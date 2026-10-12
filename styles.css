@@ -254,15 +254,28 @@ img { max-width: 100%; }
   width: 100%;
   overflow: hidden;
   border-radius: 12px;
-  background: #e7e1d6;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .figure-media img,
 .figure-media svg {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
   background: transparent;
+}
+
+/* Never upscale small diagram crops past their pixel width. */
+.figure-media.diagram img {
+  max-width: min(100%, 480px);
+}
+
+.figure-media.diagram-sm img {
+  max-width: min(100%, 360px);
 }
 
 .figure-media.portrait {
