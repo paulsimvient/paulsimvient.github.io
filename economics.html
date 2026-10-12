@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <header class="site-header">
@@ -30,100 +30,73 @@
     <p>This is the economics case in a Phase I white paper led by Paul Cummings, with Dale Rothman of George Mason University as research lead. It applies the same inquiry loop as <a href="book.html">Thinking Together</a> to agents that buy and sell. It is a research design. It is not a report of completed market results.</p>
 
     <figure class="figure figure-hero">
-      <img src="images/econ-1.png" alt="CoAgentics influence benchmark architecture from LLM providers through market testbed to validated behavioral models.">
+      <div class="figure-media">
+        <img src="images/econ-1.png" width="786" height="535" alt="CoAgentics influence benchmark architecture from LLM providers through market testbed to validated behavioral models.">
+      </div>
       <figcaption>From controlled LLM interaction to validated behavioral models. The market testbed sits between what an agent may observe and the competing models under test.</figcaption>
     </figure>
 
     <h2>The market</h2>
     <p>Agents see prices and the public information assigned to their condition. They react to other participants and submit orders. An order is a time, an asset, a quantity, and a price. An invalid order is recorded as invalid. The harness does not quietly turn it into a trade.</p>
-    <p>The laboratory uses two mechanisms: a continuous double auction and a sealed-bid double auction. The market keeps private buyer values and seller costs, cash and inventory, public bids and asks, completed trades, and controlled news. The true economic state stays separate from what any one agent is allowed to see. A change in news, history, or peer information can be tested without exposing private accounts.</p>
+    <p>The laboratory uses two mechanisms: a continuous double auction and a sealed-bid double auction. The market keeps private buyer values and seller costs, cash and inventory, public bids and asks, completed trades, and controlled news. The true economic state stays separate from what any one agent is allowed to see.</p>
 
-    <h2>What the experiment asks</h2>
-    <p>Competing predictive models can fit the same action in one condition and then predict different actions after an intervention. The work varies information, incentives, market history, and peer conditions to see whether those differences can be told apart.</p>
-    <figure class="figure">
-      <img src="images/econ-2.png" alt="Two-by-two experiment design crossing news with price history, with example bid results.">
-      <figcaption>Example design: the same private values under stable or rising history, with or without a news signal. Illustrative results show an interaction, not a finished empirical claim.</figcaption>
-    </figure>
-    <ul>
-      <li>
-        <strong>Identifiability</strong>
-        Which behavioral models can actually be separated with feasible market interventions? If the available experiments cannot separate them, the result is non-identifiability, not a forced label.
-      </li>
-      <li>
-        <strong>Experimental efficiency</strong>
-        Can an adaptive design reach the same validated conclusion with fewer model queries than a fixed factorial design or a randomized design, without weakening calibration or replication?
-      </li>
-      <li>
-        <strong>Generalization</strong>
-        Does a model learned in one set of conditions predict behavior under held-out values and costs, another auction mechanism, and markets that contain other AI agents?
-      </li>
-    </ul>
-    <p>Programmed agents supply known-rule ground truth. Unfamiliar language-model agents do not. Those agents are judged by prediction, reproducibility, calibration, and generalization. The study makes no claim about an agent’s beliefs, intent, or private reasoning. Treatment effects are claims about observable response.</p>
-
-    <h2>Discovery and confirmation</h2>
     <div class="gallery">
       <figure class="figure">
-        <img src="images/econ-3.png" alt="Adaptive behavioral discovery and validation loop across candidate models and experiments.">
-        <figcaption>Adaptive selection chooses the next experiment that best separates competing models.</figcaption>
+        <div class="figure-media">
+          <img src="images/econ-2.png" width="732" height="535" alt="Two-by-two experiment design crossing news with price history, with example bid results.">
+        </div>
+        <figcaption>Example design: stable or rising history, with or without a news signal.</figcaption>
       </figure>
       <figure class="figure">
-        <img src="images/econ-4.png" alt="Twelve-month Phase I plan from validated testbed to behavioral models across at least ten LLMs.">
-        <figcaption>Phase I plan: validated testbed, discovery, independent confirmation, and final deliverables.</figcaption>
+        <div class="figure-media">
+          <img src="images/econ-3.png" width="786" height="464" alt="Adaptive behavioral discovery and validation loop.">
+        </div>
+        <figcaption>Adaptive selection chooses the next experiment that best separates competing models.</figcaption>
       </figure>
     </div>
 
-    <h2>How the book’s layers show up</h2>
-    <ol class="chapters">
+    <h2>What the experiment asks</h2>
+    <ul>
       <li>
-        <span class="num">1</span>
-        <div>
-          <strong>Domain</strong>
-          <p>The market itself: values, costs, accounts, auction rules, and what each participant may observe.</p>
-        </div>
+        <strong>Identifiability</strong>
+        Which behavioral models can actually be separated with feasible market interventions? If they cannot, the result is non-identifiability.
       </li>
       <li>
-        <span class="num">2</span>
-        <div>
-          <strong>Strategy</strong>
-          <p>Reference rules and the competing predictive models of agent behavior.</p>
-        </div>
+        <strong>Experimental efficiency</strong>
+        Can an adaptive design reach the same validated conclusion with fewer model queries than fixed or randomized designs?
       </li>
       <li>
-        <span class="num">3</span>
-        <div>
-          <strong>Experiment</strong>
-          <p>The interventions: information, news, history, incentives, and peer conditions, including paired runs that share a seed.</p>
-        </div>
+        <strong>Generalization</strong>
+        Does a model learned in one set of conditions predict behavior under held-out values, another auction, and markets with other AI agents?
       </li>
-      <li>
-        <span class="num">4</span>
-        <div>
-          <strong>Validation</strong>
-          <p>Discovery stays separate from confirmation. A model is checked on conditions that were not used to choose it.</p>
-        </div>
-      </li>
-      <li>
-        <span class="num">5</span>
-        <div>
-          <strong>Knowledge</strong>
-          <p>Observations, actions, outcomes, uncertainty, and claim status remain available for inspection.</p>
-        </div>
-      </li>
-      <li>
-        <span class="num">6</span>
-        <div>
-          <strong>Human workbench</strong>
-          <p>A researcher can inspect the experimental process and decide what the evidence supports, rejects, or cannot distinguish.</p>
-        </div>
-      </li>
-    </ol>
+    </ul>
 
-    <h2>What would count as failure</h2>
-    <p>The main claim is falsifiable. Adaptive experimentation should reduce query cost without weakening calibration or independent replication. If it does not, the hypothesis fails. A model that fits the training conditions and then misses reserved valuations, the second auction, or a market of several unfamiliar agents has a boundary, not a general law. Individual-agent models that cannot predict a shared market without interaction terms are reported as insufficient.</p>
-    <p>Existing market software can run continuous and sealed-bid auctions, seeded interventions, and known-rule agents. Those fixtures check the machinery. They are not empirical results about language-model traders.</p>
+    <figure class="figure">
+      <div class="figure-media">
+        <img src="images/econ-4.png" width="732" height="464" alt="Twelve-month Phase I plan from validated testbed to behavioral models across at least ten LLMs.">
+      </div>
+      <figcaption>Phase I plan: validated testbed, discovery, independent confirmation, and final deliverables.</figcaption>
+    </figure>
+
+    <div class="gallery">
+      <figure class="figure">
+        <div class="figure-media">
+          <img src="images/book-experiment.png" width="1810" height="1222" alt="Matched classification over time from controlled experiments.">
+        </div>
+        <figcaption>Experiment: controlled comparison leaves a measurable record.</figcaption>
+      </figure>
+      <figure class="figure">
+        <div class="figure-media">
+          <img src="images/book-validation.png" width="1824" height="1222" alt="Paired effect intervals used in validation.">
+        </div>
+        <figcaption>Validation: what the evidence has earned, with uncertainty kept visible.</figcaption>
+      </figure>
+    </div>
+
     <div class="actions">
       <a class="btn btn-ghost" href="book.html">Back to the book <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="dca.html">DCA case <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="consulting.html">Consulting <span aria-hidden="true">→</span></a>
     </div>
   </main>
 </body>
