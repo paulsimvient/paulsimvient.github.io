@@ -23,11 +23,16 @@
     </nav>
     <a class="btn btn-contact" href="contact.html">Contact</a>
   </header>
-  <main class="page">
+  <main class="page wide">
     <p class="eyebrow">Case study · Economics</p>
     <h1>Dynamic economic markets</h1>
     <p class="intro">Can controlled market experiments identify how an unfamiliar AI agent will act, and does that account still hold when the market changes?</p>
     <p>This is the economics case in a Phase I white paper led by Paul Cummings, with Dale Rothman of George Mason University as research lead. It applies the same inquiry loop as <a href="book.html">Thinking Together</a> to agents that buy and sell. It is a research design. It is not a report of completed market results.</p>
+
+    <figure class="figure figure-hero">
+      <img src="images/econ-1.png" alt="CoAgentics influence benchmark architecture from LLM providers through market testbed to validated behavioral models.">
+      <figcaption>From controlled LLM interaction to validated behavioral models. The market testbed sits between what an agent may observe and the competing models under test.</figcaption>
+    </figure>
 
     <h2>The market</h2>
     <p>Agents see prices and the public information assigned to their condition. They react to other participants and submit orders. An order is a time, an asset, a quantity, and a price. An invalid order is recorded as invalid. The harness does not quietly turn it into a trade.</p>
@@ -35,6 +40,10 @@
 
     <h2>What the experiment asks</h2>
     <p>Competing predictive models can fit the same action in one condition and then predict different actions after an intervention. The work varies information, incentives, market history, and peer conditions to see whether those differences can be told apart.</p>
+    <figure class="figure">
+      <img src="images/econ-2.png" alt="Two-by-two experiment design crossing news with price history, with example bid results.">
+      <figcaption>Example design: the same private values under stable or rising history, with or without a news signal. Illustrative results show an interaction, not a finished empirical claim.</figcaption>
+    </figure>
     <ul>
       <li>
         <strong>Identifiability</strong>
@@ -50,6 +59,18 @@
       </li>
     </ul>
     <p>Programmed agents supply known-rule ground truth. Unfamiliar language-model agents do not. Those agents are judged by prediction, reproducibility, calibration, and generalization. The study makes no claim about an agent’s beliefs, intent, or private reasoning. Treatment effects are claims about observable response.</p>
+
+    <h2>Discovery and confirmation</h2>
+    <div class="gallery">
+      <figure class="figure">
+        <img src="images/econ-3.png" alt="Adaptive behavioral discovery and validation loop across candidate models and experiments.">
+        <figcaption>Adaptive selection chooses the next experiment that best separates competing models.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="images/econ-4.png" alt="Twelve-month Phase I plan from validated testbed to behavioral models across at least ten LLMs.">
+        <figcaption>Phase I plan: validated testbed, discovery, independent confirmation, and final deliverables.</figcaption>
+      </figure>
+    </div>
 
     <h2>How the book’s layers show up</h2>
     <ol class="chapters">
@@ -100,7 +121,10 @@
     <h2>What would count as failure</h2>
     <p>The main claim is falsifiable. Adaptive experimentation should reduce query cost without weakening calibration or independent replication. If it does not, the hypothesis fails. A model that fits the training conditions and then misses reserved valuations, the second auction, or a market of several unfamiliar agents has a boundary, not a general law. Individual-agent models that cannot predict a shared market without interaction terms are reported as insufficient.</p>
     <p>Existing market software can run continuous and sealed-bid auctions, seeded interventions, and known-rule agents. Those fixtures check the machinery. They are not empirical results about language-model traders.</p>
-    <a class="btn btn-ghost" href="book.html">Back to the book <span aria-hidden="true">→</span></a>
+    <div class="actions">
+      <a class="btn btn-ghost" href="book.html">Back to the book <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="dca.html">DCA case <span aria-hidden="true">→</span></a>
+    </div>
   </main>
 </body>
 </html>
