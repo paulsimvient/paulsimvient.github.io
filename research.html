@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
   <header class="site-header">
@@ -22,10 +22,27 @@
     </nav>
     <a class="btn btn-contact" href="contact.html">Contact</a>
   </header>
-  <main class="page">
+  <main class="page wide">
     <p class="eyebrow">The research</p>
     <h1>Explore the ideas</h1>
     <p class="intro">The manuscript treats computation as a way to make inquiry inspectable, not as a substitute for judgment.</p>
+
+    <div class="gallery">
+      <figure class="figure">
+        <a class="figure-media" href="dca.html">
+          <img src="images/dca-night-crossing.png" width="550" height="426" alt="Real-world example: DCA Night Crossing, with flight paths and a counterfactual inset.">
+        </a>
+        <figcaption><a href="dca.html">DCA Night Crossing</a> — reconstruct the event, test counterfactuals, evaluate outcomes.</figcaption>
+      </figure>
+      <figure class="figure">
+        <a class="figure-media" href="economics.html">
+          <img src="images/economics-laboratory.png" width="476" height="424" alt="Research example: economics laboratory with illustrative market coordination chart.">
+        </a>
+        <figcaption><a href="economics.html">Economics laboratory</a> — markets, institutions, and AI agents under controlled conditions.</figcaption>
+      </figure>
+    </div>
+    <p class="figure-note">The DCA and economics charts contain illustrative rather than verified experimental results.</p>
+
     <ul>
       <li>
         <strong>Shared inquiry</strong>
@@ -48,6 +65,7 @@
         When a pattern of checks can be formalized, bounded, and taught, it can become a human strategy rather than a one-time machine answer.
       </li>
     </ul>
+
     <div class="actions">
       <a class="btn btn-ghost" href="book.html">Read the chapters <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="economics.html">Economics case <span aria-hidden="true">→</span></a>

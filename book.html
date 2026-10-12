@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
   <header class="site-header">
@@ -26,62 +26,77 @@
     <p class="eyebrow">The book</p>
     <h1>Thinking Together</h1>
     <p class="intro">How Humans and AI Build Understanding Together. A 2026 manuscript by Paul Cummings, Ph.D.</p>
-    <figure class="figure figure-hero">
-      <div class="figure-media">
-        <img src="images/book-mission.jpg" width="1448" height="814" alt="Mission question beside a six-layer architecture from workbench to domain.">
-      </div>
-      <figcaption>From a mission question to a layered architecture: Domain, Strategy, Experiment, Validation, Knowledge, and the Human Workbench.</figcaption>
-    </figure>
-    <p>The book is a proposal about human–AI inquiry. It argues for keeping human judgment in the work, and for using computation where evidence and uncertainty can still be inspected. A repeated inquiry should change what people learn to notice, question, test, and judge.</p>
-    <figure class="figure">
-      <div class="figure-media">
-        <img src="images/inquiry-loop.svg" width="920" height="160" alt="Observe, Frame, Test, Validate, Return">
-      </div>
-      <figcaption>One process runs through the book: Observe → Frame → Test → Validate → Return.</figcaption>
-    </figure>
-    <p>CoAgentics appears as one research instrument for making those ideas concrete. It is not the subject of the book. A working implementation is not evidence that the cognitive claims are true. Questions about calibration, transfer, learning, appropriate reliance, and later human judgment stay empirical: they require studies with people.</p>
-    <p>Two cases put that loop in a concrete setting. In the economics laboratory, AI agents observe prices and public information, submit orders, and are tested when the information, the auction, or the other agents change. That case is a Phase I research design, not a finished set of market results. Night Crossing, at Reagan National on January 29, 2025, is a distributed operational problem: geometry, timing, communications, and partial views have to be examined together, using only what each participant could plausibly have known at the time.</p>
+
     <div class="gallery">
       <figure class="figure">
-      <a class="figure-media" href="economics.html">
-        <img src="images/econ-1.png" width="786" height="535" alt="Architecture diagram of a market laboratory for AI agents.">
-      </a>
-        <figcaption><a href="economics.html">Economics case</a> — controlled markets for unfamiliar AI agents.</figcaption>
+        <div class="figure-media portrait">
+          <img src="images/book-cover.png" width="453" height="639" alt="Thinking Together book cover.">
+        </div>
+        <figcaption>The book cover.</figcaption>
       </figure>
       <figure class="figure">
-      <a class="figure-media photo" href="dca.html">
-        <img src="images/night-crossing.jpg" width="1280" height="720" alt="Night airport on a river with approach paths and geometry overlays.">
-      </a>
-        <figcaption><a href="dca.html">DCA case</a> — Night Crossing as distributed decision-making.</figcaption>
+        <div class="figure-media">
+          <img src="images/inquiry-loop.png" width="461" height="111" alt="Inquiry loop: Observe, Frame, Test, Validate, Return.">
+        </div>
+        <figcaption>One process runs through the book: Observe → Frame → Test → Validate → Return.</figcaption>
       </figure>
     </div>
+
+    <p>The book is a proposal about human–AI inquiry. It argues for keeping human judgment in the work, and for using computation where evidence and uncertainty can still be inspected. A repeated inquiry should change what people learn to notice, question, test, and judge.</p>
+
+    <figure class="figure">
+      <div class="figure-media">
+        <img src="images/coagentics-approach.png" width="457" height="353" alt="CoAgentics approach diagram.">
+      </div>
+      <figcaption>CoAgentics appears as one research instrument for making those ideas concrete. It is not the subject of the book.</figcaption>
+    </figure>
+
+    <p>A working implementation is not evidence that the cognitive claims are true. Questions about calibration, transfer, learning, appropriate reliance, and later human judgment stay empirical: they require studies with people.</p>
+
+    <div class="gallery">
+      <figure class="figure">
+        <div class="figure-media">
+          <img src="images/counterfactual-experiments.png" width="605" height="251" alt="Counterfactual experiments diagram.">
+        </div>
+        <figcaption>Counterfactual experiments compare what happened with controlled alternatives.</figcaption>
+      </figure>
+      <figure class="figure">
+        <div class="figure-media">
+          <img src="images/when-to-use-coagentics.png" width="427" height="209" alt="When to use CoAgentics.">
+        </div>
+        <figcaption>When the approach is useful: incomplete evidence, competing explanations, and decisions that need a record.</figcaption>
+      </figure>
+    </div>
+
+    <figure class="figure">
+      <div class="figure-media">
+        <img src="images/other-applications.png" width="605" height="193" alt="Other applications of the approach.">
+      </div>
+      <figcaption>Other applications beyond the teaching cases.</figcaption>
+    </figure>
+
+    <p>Two cases put the inquiry loop in a concrete setting.</p>
+    <div class="gallery">
+      <figure class="figure">
+        <a class="figure-media" href="economics.html">
+          <img src="images/economics-laboratory.png" width="476" height="424" alt="Economics laboratory research example.">
+        </a>
+        <figcaption><a href="economics.html">Economics laboratory</a> — controlled markets for unfamiliar AI agents.</figcaption>
+      </figure>
+      <figure class="figure">
+        <a class="figure-media" href="dca.html">
+          <img src="images/dca-night-crossing.png" width="550" height="426" alt="DCA Night Crossing research example.">
+        </a>
+        <figcaption><a href="dca.html">DCA Night Crossing</a> — distributed decision-making with partial views.</figcaption>
+      </figure>
+    </div>
+    <p class="figure-note">The DCA and economics charts contain illustrative rather than verified experimental results.</p>
+
     <div class="actions">
       <a class="btn btn-fill" href="downloads/Thinking-Together.epub">Download the EPUB <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="economics.html">Economics case <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="dca.html">DCA case <span aria-hidden="true">→</span></a>
     </div>
-
-    <h2>Figures from the manuscript</h2>
-    <div class="gallery">
-      <figure class="figure">
-      <div class="figure-media">
-        <img src="images/book-domain.jpg" alt="How a messy mission becomes an inspectable domain representation.">
-      </div>
-        <figcaption>Domain: observation time is not availability time.</figcaption>
-      </figure>
-      <figure class="figure">
-      <div class="figure-media">
-        <img src="images/book-strategy.jpg" alt="Observed pattern, competing explanations, and candidate adaptations.">
-      </div>
-        <figcaption>Strategy: keep explanations and responses separate.</figcaption>
-      </figure>
-    </div>
-    <figure class="figure">
-      <div class="figure-media">
-        <img src="images/book-learning-loop.jpg" alt="Strategy knowledge base learning loop.">
-      </div>
-      <figcaption>What inquiry can leave behind: strategies that remain inspectable and teachable.</figcaption>
-    </figure>
 
     <h2>Where it starts</h2>
     <p>The manuscript opens with a conversation on a porch above a lake in New York. A middle-school educator, a mathematician working on national-security problems, and college students were each asking a different version of the same question: what should happen to human thinking when machines begin to participate in it?</p>
@@ -100,96 +115,95 @@
         <span class="num">2</span>
         <div>
           <strong>A Mission Investigation</strong>
-          <p>Communications weaken, partner aircraft report different things, and the mission window closes. The hard part is the gap between what happened, what the team saw, and what the team believed. A maneuver, a delay, a failing sensor, or several of those together can produce the same picture.</p>
+          <p>Communications weaken, partner aircraft report different things, and the mission window closes. The hard part is the gap between what happened, what the team saw, and what the team believed.</p>
         </div>
       </li>
       <li>
         <span class="num">3</span>
         <div>
           <strong>Inside the Loop: From Question to Evidence</strong>
-          <p>A short question becomes explicit working state: mission context, visual focus, analytical focus, live hypotheses, current evidence, and a next test. Conversation can interpret the question. It does not hold analytical or decision authority.</p>
+          <p>A short question becomes explicit working state: mission context, focus, live hypotheses, current evidence, and a next test. Conversation can interpret the question. It does not hold analytical or decision authority.</p>
         </div>
       </li>
       <li>
         <span class="num">4</span>
         <div>
           <strong>Domain: Representing the Decision World</strong>
-          <p>Before two parties can reason about the same situation, they need common referents. The Domain layer records what happened, when it was observed, when it became available, where it came from, and how much confidence the representation deserves.</p>
+          <p>Before two parties can reason about the same situation, they need common referents: what happened, when it was observed, when it became available, where it came from, and how much confidence it deserves.</p>
         </div>
       </li>
       <li>
         <span class="num">5</span>
         <div>
           <strong>Strategy: Representing What Could Be True or Done</strong>
-          <p>The first plausible story can take over too quickly, especially when it arrives in polished language. Strategy keeps several explanations explicit and ties each one to evidence that could strengthen, weaken, or distinguish it.</p>
+          <p>The first plausible story can take over too quickly. Strategy keeps several explanations explicit and ties each one to evidence that could strengthen, weaken, or distinguish it.</p>
         </div>
       </li>
       <li>
         <span class="num">6</span>
         <div>
           <strong>Experiment: Learning by Controlled Comparison</strong>
-          <p>Explanations become useful once the inquiry finds where they differ. A person can name the distinction that matters. The system can run the declared comparison. The result stays conditional on the scenario, the intervention, and the model.</p>
+          <p>Explanations become useful once the inquiry finds where they differ. The result stays conditional on the scenario, the intervention, and the model.</p>
         </div>
       </li>
       <li>
         <span class="num">7</span>
         <div>
           <strong>Validation: What Are We Entitled to Believe?</strong>
-          <p>A result can be precise and still be wrong, brittle, or irrelevant outside the conditions that produced it. Validation asks what the evidence has earned before a weak result is carried forward as settled knowledge.</p>
+          <p>A result can be precise and still be wrong, brittle, or irrelevant outside the conditions that produced it.</p>
         </div>
       </li>
       <li>
         <span class="num">8</span>
         <div>
           <strong>Knowledge: What Should the System Remember?</strong>
-          <p>The next question should not begin as if the relationship had no history. Knowledge here is an inspectable record outside the conversational model: claims, evidence, experiments, contradictions, provenance, qualifications, and their history.</p>
+          <p>Knowledge is an inspectable record outside the conversational model: claims, evidence, experiments, contradictions, provenance, and history.</p>
         </div>
       </li>
       <li>
         <span class="num">9</span>
         <div>
           <strong>The Human Workbench: A Place to Think</strong>
-          <p>The other layers do not guarantee that a person can see or challenge the reasoning. The workbench is where someone can see what the system is attending to, redirect the inquiry, and carry evidence back into judgment.</p>
+          <p>The workbench is where someone can see what the system is attending to, redirect the inquiry, and carry evidence back into judgment.</p>
         </div>
       </li>
       <li>
         <span class="num">10</span>
         <div>
           <strong>When Human and Machine Disagree</strong>
-          <p>Neither side gets automatic priority. A person may hold context, tacit knowledge, or a value judgment the representation lacks. The system may hold comparisons, records, or counterexamples the person has forgotten.</p>
+          <p>Neither side gets automatic priority. Disagreement can reveal what the relationship has not yet reconciled.</p>
         </div>
       </li>
       <li>
         <span class="num">11</span>
         <div>
           <strong>Learning to Think Together</strong>
-          <p>Across cases, one sequence of checks may work better than another, or one question may consistently separate competing explanations. When that pattern can be understood, practiced, and adapted, it becomes a candidate human heuristic.</p>
+          <p>Across cases, a useful pattern of checks can become a candidate human heuristic.</p>
         </div>
       </li>
       <li>
         <span class="num">12</span>
         <div>
           <strong>What We Carry Forward</strong>
-          <p>Computational behavior becomes a human strategy only after four kinds of work: identify the useful pattern, formalize it, validate its boundaries, and teach it well enough that a person can reuse it.</p>
+          <p>Computational behavior becomes a human strategy only after it is identified, formalized, bounded, and taught.</p>
         </div>
       </li>
       <li>
         <span class="num">13</span>
         <div>
           <strong>The Strategy Knowledge Base</strong>
-          <p>A working system accumulates many methods, some overlapping and some useful only under narrow conditions. The library has to keep the evidence visible, retrieve methods for a new situation, and teach from them without turning retrieval into authority.</p>
+          <p>A growing library of methods must keep evidence visible and avoid turning retrieval into authority.</p>
         </div>
       </li>
       <li>
         <span class="num">14</span>
         <div>
           <strong>Authority, Responsibility, and the Right to Disagree</strong>
-          <p>Once analysis can influence action, evidence can reshape what a person believes, and a system can influence which evidence receives attention. Authority, responsibility, and the right to disagree have to stay explicit.</p>
+          <p>Once analysis can influence action, authority and responsibility have to stay explicit.</p>
         </div>
       </li>
     </ol>
     <p>The conclusion returns to the porch. The relationship is the system. Inquiry can leave behind a reusable method as well as a result for the case at hand.</p>
-    <p>The back of the manuscript includes a glossary, notes, references, an architecture appendix, a subject index, and a note about the author.</p>
   </main>
 </body>
 </html>
