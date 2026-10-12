@@ -1,36 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 160" role="img" aria-labelledby="t d">
-  <title id="t">Inquiry loop</title>
-  <desc id="d">Observe, Frame, Test, Validate, Return</desc>
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#994220"/>
-    </marker>
-  </defs>
-  <rect width="920" height="160" fill="#f3efe6"/>
-  <g font-family="Manrope, Avenir Next, sans-serif" font-size="18" font-weight="700" letter-spacing="2">
-    <g transform="translate(40,40)">
-      <rect width="140" height="80" rx="40" fill="#102928"/>
-      <text x="70" y="47" text-anchor="middle" fill="#f3efe6">OBSERVE</text>
-    </g>
-    <line x1="190" y1="80" x2="220" y2="80" stroke="#994220" stroke-width="3" marker-end="url(#arrow)"/>
-    <g transform="translate(230,40)">
-      <rect width="140" height="80" rx="40" fill="#102928"/>
-      <text x="70" y="47" text-anchor="middle" fill="#f3efe6">FRAME</text>
-    </g>
-    <line x1="380" y1="80" x2="410" y2="80" stroke="#994220" stroke-width="3" marker-end="url(#arrow)"/>
-    <g transform="translate(420,40)">
-      <rect width="140" height="80" rx="40" fill="#994220"/>
-      <text x="70" y="47" text-anchor="middle" fill="#fff">TEST</text>
-    </g>
-    <line x1="570" y1="80" x2="600" y2="80" stroke="#994220" stroke-width="3" marker-end="url(#arrow)"/>
-    <g transform="translate(610,40)">
-      <rect width="140" height="80" rx="40" fill="#102928"/>
-      <text x="70" y="47" text-anchor="middle" fill="#f3efe6">VALIDATE</text>
-    </g>
-    <line x1="760" y1="80" x2="790" y2="80" stroke="#994220" stroke-width="3" marker-end="url(#arrow)"/>
-    <g transform="translate(800,40)">
-      <rect width="100" height="80" rx="40" fill="#102928"/>
-      <text x="50" y="47" text-anchor="middle" fill="#f3efe6" font-size="15">RETURN</text>
-    </g>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#f3efe6"/>
+<rect x="0" y="0" width="24" height="1080" fill="#994220"/>
+<g font-family="Arial, Helvetica, sans-serif"><text x="110" y="125" fill="#102928" font-size="65" font-weight="700" text-anchor="start">The inquiry loop</text><text x="112" y="181" fill="#994220" font-size="27" font-weight="500" text-anchor="start">Observe → Frame → Test → Validate → Return</text>
+<rect x="110" y="365" width="310" height="120" rx="16" fill="#fffaf2" stroke="none" stroke-width="2"/><text x="134" y="410" fill="#102928" font-size="27" font-weight="700" text-anchor="start">Observe</text><text x="134" y="447" fill="#102928" font-size="18" font-weight="500" text-anchor="start">Notice a pattern</text><path d="M420,425 L460,425" fill="none" stroke="#994220" stroke-width="5" stroke-dasharray=""/><rect x="465" y="365" width="310" height="120" rx="16" fill="#fffaf2" stroke="none" stroke-width="2"/><text x="489" y="410" fill="#102928" font-size="27" font-weight="700" text-anchor="start">Frame</text><text x="489" y="447" fill="#102928" font-size="18" font-weight="500" text-anchor="start">Keep alternatives</text><path d="M775,425 L815,425" fill="none" stroke="#994220" stroke-width="5" stroke-dasharray=""/><rect x="820" y="365" width="310" height="120" rx="16" fill="#fffaf2" stroke="none" stroke-width="2"/><text x="844" y="410" fill="#102928" font-size="27" font-weight="700" text-anchor="start">Test</text><text x="844" y="447" fill="#102928" font-size="18" font-weight="500" text-anchor="start">Compare scenarios</text><path d="M1130,425 L1170,425" fill="none" stroke="#994220" stroke-width="5" stroke-dasharray=""/><rect x="1175" y="365" width="310" height="120" rx="16" fill="#fffaf2" stroke="none" stroke-width="2"/><text x="1199" y="410" fill="#102928" font-size="27" font-weight="700" text-anchor="start">Validate</text><text x="1199" y="447" fill="#102928" font-size="18" font-weight="500" text-anchor="start">Check evidence</text><path d="M1485,425 L1525,425" fill="none" stroke="#994220" stroke-width="5" stroke-dasharray=""/><rect x="1530" y="365" width="310" height="120" rx="16" fill="#fffaf2" stroke="none" stroke-width="2"/><text x="1554" y="410" fill="#102928" font-size="27" font-weight="700" text-anchor="start">Return</text><text x="1554" y="447" fill="#102928" font-size="18" font-weight="500" text-anchor="start">Revise understanding</text><text x="110" y="670" fill="#102928" font-size="39" font-weight="600" text-anchor="start">A cycle of inquiry, not an automated verdict.</text></g><text x="110" y="1035" fill="#102928" font-family="Arial" font-size="20">THINKING TOGETHER  /  PAUL CUMMINGS, Ph.D.   •   Conceptual illustration — not measured results</text></svg>

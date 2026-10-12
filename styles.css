@@ -269,17 +269,21 @@ img { max-width: 100%; }
   background: transparent;
 }
 
-/* Never upscale small diagram crops past their pixel width. */
-.figure-media.diagram img {
-  max-width: min(100%, 480px);
-}
-
-.figure-media.diagram-sm img {
-  max-width: min(100%, 360px);
+.figure-media.diagram img,
+.figure-media.diagram svg {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
 }
 
 .figure-media.portrait {
-  max-width: 360px;
+  max-width: 320px;
+}
+
+.figure-media.portrait img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 14px 16px 0 rgba(16, 41, 40, 0.1);
 }
 
 .figure-note {
@@ -343,7 +347,12 @@ a.figure-media {
 }
 
 .case-card .thumb {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
+  background: #f3efe6;
+}
+
+.case-card .thumb img[src$=".svg"] {
+  object-fit: contain;
 }
 
 .case-card h2 {
