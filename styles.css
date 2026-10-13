@@ -501,6 +501,83 @@ a.figure-media {
   line-height: 1.05;
 }
 
+.research-question {
+  margin: 28px 0 0;
+  max-width: 38em;
+  padding: 18px 20px;
+  border-left: 3px solid var(--rust);
+  background: rgba(153, 66, 32, 0.06);
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.plain-list {
+  margin: 18px 0 0;
+  padding: 0 0 0 1.15em;
+  max-width: 40em;
+  list-style: disc;
+}
+
+.plain-list li {
+  border: 0;
+  padding: 6px 0;
+  max-width: none;
+}
+
+.table-wrap {
+  margin: 24px 0 8px;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 41, 40, 0.12);
+  background: #fffaf2;
+}
+
+.research-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.research-table th,
+.research-table td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(16, 41, 40, 0.1);
+}
+
+.research-table th {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rust);
+  background: rgba(16, 41, 40, 0.04);
+}
+
+.research-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.research-table td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.closing-line {
+  margin: 28px 0 0;
+  max-width: 38em;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
 .loop {
   display: flex;
   flex-wrap: wrap;

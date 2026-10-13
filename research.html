@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Research — Thinking Together</title>
+  <title>Research — Opening the AI Black Box</title>
+  <meta name="description" content="Can we understand an AI system not by trusting what it tells us about itself, but by designing experiments that reveal what it actually does?">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
   <header class="site-header">
@@ -24,75 +25,186 @@
   </header>
   <main class="page wide">
     <p class="eyebrow">The research</p>
-    <h1>Explore the ideas</h1>
-    <p class="intro">Observation, experimentation, and discovery applied to opaque AI systems — so fluency is never mistaken for understanding.</p>
+    <h1>Opening the AI Black Box</h1>
+    <p class="intro">How can we discover what large language models are actually doing?</p>
+
+    <p class="research-question">Can we understand an AI system not by trusting what it tells us about itself, but by designing experiments that reveal what it actually does?</p>
+
+    <p>Large language models can explain, predict, recommend, and solve complex problems. But a convincing response tells us surprisingly little about how the model arrived at it.</p>
+
+    <p>Why does an LLM choose one answer over another? What changes its behavior? Does it apply consistent strategies, or does its apparent reasoning depend on how a question is presented?</p>
+
+    <p>These questions can be investigated.</p>
+
+    <p>This research brings together computational social science, agent-based modeling, multi-agent systems, and controlled experimentation to study the behavior of AI systems. The aim is to move beyond asking models to explain themselves. We can construct experiments that reveal behavioral patterns, challenge competing explanations, and establish what the evidence actually supports.</p>
+
+    <h2>What it means to open the LLM black box</h2>
+    <p>An LLM accepts a prompt, processes it through a vast network of learned parameters, and produces a response. We know the broad computational architecture, but that does not mean we can readily explain why a particular response occurred.</p>
+
+    <ul class="plain-list">
+      <li>Why does changing one word in a prompt change the conclusion?</li>
+      <li>Does the model apply a consistent strategy across different problems?</li>
+      <li>When it gives an explanation, does that explanation reflect the process that produced the answer?</li>
+      <li>Does its apparent reasoning survive when we change the context?</li>
+      <li>Can we identify conditions under which its behavior becomes unreliable?</li>
+    </ul>
+
+    <p>These are questions that can be investigated experimentally. Rather than treating an LLM as a source of authoritative answers, we can study it as a system whose behavior emerges under different conditions — the same stance computational social science takes toward complex social systems.</p>
+
+    <h2>Deciphering the black box</h2>
+    <p>We begin with observations, not assumptions about intelligence.</p>
+    <p>A model produces a response. We develop competing explanations for that behavior, change the experimental conditions, and observe what happens.</p>
+    <p>Does the behavior persist when we change the wording? Does it survive new scenarios? Can the model adapt when important assumptions change? Can another model reproduce the result?</p>
+    <p>Each experiment helps distinguish a reliable pattern from a coincidence, an artifact of the prompt, or an explanation that sounds plausible but lacks evidence.</p>
 
     <figure class="figure">
       <div class="figure-media diagram">
-        <img src="images/research-questions.svg" width="1920" height="1080" alt="Questions worth testing.">
+        <img src="images/black-box-inquiry.svg" width="1920" height="1080" alt="Opening the black box by experiment: observe, intervene on an opaque model, and compare which claims survive.">
       </div>
+      <figcaption>The model remains internally opaque. Controlled interventions make its behavior increasingly testable.</figcaption>
     </figure>
+    <p class="figure-note">Conceptual illustration — not a measured experimental result.</p>
 
-    <h2>CoAgentics</h2>
-    <p>CoAgentics is the inspectable workbench behind these ideas — an instrument for opening the AI black box through structured inquiry: domain, strategy, experiment, validation, knowledge, and a human workbench. Models may organize or explain evidence drawn from authoritative records. They cannot manufacture observations, statistical significance, simulation outcomes, or approval. Missing evidence stays missing. See <a href="book.html#coagentics">the book’s CoAgentics section</a>.</p>
-
-    <figure class="figure">
-      <div class="figure-media diagram">
-        <img src="images/six-layer-architecture.svg" width="1920" height="1080" alt="Six connected layers of CoAgentics.">
-      </div>
-    </figure>
+    <p>The goal is not to claim that a black-box experiment reveals the exact internal computations. It is to develop increasingly strong, falsifiable accounts of model behavior. We decipher the black box by discovering which explanations survive attempts to disprove them.</p>
 
     <div class="gallery">
       <figure class="figure">
-        <a class="figure-media diagram" href="dca.html">
-          <img src="images/dca-night-crossing.svg" width="1920" height="1080" alt="DCA Night Crossing conceptual geometry.">
+        <div class="figure-media diagram">
+          <img src="images/paired-experiments.svg" width="1920" height="1080" alt="Paired counterfactual experiments.">
+        </div>
+      </figure>
+      <figure class="figure">
+        <div class="figure-media diagram">
+          <img src="images/exploring-alternatives.svg" width="1920" height="1080" alt="Explore competing explanations.">
+        </div>
+      </figure>
+    </div>
+
+    <h2>A concrete example: Does an LLM reason consistently?</h2>
+    <p>Suppose an LLM is asked to choose between two economic strategies. It selects Strategy A and provides a persuasive explanation.</p>
+    <p>Did it compare the alternatives? Did it rely on superficial cues? Would it make the same choice if the wording changed?</p>
+    <p>We can design a controlled experiment.</p>
+
+    <div class="table-wrap">
+      <table class="research-table">
+        <thead>
+          <tr>
+            <th scope="col">Experiment</th>
+            <th scope="col">What we change</th>
+            <th scope="col">What we investigate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Baseline</td>
+            <td>Original problem</td>
+            <td>Initial choice and explanation</td>
+          </tr>
+          <tr>
+            <td>Paraphrase</td>
+            <td>Wording only</td>
+            <td>Sensitivity to language</td>
+          </tr>
+          <tr>
+            <td>Reorder</td>
+            <td>Position of alternatives</td>
+            <td>Order effects</td>
+          </tr>
+          <tr>
+            <td>Counterfactual</td>
+            <td>One economic assumption</td>
+            <td>Response to relevant evidence</td>
+          </tr>
+          <tr>
+            <td>Transfer</td>
+            <td>Different economic setting</td>
+            <td>Generalization</td>
+          </tr>
+          <tr>
+            <td>Repetition</td>
+            <td>Random seed or sampling</td>
+            <td>Behavioral variability</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Repeated trials could reveal whether the model follows a stable behavioral rule, changes its answer for irrelevant reasons, or adapts appropriately to new evidence.</p>
+    <p>Even perfect consistency would not prove the model uses a particular internal reasoning process. It would establish a behavioral finding, which can motivate further mechanistic investigation.</p>
+
+    <h2>Three levels of understanding</h2>
+    <div class="table-wrap">
+      <table class="research-table">
+        <thead>
+          <tr>
+            <th scope="col">Level</th>
+            <th scope="col">Research question</th>
+            <th scope="col">Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Behavioral</td>
+            <td>What does the LLM do, and under which conditions?</td>
+            <td>Black-box experiments, repeated trials</td>
+          </tr>
+          <tr>
+            <td>Functional</td>
+            <td>What computational strategy best explains its behavior?</td>
+            <td>Competing models, causal interventions, transfer tests</td>
+          </tr>
+          <tr>
+            <td>Mechanistic</td>
+            <td>Which internal components produce the behavior?</td>
+            <td>Activation analysis, probing, causal ablation, interpretability methods</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>CoAgentics is built strongly for the first two levels. Mechanistic work — with open-weight models and interpretability tools — is a natural extension of the same research program.</p>
+
+    <h2 id="coagentics">CoAgentics: an experimental workbench</h2>
+    <p>CoAgentics provides the computational environment for conducting these investigations. It connects domain models, competing strategies, controlled experiments, statistical validation, an evidence registry, and a human research workbench.</p>
+    <p>Researchers can formulate hypotheses, compare model behavior, run counterfactual experiments, examine uncertainty, and preserve findings across investigations. The system separates observed behavior from interpretation. It does not treat an LLM’s self-explanation as proof of its internal reasoning.</p>
+
+    <figure class="figure">
+      <div class="figure-media diagram">
+        <img src="images/six-layer-architecture.svg" width="1920" height="1080" alt="Six connected layers: Domain, Strategy, Experiment, Validation, Knowledge, and Human Workbench.">
+      </div>
+      <figcaption>The apparatus that makes the investigation possible — not the research question itself.</figcaption>
+    </figure>
+
+    <figure class="figure">
+      <div class="figure-media diagram">
+        <img src="images/coagentics-workbench.svg" width="1920" height="1080" alt="CoAgentics workbench console.">
+      </div>
+    </figure>
+    <p>See also <a href="book.html#coagentics">how CoAgentics relates to Thinking Together</a>.</p>
+
+    <h2>From AI behavior to human understanding</h2>
+    <p>Understanding the black box is only part of the research.</p>
+    <p>When experiments uncover reliable patterns, people can learn from them. They can discover new strategies, recognize hidden assumptions, improve their questions, and develop better ways to evaluate AI-generated conclusions.</p>
+    <p>The models also become subjects of continued investigation as researchers refine experimental conditions and challenge earlier findings.</p>
+    <p>This is the idea behind <em>Thinking Together</em>: people and computational models participating in a continuing process of observation, experimentation, and discovery.</p>
+    <p class="closing-line">We learn about AI by testing what it does. We learn together by using those discoveries to improve how we investigate and understand the world.</p>
+
+    <h2>Teaching cases</h2>
+    <div class="gallery">
+      <figure class="figure">
+        <a class="figure-media diagram" href="economics.html">
+          <img src="images/economics-laboratory.svg" width="1920" height="1080" alt="Economics laboratory.">
         </a>
       </figure>
       <figure class="figure">
-        <a class="figure-media diagram" href="economics.html">
-          <img src="images/economics-laboratory.svg" width="1920" height="1080" alt="Economics laboratory conceptual chart.">
+        <a class="figure-media diagram" href="dca.html">
+          <img src="images/dca-night-crossing.svg" width="1920" height="1080" alt="DCA Night Crossing.">
         </a>
       </figure>
     </div>
-    <p class="figure-note">Diagrams are conceptual illustrations, not measured experimental results.</p>
-
-    <figure class="figure">
-      <div class="figure-media diagram">
-        <img src="images/data-to-decisions.svg" width="1920" height="1080" alt="From data to judgment.">
-      </div>
-    </figure>
-
-    <figure class="figure">
-      <div class="figure-media diagram">
-        <img src="images/evidence-uncertainty.svg" width="1920" height="1080" alt="Evidence and uncertainty.">
-      </div>
-    </figure>
-
-    <ul>
-      <li>
-        <strong>Shared inquiry</strong>
-        Fast recognition can open a question. Deliberate examination turns it into a claim, alternatives, evidence, and a test.
-      </li>
-      <li>
-        <strong>A represented world</strong>
-        Domain records what was observed, when, from where, and with what confidence. Strategy keeps competing explanations tied to the evidence that could distinguish them.
-      </li>
-      <li>
-        <strong>Tests that stay conditional</strong>
-        An experiment shows what changes inside the assumptions of the model. Validation asks whether that result has earned belief outside those conditions.
-      </li>
-      <li>
-        <strong>Memory outside the chat</strong>
-        Knowledge is an auditable record of claims, evidence, contradictions, and provenance. The next question should be able to use that history.
-      </li>
-      <li>
-        <strong>Heuristics people can carry</strong>
-        When a pattern of checks can be formalized, bounded, and taught, it can become a human strategy rather than a one-time machine answer.
-      </li>
-    </ul>
+    <p class="figure-note">Case diagrams are conceptual illustrations, not measured experimental results.</p>
 
     <div class="actions">
-      <a class="btn btn-ghost" href="book.html">Read the chapters <span aria-hidden="true">→</span></a>
+      <a class="btn btn-fill" href="book.html">Read the book <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="economics.html">Economics case <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="dca.html">DCA case <span aria-hidden="true">→</span></a>
     </div>
