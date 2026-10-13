@@ -151,13 +151,58 @@ h1,h2,h3,h4,
 .feature-card,
 .tech-card,
 .case-card,
-.console,
-.instrument,
 .architecture,
 .demo-panel{
   background:rgba(255,250,240,.94) !important;
   border-color:var(--line) !important;
   box-shadow:0 12px 34px rgba(57,54,46,.08);
+}
+
+/* Keep dark instrument / diagram panels readable (light text on dark) */
+.diagram,
+.instrument,
+.console{
+  background:#123734 !important;
+  color:#f6ead8 !important;
+  border-color:#315d57 !important;
+  box-shadow:0 18px 50px rgba(18,32,30,.18);
+}
+.diagram-node{
+  background:#0f2421 !important;
+  border-color:#3a5550 !important;
+  color:#f6ead8 !important;
+}
+.diagram-node b,
+.diagram-node strong,
+.instrument b,
+.instrument strong,
+.console strong,
+.console b{
+  color:#fff3df !important;
+}
+.diagram-node span,
+.instrument span,
+.console span,
+.layer span,
+.metric span,
+.trace,
+.instrument-top{
+  color:#c8d0c6 !important;
+}
+.layer{
+  background:#0f2421 !important;
+  border-color:#3a5550 !important;
+  color:#f6ead8 !important;
+}
+.layer b{color:#fff3df !important}
+.layer.active{
+  border-color:var(--cyan) !important;
+  background:rgba(103,199,211,.10) !important;
+}
+.metric{
+  background:#0c1c1a !important;
+  border-color:#3a5550 !important;
+  color:#f6ead8 !important;
 }
 
 code, pre, .code, .console-output, .trace{
