@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
   <header class="site-header">
@@ -33,7 +33,15 @@
       </div>
     </figure>
 
-    <p>The book is a proposal about human–AI inquiry. It argues for keeping human judgment in the work, and for using computation where evidence and uncertainty can still be inspected. A repeated inquiry should change what people learn to notice, question, test, and judge.</p>
+    <p>The book is a practical explanation of how to work with large language models and other AI systems without handing them judgment. It argues for keeping human judgment in the work, and for using computation where evidence and uncertainty can still be inspected. A repeated inquiry should change what people learn to notice, question, test, and judge.</p>
+
+    <figure class="figure">
+      <div class="figure-media diagram">
+        <img src="images/human-ai-teaming.svg" width="1920" height="1080" alt="Human and machine: shared inquiry without transferring authority.">
+      </div>
+    </figure>
+
+    <p>LLMs are fluent. Fluency is not understanding, and a confident answer is not evidence. The manuscript shows how conversation can help frame a question, keep alternatives open, and explain results — while models do not invent observations, decide what is true, or take responsibility for action.</p>
 
     <figure class="figure">
       <div class="figure-media diagram">
@@ -41,17 +49,26 @@
       </div>
     </figure>
 
-    <p>CoAgentics appears as one research instrument for making those ideas concrete. It is not the subject of the book. A working implementation is not evidence that the cognitive claims are true — questions about calibration, transfer, learning, and appropriate reliance stay empirical.</p>
+    <h2 id="coagentics">CoAgentics</h2>
+    <p>CoAgentics is a research and decision-support workbench built to make those ideas concrete. It keeps observations, competing explanations, counterfactual experiments, uncertainty, evidence, and human decisions connected in one inspectable workflow. Language models may interpret a question or explain a result drawn from authoritative records. They do not own the represented world, promote their own claims, or hold decision authority.</p>
 
     <figure class="figure">
       <div class="figure-media diagram">
-        <img src="images/six-layer-architecture.svg" width="1920" height="1080" alt="Six connected layers of the approach.">
+        <img src="images/six-layer-architecture.svg" width="1920" height="1080" alt="Six connected layers: Domain, Strategy, Experiment, Validation, Knowledge, and Human Workbench.">
+      </div>
+    </figure>
+
+    <p>The book is not a product manual for CoAgentics. CoAgentics is one instrument for practicing shared inquiry — the same loop the chapters teach. A working implementation is not proof that the cognitive claims are true. Questions about calibration, transfer, learning, appropriate reliance, and later human judgment stay empirical: they require studies with people.</p>
+
+    <figure class="figure">
+      <div class="figure-media diagram">
+        <img src="images/coagentics-workbench.svg" width="1920" height="1080" alt="CoAgentics workbench: scenario, explanations, paired experiment, evidence review, and human approval.">
       </div>
     </figure>
 
     <figure class="figure">
       <div class="figure-media diagram">
-        <img src="images/coagentics-workbench.svg" width="1920" height="1080" alt="CoAgentics workbench.">
+        <img src="images/knowledge-registry.svg" width="1920" height="1080" alt="The evidence registry: an inspectable record outside the chat.">
       </div>
     </figure>
 
