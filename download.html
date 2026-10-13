@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get the book — Thinking Together</title>
+  <meta name="description" content="Leave your email to download Thinking Together as an EPUB.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=9">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Paul Cummings, Ph.D.</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="book.html">Book</a>
+      <a href="research.html">Research</a>
+      <a href="consulting.html">Consulting</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+    </nav>
+    <a class="btn btn-contact" href="contact.html">Contact</a>
+  </header>
+  <main class="page">
+    <p class="eyebrow">The book</p>
+    <h1>Get the EPUB</h1>
+    <p class="intro">Leave your email and the download will unlock. Occasional notes on the book, CoAgentics, and human–AI inquiry — no spam.</p>
+
+    <div id="gate" class="access-panel">
+      <form id="access-form" class="access-form" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn btn-fill" type="submit">Unlock download <span aria-hidden="true">→</span></button>
+        <p id="access-status" class="access-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div id="unlocked" class="access-panel" hidden>
+      <p class="access-ready">Thanks — your download is ready.</p>
+      <a class="btn btn-fill" id="epub-link" href="downloads/access/Thinking-Together.epub" download>Download Thinking Together <span aria-hidden="true">→</span></a>
+      <p class="figure-note">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var KEY = "tt-book-access-v1";
+      var ENDPOINT = "https://formsubmit.co/ajax/paul@invia.com";
+      var gate = document.getElementById("gate");
+      var unlocked = document.getElementById("unlocked");
+      var form = document.getElementById("access-form");
+      var statusEl = document.getElementById("access-status");
+      var epub = document.getElementById("epub-link");
+
+      function showUnlocked() {
+        gate.hidden = true;
+        unlocked.hidden = false;
+      }
+
+      if (sessionStorage.getItem(KEY) === "1") {
+        showUnlocked();
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var email = (form.email.value || "").trim();
+        var honeypot = form._gotcha.value;
+        statusEl.textContent = "";
+        statusEl.classList.remove("error");
+
+        if (honeypot) {
+          showUnlocked();
+          return;
+        }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          statusEl.textContent = "Enter a valid email address.";
+          statusEl.classList.add("error");
+          form.email.focus();
+          return;
+        }
+
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        statusEl.textContent = "Sending…";
+
+        fetch(ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            _subject: "Thinking Together — book access",
+            source: "paulsimvient.github.io/download.html",
+            _template: "table",
+            _captcha: "false",
+            _blacklist: "spammy pattern"
+          })
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error("request failed");
+            return res.json().catch(function () { return {}; });
+          })
+          .then(function () {
+            sessionStorage.setItem(KEY, "1");
+            showUnlocked();
+            // Offer the file immediately after unlock.
+            epub.click();
+          })
+          .catch(function () {
+            statusEl.textContent = "Something went wrong. Try again, or email paul@invia.com.";
+            statusEl.classList.add("error");
+            btn.disabled = false;
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -408,6 +408,70 @@ a.figure-media {
 
 .page .btn { margin-top: 28px; }
 
+.access-panel {
+  margin: 32px 0 0;
+  max-width: 28em;
+}
+
+.access-form {
+  display: grid;
+  gap: 10px;
+}
+
+.access-form label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+
+.access-form input[type="email"] {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1.5px solid rgba(16, 41, 40, 0.22);
+  border-radius: 8px;
+  background: #fffaf2;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.access-form input[type="email"]:focus {
+  outline: 2px solid rgba(153, 66, 32, 0.35);
+  border-color: var(--rust);
+}
+
+.access-form .btn {
+  margin-top: 6px;
+  justify-self: start;
+}
+
+.access-form .hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.access-status {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.access-status.error {
+  color: var(--rust-deep);
+}
+
+.access-ready {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+
 .page ul {
   margin: 22px 0 0;
   padding: 0;
