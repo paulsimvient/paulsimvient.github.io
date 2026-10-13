@@ -726,3 +726,10 @@ a:focus-visible,
   .gallery { grid-template-columns: 1fr; }
   .actions { flex-direction: column; align-items: flex-start; }
 }
+
+/* Clarity and engagement sections */
+.clarity-section,.deliverables,.book-sample{max-width:1120px;margin:3rem auto;padding:1.6rem 2rem;border-top:1px solid rgba(100,100,100,.25)}
+.clarity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.3rem;margin:1.5rem 0}
+.clarity-grid article{padding:1.3rem;background:rgba(120,120,120,.055);border-radius:10px}
+.clarity-grid h3{margin-top:0}
+@media(max-width:720px){.clarity-grid{grid-template-columns:1fr}.clarity-section,.deliverables,.book-sample{padding:1.2rem}}

@@ -1,51 +1,50 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Get the book — Thinking Together</title>
-  <meta name="description" content="Leave your email to download Thinking Together as an EPUB.">
-  <meta name="robots" content="noindex">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=19">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Get the book — Thinking Together</title>
+<meta content="Leave your email to download Thinking Together as an EPUB." name="description"/>
+<meta content="noindex" name="robots"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css?v=20" rel="stylesheet"/>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html">Paul Cummings, Ph.D.</a>
-    <nav class="nav" aria-label="Primary">
-      <a href="index.html">Home</a>
-      <a href="book.html">Book</a>
-      <a href="research.html">Research</a>
-      <a href="consulting.html">Consulting</a>
-      <a href="blog.html">Blog</a>
-      <a href="about.html">About</a>
-    </nav>
-    <a class="btn btn-contact" href="contact.html">Contact</a>
-  </header>
-  <main class="page">
-    <p class="eyebrow">The book</p>
-    <h1>Get the EPUB</h1>
-    <p class="intro">Leave your email and the download will unlock. Occasional notes on opening the AI black box through observation, experimentation, and discovery — no spam.</p>
-
-    <div id="gate" class="access-panel">
-      <form id="access-form" class="access-form" novalidate>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
-        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button class="btn btn-fill" type="submit">Unlock download <span aria-hidden="true">→</span></button>
-        <p id="access-status" class="access-status" role="status" aria-live="polite"></p>
-      </form>
-    </div>
-
-    <div id="unlocked" class="access-panel" hidden>
-      <p class="access-ready">Thanks — your download is ready.</p>
-      <a class="btn btn-fill" id="epub-link" href="downloads/Thinking-Together.epub">Download Thinking Together <span aria-hidden="true">→</span></a>
-      <p class="figure-note">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
-    </div>
-  </main>
-  <script>
+<header class="site-header">
+<a class="brand" href="index.html">Paul Cummings, Ph.D.</a>
+<nav aria-label="Primary" class="nav">
+<a href="index.html">Home</a>
+<a href="book.html">Book</a>
+<a href="research.html">Research</a>
+<a href="consulting.html">Consulting</a>
+<a href="blog.html">Blog</a>
+<a href="about.html">About</a>
+</nav>
+<a class="btn btn-contact" href="contact.html">Contact</a>
+</header>
+<main class="page">
+<p class="eyebrow">The book</p>
+<h1>Get the EPUB</h1>
+<p class="intro">Leave your email and the download will unlock. Occasional notes on opening the AI black box through observation, experimentation, and discovery — no spam.</p>
+<div class="access-panel" id="gate">
+<form class="access-form" id="access-form" novalidate="">
+<label for="email">Email</label>
+<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required="" type="email"/>
+<input aria-hidden="true" autocomplete="off" class="hp" name="_gotcha" tabindex="-1" type="text"/>
+<button class="btn btn-fill" type="submit">Unlock download <span aria-hidden="true">→</span></button>
+<p aria-live="polite" class="access-status" id="access-status" role="status"></p>
+</form>
+</div>
+<div class="access-panel" hidden="" id="unlocked">
+<p class="access-ready">Thanks — your download is ready.</p>
+<a class="btn btn-fill" href="downloads/Thinking-Together.epub" id="epub-link">Download Thinking Together <span aria-hidden="true">→</span></a>
+<p class="figure-note">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
+</div>
+</main>
+<script>
     (function () {
       var KEY = "tt-book-access-v1";
       var ENDPOINT = "https://formsubmit.co/ajax/paul@invia.com";
@@ -66,8 +65,8 @@
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
-        var email = (form.email.value || "").trim();
-        var honeypot = form._gotcha.value;
+        var email = (form.elements.namedItem("email").value || "").trim();
+        var honeypot = form.elements.namedItem("_gotcha")?.value || "";
         statusEl.textContent = "";
         statusEl.classList.remove("error");
 
@@ -78,7 +77,7 @@
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           statusEl.textContent = "Enter a valid email address.";
           statusEl.classList.add("error");
-          form.email.focus();
+          form.elements.namedItem("email").focus();
           return;
         }
 

@@ -1,212 +1,192 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Research — Validating Decision-Making</title>
-  <meta name="description" content="Validating decision-making when AI is opaque: design experiments that reveal what systems actually do, then judge what the evidence supports.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=19">
-  <meta http-equiv="Cache-Control" content="no-cache">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Research — Validating Decision-Making</title>
+<meta content="Validating decision-making when AI is opaque: design experiments that reveal what systems actually do, then judge what the evidence supports." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css?v=20" rel="stylesheet"/>
+<meta content="no-cache" http-equiv="Cache-Control"/>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html">Paul Cummings, Ph.D.</a>
-    <nav class="nav" aria-label="Primary">
-      <a href="index.html">Home</a>
-      <a href="book.html">Book</a>
-      <a class="active" href="research.html" aria-current="page">Research</a>
-      <a href="consulting.html">Consulting</a>
-      <a href="blog.html">Blog</a>
-      <a href="about.html">About</a>
-    </nav>
-    <a class="btn btn-contact" href="contact.html">Contact</a>
-  </header>
-  <main class="page wide research-page">
-    <p class="eyebrow">Central research problem</p>
-    <h1>Validating decision-making</h1>
-    <p class="intro">How do we know a consequential choice is supported by evidence — when AI and models remain partly opaque?</p>
-
-    <p class="research-question">Can we validate a decision not by trusting what an AI system tells us about itself, but by designing experiments that reveal what it actually does — and judging what that evidence supports?</p>
-
-    <p>Decisions in markets, operations, defense, and policy increasingly depend on large language models and other computational systems. Those systems can explain, predict, recommend, and solve complex problems. A convincing response still tells us surprisingly little about how the model arrived at it — or whether the recommendation should carry authority.</p>
-
-    <p>Why does an LLM choose one answer over another? What changes its behavior? Does it apply consistent strategies, or does its apparent reasoning depend on how a question is presented? Until those questions are investigated, “using the model” is not the same as validating a decision.</p>
-
-    <p>This research brings together computational social science, agent-based modeling, multi-agent systems, and controlled experimentation to study AI behavior in service of better judgment. The aim is to move beyond asking models to explain themselves. We construct experiments that reveal behavioral patterns, challenge competing explanations, and establish what the evidence actually supports before a claim hardens into action.</p>
-
-    <h2>Opening the LLM black box — to validate decisions</h2>
-    <p>An LLM accepts a prompt, processes it through a vast network of learned parameters, and produces a response. We know the broad computational architecture, but that does not mean we can readily explain why a particular response occurred — or whether it is fit for a decision.</p>
-
-    <ul class="plain-list">
-      <li>Why does changing one word in a prompt change the conclusion?</li>
-      <li>Does the model apply a consistent strategy across different problems?</li>
-      <li>When it gives an explanation, does that explanation reflect the process that produced the answer?</li>
-      <li>Does its apparent reasoning survive when we change the context?</li>
-      <li>Can we identify conditions under which its behavior becomes unreliable for decision use?</li>
-    </ul>
-
-    <p>These are questions that can be investigated experimentally. Rather than treating an LLM as a source of authoritative answers, we study it as a system whose behavior emerges under different conditions — then ask what that behavior entitles us to decide.</p>
-
-    <h2>From observation to validated judgment</h2>
-    <p>We begin with observations, not assumptions about intelligence.</p>
-    <p>A model produces a response. We develop competing explanations for that behavior, change the experimental conditions, and observe what happens.</p>
-    <p>Does the behavior persist when we change the wording? Does it survive new scenarios? Can the model adapt when important assumptions change? Can another model reproduce the result?</p>
-    <p>Each experiment helps distinguish a reliable pattern from a coincidence, an artifact of the prompt, or an explanation that sounds plausible but lacks evidence. Validation is the step that asks whether a result has earned a role in decision-making — under which conditions, with what uncertainty, and with what right to disagree.</p>
-
-    <figure class="figure">
-      <div class="figure-media diagram">
-        <img src="images/black-box-experiment.svg" width="1920" height="1080" alt="Observe, intervene on an opaque model, and compare which claims survive.">
-      </div>
-      <figcaption>The model remains internally opaque. Controlled interventions make its behavior — and its fitness for decisions — increasingly testable.</figcaption>
-    </figure>
-    <p class="figure-note">Conceptual illustration — not a measured experimental result.</p>
-
-    <p>The goal is not to claim that a black-box experiment reveals the exact internal computations. It is to develop increasingly strong, falsifiable accounts of model behavior, and to keep decision authority tied to what those accounts support. We decipher the black box by discovering which explanations survive attempts to disprove them.</p>
-
-    <div class="gallery">
-      <figure class="figure">
-        <div class="figure-media diagram">
-          <img src="images/paired-experiments.svg" width="1920" height="1080" alt="Paired counterfactual experiments.">
-        </div>
-      </figure>
-      <figure class="figure">
-        <div class="figure-media diagram">
-          <img src="images/exploring-alternatives.svg" width="1920" height="1080" alt="Explore competing explanations.">
-        </div>
-      </figure>
-    </div>
-
-    <h2>A concrete example: Can we trust an LLM’s strategic recommendation?</h2>
-    <p>Suppose an LLM is asked to choose between two economic strategies. It selects Strategy A and provides a persuasive explanation — the kind of output that can feel like a decision already made.</p>
-    <p>Did it compare the alternatives? Did it rely on superficial cues? Would it make the same choice if the wording changed? Until we know, we have fluency, not validated decision support.</p>
-    <p>We can design a controlled experiment.</p>
-
-    <div class="table-wrap">
-      <table class="research-table">
-        <thead>
-          <tr>
-            <th scope="col">Experiment</th>
-            <th scope="col">What we change</th>
-            <th scope="col">What we investigate</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Baseline</td>
-            <td>Original problem</td>
-            <td>Initial choice and explanation</td>
-          </tr>
-          <tr>
-            <td>Paraphrase</td>
-            <td>Wording only</td>
-            <td>Sensitivity to language</td>
-          </tr>
-          <tr>
-            <td>Reorder</td>
-            <td>Position of alternatives</td>
-            <td>Order effects</td>
-          </tr>
-          <tr>
-            <td>Counterfactual</td>
-            <td>One economic assumption</td>
-            <td>Response to relevant evidence</td>
-          </tr>
-          <tr>
-            <td>Transfer</td>
-            <td>Different economic setting</td>
-            <td>Generalization</td>
-          </tr>
-          <tr>
-            <td>Repetition</td>
-            <td>Random seed or sampling</td>
-            <td>Behavioral variability</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>Repeated trials could reveal whether the model follows a stable behavioral rule, changes its answer for irrelevant reasons, or adapts appropriately to new evidence.</p>
-    <p>Even perfect consistency would not prove the model uses a particular internal reasoning process. It would establish a behavioral finding — the kind of evidence that can support, bound, or withhold a decision recommendation.</p>
-
-    <h2>Three levels of understanding</h2>
-    <div class="table-wrap">
-      <table class="research-table">
-        <thead>
-          <tr>
-            <th scope="col">Level</th>
-            <th scope="col">Research question</th>
-            <th scope="col">Method</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Behavioral</td>
-            <td>What does the LLM do, and under which conditions?</td>
-            <td>Black-box experiments, repeated trials</td>
-          </tr>
-          <tr>
-            <td>Functional</td>
-            <td>What computational strategy best explains its behavior?</td>
-            <td>Competing models, causal interventions, transfer tests</td>
-          </tr>
-          <tr>
-            <td>Mechanistic</td>
-            <td>Which internal components produce the behavior?</td>
-            <td>Activation analysis, probing, causal ablation, interpretability methods</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p>Decision validation usually begins at the behavioral and functional levels: what happens, under which conditions, and which accounts survive. CoAgentics is built strongly for those levels. Mechanistic work — with open-weight models and interpretability tools — is a natural extension of the same research program.</p>
-
-    <h2 id="coagentics">CoAgentics: apparatus for validated inquiry</h2>
-    <p>CoAgentics provides the computational environment for these investigations. It connects domain models, competing strategies, controlled experiments, statistical validation, an evidence registry, and a human research workbench.</p>
-    <p>Researchers can formulate hypotheses, compare model behavior, run counterfactual experiments, examine uncertainty, and preserve findings across investigations. The system separates observed behavior from interpretation. It does not treat an LLM’s self-explanation as proof of its internal reasoning — or as automatic decision authority.</p>
-
-    <figure class="figure">
-      <div class="figure-media diagram">
-        <img src="images/six-layer-architecture.svg" width="1920" height="1080" alt="Six connected layers: Domain, Strategy, Experiment, Validation, Knowledge, and Human Workbench.">
-      </div>
-      <figcaption>The apparatus that makes validated inquiry possible — not a substitute for human judgment.</figcaption>
-    </figure>
-
-    <figure class="figure">
-      <div class="figure-media diagram">
-        <img src="images/coagentics-workbench.svg" width="1920" height="1080" alt="CoAgentics workbench console.">
-      </div>
-    </figure>
-    <p>See also <a href="book.html#coagentics">how CoAgentics relates to Thinking Together</a>.</p>
-
-    <h2>From validated AI behavior to better human decisions</h2>
-    <p>Understanding the black box matters because decisions rest on it.</p>
-    <p>When experiments uncover reliable patterns, people can learn from them. They can discover new strategies, recognize hidden assumptions, improve their questions, and develop better ways to evaluate AI-generated conclusions before acting.</p>
-    <p>The models also become subjects of continued investigation as researchers refine experimental conditions and challenge earlier findings.</p>
-    <p>This is the idea behind <em>Thinking Together</em>: people and computational models participating in a continuing process of observation, experimentation, and discovery — so judgment improves rather than being outsourced.</p>
-    <p class="closing-line">We validate decisions by testing what AI systems actually do. We learn together by using those discoveries to improve how we investigate, decide, and remain accountable.</p>
-
-    <h2>Teaching cases</h2>
-    <div class="gallery">
-      <figure class="figure">
-        <a class="figure-media diagram" href="economics.html">
-          <img src="images/economics-laboratory.svg" width="1920" height="1080" alt="Economics laboratory.">
-        </a>
-      </figure>
-      <figure class="figure">
-        <a class="figure-media diagram" href="dca.html">
-          <img src="images/dca-night-crossing.svg" width="1920" height="1080" alt="DCA Night Crossing.">
-        </a>
-      </figure>
-    </div>
-    <p class="figure-note">Case diagrams are conceptual illustrations, not measured experimental results.</p>
-
-    <div class="actions">
-      <a class="btn btn-fill" href="book.html">Read the book <span aria-hidden="true">→</span></a>
-      <a class="btn btn-ghost" href="economics.html">Economics case <span aria-hidden="true">→</span></a>
-      <a class="btn btn-ghost" href="dca.html">DCA case <span aria-hidden="true">→</span></a>
-    </div>
-  </main>
+<header class="site-header">
+<a class="brand" href="index.html">Paul Cummings, Ph.D.</a>
+<nav aria-label="Primary" class="nav">
+<a href="index.html">Home</a>
+<a href="book.html">Book</a>
+<a aria-current="page" class="active" href="research.html">Research</a>
+<a href="consulting.html">Consulting</a>
+<a href="blog.html">Blog</a>
+<a href="about.html">About</a>
+</nav>
+<a class="btn btn-contact" href="contact.html">Contact</a>
+</header>
+<main class="page wide research-page">
+<p class="eyebrow">Central research problem</p>
+<h1>Understanding AI behavior through experiment</h1>
+<p class="intro">How do we know a consequential choice is supported by evidence — when AI and models remain partly opaque?</p>
+<p class="research-question">Can we validate a decision not by trusting what an AI system tells us about itself, but by designing experiments that reveal what it actually does — and judging what that evidence supports?</p>
+<p>Decisions in markets, operations, defense, and policy increasingly depend on large language models and other computational systems. Those systems can explain, predict, recommend, and solve complex problems. A convincing response still tells us surprisingly little about how the model arrived at it — or whether the recommendation should carry authority.</p>
+<p>Why does an LLM choose one answer over another? What changes its behavior? Does it apply consistent strategies, or does its apparent reasoning depend on how a question is presented? Until those questions are investigated, “using the model” is not the same as validating a decision.</p>
+<p>This research brings together computational social science, agent-based modeling, multi-agent systems, and controlled experimentation to study AI behavior in service of better judgment. The aim is to move beyond asking models to explain themselves. We construct experiments that reveal behavioral patterns, challenge competing explanations, and establish what the evidence actually supports before a claim hardens into action.</p>
+<h2>Opening the LLM black box — to validate decisions</h2>
+<p>An LLM accepts a prompt, processes it through a vast network of learned parameters, and produces a response. We know the broad computational architecture, but that does not mean we can readily explain why a particular response occurred — or whether it is fit for a decision.</p>
+<ul class="plain-list">
+<li>Why does changing one word in a prompt change the conclusion?</li>
+<li>Does the model apply a consistent strategy across different problems?</li>
+<li>When it gives an explanation, does that explanation reflect the process that produced the answer?</li>
+<li>Does its apparent reasoning survive when we change the context?</li>
+<li>Can we identify conditions under which its behavior becomes unreliable for decision use?</li>
+</ul>
+<p>These are questions that can be investigated experimentally. Rather than treating an LLM as a source of authoritative answers, we study it as a system whose behavior emerges under different conditions — then ask what that behavior entitles us to decide.</p>
+<h2>From observation to validated judgment</h2>
+<p>We begin with observations, not assumptions about intelligence.</p>
+<p>A model produces a response. We develop competing explanations for that behavior, change the experimental conditions, and observe what happens.</p>
+<p>Does the behavior persist when we change the wording? Does it survive new scenarios? Can the model adapt when important assumptions change? Can another model reproduce the result?</p>
+<p>Each experiment helps distinguish a reliable pattern from a coincidence, an artifact of the prompt, or an explanation that sounds plausible but lacks evidence. Validation is the step that asks whether a result has earned a role in decision-making — under which conditions, with what uncertainty, and with what right to disagree.</p>
+<figure class="figure">
+<div class="figure-media diagram">
+<img alt="Observe, intervene on an opaque model, and compare which claims survive." height="1080" src="images/black-box-experiment.svg" width="1920"/>
+</div>
+<figcaption>The model remains internally opaque. Controlled interventions make its behavior — and its fitness for decisions — increasingly testable.</figcaption>
+</figure>
+<p class="figure-note">Conceptual illustration — not a measured experimental result.</p>
+<p>The goal is not to claim that a black-box experiment reveals the exact internal computations. It is to develop increasingly strong, falsifiable accounts of model behavior, and to keep decision authority tied to what those accounts support. We decipher the black box by discovering which explanations survive attempts to disprove them.</p>
+<div class="gallery">
+<figure class="figure">
+<div class="figure-media diagram">
+<img alt="Paired counterfactual experiments." height="1080" src="images/paired-experiments.svg" width="1920"/>
+</div>
+</figure>
+<figure class="figure">
+<div class="figure-media diagram">
+<img alt="Explore competing explanations." height="1080" src="images/exploring-alternatives.svg" width="1920"/>
+</div>
+</figure>
+</div>
+<h2>A concrete example: Can we trust an LLM’s strategic recommendation?</h2>
+<p>Suppose an LLM is asked to choose between two economic strategies. It selects Strategy A and provides a persuasive explanation — the kind of output that can feel like a decision already made.</p>
+<p>Did it compare the alternatives? Did it rely on superficial cues? Would it make the same choice if the wording changed? Until we know, we have fluency, not validated decision support.</p>
+<p>We can design a controlled experiment.</p>
+<div class="table-wrap">
+<table class="research-table">
+<thead>
+<tr>
+<th scope="col">Experiment</th>
+<th scope="col">What we change</th>
+<th scope="col">What we investigate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>Original problem</td>
+<td>Initial choice and explanation</td>
+</tr>
+<tr>
+<td>Paraphrase</td>
+<td>Wording only</td>
+<td>Sensitivity to language</td>
+</tr>
+<tr>
+<td>Reorder</td>
+<td>Position of alternatives</td>
+<td>Order effects</td>
+</tr>
+<tr>
+<td>Counterfactual</td>
+<td>One economic assumption</td>
+<td>Response to relevant evidence</td>
+</tr>
+<tr>
+<td>Transfer</td>
+<td>Different economic setting</td>
+<td>Generalization</td>
+</tr>
+<tr>
+<td>Repetition</td>
+<td>Random seed or sampling</td>
+<td>Behavioral variability</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Repeated trials could reveal whether the model follows a stable behavioral rule, changes its answer for irrelevant reasons, or adapts appropriately to new evidence.</p>
+<p>Even perfect consistency would not prove the model uses a particular internal reasoning process. It would establish a behavioral finding — the kind of evidence that can support, bound, or withhold a decision recommendation.</p>
+<h2>Three levels of understanding</h2>
+<div class="table-wrap">
+<table class="research-table">
+<thead>
+<tr>
+<th scope="col">Level</th>
+<th scope="col">Research question</th>
+<th scope="col">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Behavioral</td>
+<td>What does the LLM do, and under which conditions?</td>
+<td>Black-box experiments, repeated trials</td>
+</tr>
+<tr>
+<td>Functional</td>
+<td>What computational strategy best explains its behavior?</td>
+<td>Competing models, causal interventions, transfer tests</td>
+</tr>
+<tr>
+<td>Mechanistic</td>
+<td>Which internal components produce the behavior?</td>
+<td>Activation analysis, probing, causal ablation, interpretability methods</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Decision validation usually begins at the behavioral and functional levels: what happens, under which conditions, and which accounts survive. CoAgentics is built strongly for those levels. Mechanistic work — with open-weight models and interpretability tools — is a natural extension of the same research program.</p>
+<h2 id="coagentics">CoAgentics: apparatus for validated inquiry</h2>
+<p>CoAgentics provides the computational environment for these investigations. It connects domain models, competing strategies, controlled experiments, statistical validation, an evidence registry, and a human research workbench.</p>
+<p>Researchers can formulate hypotheses, compare model behavior, run counterfactual experiments, examine uncertainty, and preserve findings across investigations. The system separates observed behavior from interpretation. It does not treat an LLM’s self-explanation as proof of its internal reasoning — or as automatic decision authority.</p>
+<figure class="figure">
+<div class="figure-media diagram">
+<img alt="Six connected layers: Domain, Strategy, Experiment, Validation, Knowledge, and Human Workbench." height="1080" src="images/six-layer-architecture.svg" width="1920"/>
+</div>
+<figcaption>The apparatus that makes validated inquiry possible — not a substitute for human judgment.</figcaption>
+</figure>
+<figure class="figure">
+<div class="figure-media diagram">
+<img alt="CoAgentics workbench console." height="1080" src="images/coagentics-workbench.svg" width="1920"/>
+</div>
+</figure>
+<p>See also <a href="book.html#coagentics">how CoAgentics relates to Thinking Together</a>.</p>
+<h2>From validated AI behavior to better human decisions</h2>
+<p>Understanding the black box matters because decisions rest on it.</p>
+<p>When experiments uncover reliable patterns, people can learn from them. They can discover new strategies, recognize hidden assumptions, improve their questions, and develop better ways to evaluate AI-generated conclusions before acting.</p>
+<p>The models also become subjects of continued investigation as researchers refine experimental conditions and challenge earlier findings.</p>
+<p>This is the idea behind <em>Thinking Together</em>: people and computational models participating in a continuing process of observation, experimentation, and discovery — so judgment improves rather than being outsourced.</p>
+<p class="closing-line">We validate decisions by testing what AI systems actually do. We learn together by using those discoveries to improve how we investigate, decide, and remain accountable.</p>
+<h2>Teaching cases</h2>
+<div class="gallery">
+<figure class="figure">
+<a class="figure-media diagram" href="economics.html">
+<img alt="Economics laboratory." height="1080" src="images/economics-laboratory.svg" width="1920"/>
+</a>
+</figure>
+<figure class="figure">
+<a class="figure-media diagram" href="dca.html">
+<img alt="DCA Night Crossing." height="1080" src="images/dca-night-crossing.svg" width="1920"/>
+</a>
+</figure>
+</div>
+<p class="figure-note">Case diagrams are conceptual illustrations, not measured experimental results.</p>
+<div class="actions">
+<a class="btn btn-fill" href="book.html">Read the book <span aria-hidden="true">→</span></a>
+<a class="btn btn-ghost" href="economics.html">Economics case <span aria-hidden="true">→</span></a>
+<a class="btn btn-ghost" href="dca.html">DCA case <span aria-hidden="true">→</span></a>
+</div>
+</main>
 </body>
 </html>
