@@ -1,121 +1,150 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Get the book — Thinking Together</title>
-<meta content="Leave your email to download Thinking Together as an EPUB." name="description"/>
-<meta content="noindex" name="robots"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="styles.css?v=21" rel="stylesheet"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Get the book | Paul Cummings, Ph.D.</title>
+<meta name="description" content="Leave your email to download Thinking Together as an EPUB.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="styles.css?v=22">
 </head>
 <body>
 <header class="site-header">
-<a class="brand" href="index.html">Paul Cummings, Ph.D.</a>
-<nav aria-label="Primary" class="nav">
+<div class="nav-wrap">
+<a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
+<button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+<nav class="nav">
 <a href="index.html">Home</a>
 <a href="book.html">Book</a>
 <a href="research.html">Research</a>
 <a href="consulting.html">Consulting</a>
 <a href="blog.html">Blog</a>
 <a href="about.html">About</a>
+<a class="contact-pill" href="contact.html">Contact</a>
 </nav>
-<a class="btn btn-contact" href="contact.html">Contact</a>
+</div>
 </header>
-<main class="page">
-<p class="eyebrow">The book</p>
-<h1>Get the EPUB</h1>
-<p class="intro">Leave your email and the download will unlock. Occasional notes on opening the AI black box through observation, experimentation, and discovery — no spam.</p>
-<div class="access-panel" id="gate">
-<form class="access-form" id="access-form" novalidate="">
+<main>
+<section class="page-hero">
+<div class="container">
+<div class="eyebrow">The book</div>
+<h1>Get the <span class="accent">EPUB</span></h1>
+<p class="lead">Leave an email and the download unlocks. Occasional notes on human-AI inquiry — no spam.</p>
+</div>
+</section>
+<section class="section">
+<div class="container" style="max-width:560px">
+<div id="gate">
+<form class="form" id="access-form" novalidate>
+<div>
 <label for="email">Email</label>
-<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required="" type="email"/>
-<input aria-hidden="true" autocomplete="off" class="hp" name="_gotcha" tabindex="-1" type="text"/>
-<button class="btn btn-fill" type="submit">Unlock download <span aria-hidden="true">→</span></button>
-<p aria-live="polite" class="access-status" id="access-status" role="status"></p>
+<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email">
+</div>
+<input aria-hidden="true" autocomplete="off" name="_gotcha" tabindex="-1" type="text" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
+<button class="btn primary" type="submit">Unlock download →</button>
+<p aria-live="polite" class="caption" id="access-status" role="status"></p>
 </form>
 </div>
-<div class="access-panel" hidden="" id="unlocked">
-<p class="access-ready">Thanks — your download is ready.</p>
-<a class="btn btn-fill" href="downloads/Thinking-Together.epub" id="epub-link">Download Thinking Together <span aria-hidden="true">→</span></a>
-<p class="figure-note">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
+<div hidden id="unlocked">
+<p class="lead">Thanks — the download is ready.</p>
+<a class="btn primary" href="downloads/Thinking-Together.epub" id="epub-link">Download Thinking Together →</a>
+<p class="caption" style="margin-top:16px">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
 </div>
+</div>
+</section>
 </main>
+<footer class="site-footer">
+<div class="container">
+<div class="footer-grid">
+<div>
+<div class="footer-title">PAUL CUMMINGS, Ph.D.</div>
+<p>Agent-based simulation, multi-agent AI, experimental validation, and human-AI inquiry.</p>
+</div>
+<div class="footer-links">
+<strong>Explore</strong>
+<a href="book.html">Thinking Together</a>
+<a href="research.html">Research</a>
+<a href="consulting.html">Consulting</a>
+</div>
+<div class="footer-links">
+<strong>Connect</strong>
+<a href="contact.html">Contact</a>
+<a href="https://github.com/paulsimvient" target="_blank" rel="noopener">GitHub</a>
+<a href="https://github.com/paulsimvient/ThinkingTogetherBook" target="_blank" rel="noopener">Book repository</a>
+</div>
+</div>
+<div class="fineprint">© 2026 Paul Cummings, Ph.D. All rights reserved.</div>
+</div>
+</footer>
+<script src="script.js?v=22"></script>
 <script>
-    (function () {
-      var KEY = "tt-book-access-v1";
-      var ENDPOINT = "https://formsubmit.co/ajax/paul@invia.com";
-      var gate = document.getElementById("gate");
-      var unlocked = document.getElementById("unlocked");
-      var form = document.getElementById("access-form");
-      var statusEl = document.getElementById("access-status");
-      var epub = document.getElementById("epub-link");
+(function () {
+  var KEY = "tt-book-access-v1";
+  var ENDPOINT = "https://formsubmit.co/ajax/paul@invia.com";
+  var gate = document.getElementById("gate");
+  var unlocked = document.getElementById("unlocked");
+  var form = document.getElementById("access-form");
+  var statusEl = document.getElementById("access-status");
+  var epub = document.getElementById("epub-link");
 
-      function showUnlocked() {
-        gate.hidden = true;
-        unlocked.hidden = false;
-      }
+  function showUnlocked() {
+    gate.hidden = true;
+    unlocked.hidden = false;
+  }
 
-      if (sessionStorage.getItem(KEY) === "1") {
+  if (sessionStorage.getItem(KEY) === "1") {
+    showUnlocked();
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var email = (form.elements.namedItem("email").value || "").trim();
+    var honeypot = (form.elements.namedItem("_gotcha") && form.elements.namedItem("_gotcha").value) || "";
+    statusEl.textContent = "";
+
+    if (honeypot) {
+      showUnlocked();
+      return;
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      statusEl.textContent = "Enter a valid email address.";
+      form.elements.namedItem("email").focus();
+      return;
+    }
+
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    statusEl.textContent = "Sending…";
+
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        _subject: "Thinking Together — book access",
+        source: "paulsimvient.github.io/download.html",
+        _template: "table",
+        _captcha: "false"
+      })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("request failed");
+        return res.json().catch(function () { return {}; });
+      })
+      .then(function () {
+        sessionStorage.setItem(KEY, "1");
         showUnlocked();
-      }
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        var email = (form.elements.namedItem("email").value || "").trim();
-        var honeypot = form.elements.namedItem("_gotcha")?.value || "";
-        statusEl.textContent = "";
-        statusEl.classList.remove("error");
-
-        if (honeypot) {
-          showUnlocked();
-          return;
-        }
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          statusEl.textContent = "Enter a valid email address.";
-          statusEl.classList.add("error");
-          form.elements.namedItem("email").focus();
-          return;
-        }
-
-        var btn = form.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        statusEl.textContent = "Sending…";
-
-        fetch(ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          },
-          body: JSON.stringify({
-            email: email,
-            _subject: "Thinking Together — book access",
-            source: "paulsimvient.github.io/download.html",
-            _template: "table",
-            _captcha: "false",
-            _blacklist: "spammy pattern"
-          })
-        })
-          .then(function (res) {
-            if (!res.ok) throw new Error("request failed");
-            return res.json().catch(function () { return {}; });
-          })
-          .then(function () {
-            sessionStorage.setItem(KEY, "1");
-            showUnlocked();
-            window.location.href = epub.getAttribute("href");
-          })
-          .catch(function () {
-            statusEl.textContent = "Something went wrong. Try again, or email paul@invia.com.";
-            statusEl.classList.add("error");
-            btn.disabled = false;
-          });
+        window.location.href = epub.getAttribute("href");
+      })
+      .catch(function () {
+        statusEl.textContent = "Something went wrong. Try again, or email paul@invia.com.";
+        btn.disabled = false;
       });
-    })();
-  </script>
+  });
+})();
+</script>
 </body>
 </html>
