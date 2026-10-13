@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DCA Night Crossing · Instrument | Paul Cummings</title>
+<meta name="description" content="Interactive teaching instrument: same world, same seed, one controlled change. Compare what happens.">
+<link rel="stylesheet" href="styles.css?v=50">
+<style>
+:root{
+  --ink:#102f2d; --teal:#153f3b; --rust:#b64824; --cream:#f4ebdc; --paper:#fffaf1;
+  --line:#d8c8b0; --panel:#0f2926; --panel2:#123734; --hi:#67c7d3; --warn:#f0b487; --ok:#8cbf90;
+}
+.page{max-width:1280px;margin:0 auto;padding:22px 20px 56px}
+.lead-box{max-width:820px;margin:0 0 18px;padding:18px 20px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+.lead-box h1{margin:0 0 10px;font-size:clamp(1.8rem,4vw,2.7rem);color:var(--teal);letter-spacing:-.03em}
+.lead-box p{margin:0;color:#3a4844;font-size:1.05rem;line-height:1.55}
+.note{margin-top:10px;font-size:.86rem;color:#5c6964}
+.instrument{
+  border:1px solid #2f5b55;border-radius:16px;overflow:hidden;background:var(--panel2);
+  box-shadow:0 22px 60px rgba(18,32,30,.22);color:#f4f7f5;
+}
+.inst-top{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;
+  padding:14px 16px;border-bottom:1px solid #2f5b55;background:#0f2421;
+  font-family:ui-monospace,Menlo,monospace;font-size:.72rem;letter-spacing:.08em;
+}
+.inst-top .live{color:var(--ok)}
+.inst-body{display:grid;grid-template-columns:1.35fr .9fr}
+.stage{
+  position:relative;min-height:420px;background:
+    radial-gradient(circle at 70% 30%,rgba(103,199,211,.08),transparent 35%),
+    linear-gradient(180deg,#102c29,#0b1f1d 70%);
+  border-right:1px solid #2f5b55;
+}
+.stage svg{width:100%;height:100%;min-height:420px;display:block}
+.hud{
+  position:absolute;left:12px;right:12px;bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+}
+.hud div{
+  background:rgba(8,20,18,.82);border:1px solid #355853;border-radius:8px;padding:8px 10px;
+  font-family:ui-monospace,Menlo,monospace;font-size:.68rem;
+}
+.hud span{display:block;color:#9fb4af;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.hud b{color:#fff8eb;font-size:.86rem}
+.side{display:flex;flex-direction:column;min-height:420px}
+.phase-bar{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:12px;border-bottom:1px solid #2f5b55;
+}
+.phase-bar button{
+  appearance:none;border:1px solid #355853;background:#0f2421;color:#c8d4d1;border-radius:8px;
+  padding:8px 6px;font:700 .62rem/1.2 ui-sans-serif,system-ui;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+}
+.phase-bar button.active{background:var(--rust);border-color:var(--rust);color:#fff8eb}
+.phase-bar button.done{border-color:#4a7a72;color:#9fd0c6}
+.tests{padding:12px;border-bottom:1px solid #2f5b55}
+.tests .label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#9fb4af;margin-bottom:8px}
+.tests .row{display:flex;flex-wrap:wrap;gap:8px}
+.tests button{
+  appearance:none;border:1px solid #3a5550;background:#0f2421;color:#fff8eb;border-radius:999px;
+  padding:9px 12px;font:600 .78rem/1 system-ui;cursor:pointer;
+}
+.tests button.active{background:#1a4d47;border-color:var(--hi);color:#fff}
+.tests button:hover{border-color:var(--hi)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border-bottom:1px solid #2f5b55}
+.card{
+  background:#0f2421;border:1px solid #355853;border-radius:10px;padding:12px;
+}
+.card h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--hi)}
+.card.cf h3{color:var(--warn)}
+.card p{margin:0 0 6px;font-size:.86rem;color:#dce6e3}
+.card .out{font-family:ui-monospace,Menlo,monospace;font-size:1.15rem;color:#fff8eb}
+.delta{
+  margin:0 12px 12px;padding:14px;border-radius:10px;background:#0f2421;border:1px solid #355853;text-align:center;
+}
+.delta .big{font-family:ui-monospace,Menlo,monospace;font-size:1.6rem;color:var(--ok);margin:4px 0}
+.delta .bar{height:8px;border-radius:999px;background:#243f3b;overflow:hidden;margin:10px auto;max-width:220px}
+.delta .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--hi),var(--ok));transition:width .8s ease}
+.evidence{padding:0 12px 12px;flex:1}
+.evidence h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#9fb4af}
+.ev-list{display:grid;gap:6px}
+.ev-list div{
+  border:1px solid #355853;border-radius:8px;padding:8px 10px;font-size:.8rem;color:#dce6e3;background:#0f2421;
+}
+.ev-list .ok{border-color:#3d6f66}
+.ev-list .warn{border-color:#8a5a3a}
+.controls{display:flex;flex-wrap:wrap;gap:8px;padding:0 12px 14px}
+.controls button{
+  appearance:none;border:1px solid var(--rust);background:var(--rust);color:#fff8eb;border-radius:8px;
+  padding:10px 14px;font:600 .82rem/1 system-ui;cursor:pointer;
+}
+.controls button.ghost{background:transparent;border-color:#4a6f68;color:#dce6e3}
+.loop{padding:10px 16px 16px;font-size:.84rem;color:#b7c9c4}
+.loop strong{color:#fff8eb}
+.tagline{
+  margin-top:18px;padding:22px 24px;border-radius:14px;background:var(--teal);color:#fff8eb;
+  font-size:clamp(1.2rem,2.5vw,1.7rem);letter-spacing:-.02em;
+}
+.tagline span{display:block;margin-top:8px;font-size:.95rem;color:#c6e6df;letter-spacing:0}
+.footer-links{margin-top:18px;display:flex;flex-wrap:wrap;gap:14px}
+.footer-links a{color:var(--rust);font-size:.92rem}
+.ac{fill:#67c7d3}.ac2{fill:#f0b487}
+.trail{fill:none;stroke-width:2;stroke-linecap:round;opacity:.85}
+.trail-a{stroke:#67c7d3}.trail-b{stroke:#f0b487}
+.pred{stroke:#9aa7af;stroke-dasharray:4 5;opacity:.7}
+.xmark{fill:none;stroke:#fff8eb;stroke-width:1.5}
+.river{fill:#163f4a;opacity:.55}
+.runway{stroke:#d8c8b0;stroke-width:3;opacity:.35}
+.corridor{fill:rgba(240,180,135,.08);stroke:rgba(240,180,135,.25);stroke-width:1}
+.label{fill:#c8d4d1;font:600 11px ui-sans-serif,system-ui}
+.muted{fill:#8aa09a;font:500 10px ui-monospace,Menlo,monospace}
+@media(max-width:900px){
+  .inst-body{grid-template-columns:1fr}
+  .stage{border-right:0;border-bottom:1px solid #2f5b55}
+  .hud{grid-template-columns:1fr 1fr}
+  .split{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+<div class="nav-wrap">
+<a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
+<button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+<nav class="nav">
+<a href="index.html">Home</a>
+<a href="research.html">How it works</a>
+<a href="system-demo.html">Example</a>
+<a href="economics.html">Economics</a>
+<a class="active" href="dca-demo.html">DCA</a>
+<a href="book.html">Book</a>
+<a href="about.html">About</a>
+<a class="contact-pill" href="contact.html">Contact</a>
+</nav>
+</div>
+</header>
+
+<main class="page">
+<div class="lead-box">
+<div class="eyebrow" style="color:var(--rust)">Teaching instrument · Night Crossing</div>
+<h1>Same world. Same seed. One controlled change.</h1>
+<p>Watch an abstract encounter near a busy airport environment. The point is not a crash reenactment. The point is the method: keep competing explanations alive, run a matched comparison, and see what the evidence supports.</p>
+<p class="note">Illustrative teaching case with surrogate labels. Not an accident reconstruction or measured finding about a real event.</p>
+</div>
+
+<section class="instrument" aria-label="DCA Night Crossing experiment console">
+<div class="inst-top">
+<div><span class="live">● LIVE</span> &nbsp; DCA NIGHT CROSSING &nbsp;·&nbsp; SCIENTIFIC INSTRUMENT</div>
+<div id="expLabel">EXPERIMENT 00 / 03</div>
+</div>
+<div class="inst-body">
+<div class="stage">
+<svg id="map" viewBox="0 0 720 420" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Abstract map with two aircraft paths">
+  <rect width="720" height="420" fill="#0b1f1d"/>
+  <!-- abstract river / shoreline -->
+  <path class="river" d="M0 80 C140 60,220 140,360 160 S560 90,720 120 L720 420 L0 420 Z"/>
+  <line class="runway" x1="420" y1="300" x2="680" y2="250"/>
+  <path class="corridor" d="M380 210 L520 175 L560 210 L430 250 Z"/>
+  <text class="muted" x="520" y="238">corridor</text>
+  <text class="muted" x="600" y="268">runway axis</text>
+
+  <!-- predicted / trails -->
+  <path id="trailA" class="trail trail-a" d="M80 90 C180 120,260 160,340 210"/>
+  <path id="trailB" class="trail trail-b" d="M120 320 C220 300,300 270,360 230"/>
+  <path id="predA" class="trail pred" d="M340 210 C400 245,455 270,520 285" opacity="0"/>
+  <path id="predB" class="trail pred" d="M360 230 C420 215,470 205,540 200" opacity="0"/>
+
+  <!-- closest approach marker -->
+  <g id="cpa" opacity="0">
+    <circle cx="355" cy="220" r="10" class="xmark"/>
+    <line x1="348" y1="213" x2="362" y2="227" class="xmark"/>
+    <line x1="362" y1="213" x2="348" y2="227" class="xmark"/>
+    <text class="label" x="370" y="216">closest approach</text>
+  </g>
+
+  <!-- aircraft A PAT25 -->
+  <g id="acA">
+    <circle class="ac" r="6" cx="80" cy="90"/>
+    <text class="label" x="92" y="86">PAT25</text>
+    <text class="muted" id="acAmeta" x="92" y="100">alt · hdg</text>
+  </g>
+  <!-- aircraft B PSA5342 -->
+  <g id="acB">
+    <circle class="ac2" r="6" cx="120" cy="320"/>
+    <text class="label" x="132" y="316">PSA5342</text>
+    <text class="muted" id="acBmeta" x="132" y="330">alt · hdg</text>
+  </g>
+
+  <text class="muted" x="18" y="24">ABSTRACT GEOMETRY · TEACHING SURROGATES</text>
+</svg>
+<div class="hud">
+  <div><span>Clock</span><b id="hudClock">00:34:00</b></div>
+  <div><span>Factor</span><b id="hudFactor">—</b></div>
+  <div><span>Visibility</span><b id="hudVis">night / haze</b></div>
+  <div><span>Seed</span><b id="hudSeed">1842</b></div>
+</div>
+</div>
+
+<div class="side">
+<div class="phase-bar" id="phases">
+  <button data-phase="observe" class="active">Observe</button>
+  <button data-phase="frame">Frame</button>
+  <button data-phase="test">Test</button>
+  <button data-phase="validate">Validate</button>
+  <button data-phase="learn">Learn</button>
+</div>
+
+<div class="tests">
+  <div class="label">Choose one controlled change</div>
+  <div class="row">
+    <button class="factor-btn active" data-factor="altitude">Test altitude</button>
+    <button class="factor-btn" data-factor="timing">Test timing</button>
+    <button class="factor-btn" data-factor="visibility">Test visibility</button>
+  </div>
+</div>
+
+<div class="split">
+  <div class="card">
+    <h3>Baseline · seed 1842</h3>
+    <p id="baseFactor">Altitude: observed</p>
+    <p class="out" id="baseOut">outcome —</p>
+  </div>
+  <div class="card cf">
+    <h3>Matched counterfactual · seed 1842</h3>
+    <p id="cfFactor">Altitude: +200 ft</p>
+    <p class="out" id="cfOut">outcome —</p>
+  </div>
+</div>
+
+<div class="delta">
+  <div style="font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#9fb4af">Paired difference</div>
+  <div class="big" id="deltaVal">Δ —</div>
+  <div class="bar"><i id="deltaBar"></i></div>
+  <div id="deltaText" style="font-size:.84rem;color:#c8d4d1">Run a test to compare matched outcomes.</div>
+</div>
+
+<div class="evidence">
+  <h3>Evidence building</h3>
+  <div class="ev-list" id="evList">
+    <div>Waiting for a controlled comparison.</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button id="btnRun">Run matched experiment</button>
+  <button class="ghost" id="btnPlay">Play walkthrough</button>
+  <button class="ghost" id="btnReset">Reset</button>
+</div>
+<div class="loop" id="loopNote">OBSERVE → FRAME → TEST → VALIDATE → LEARN</div>
+</div>
+</div>
+</section>
+
+<div class="tagline">
+  Don’t ask the model why. Test what changes.
+  <span>Same world. Same seed. One controlled change. Compare what happens.</span>
+</div>
+<div class="footer-links">
+  <a href="dca.html">Read the Night Crossing case note →</a>
+  <a href="system-demo.html">Shorter method walkthrough →</a>
+  <a href="economics-demo.html">Market instrument →</a>
+</div>
+</main>
+
+<script>
+(function () {
+  const factors = {
+    altitude: {
+      label: 'Altitude',
+      base: 'Altitude: observed',
+      cf: 'Altitude: +200 ft',
+      baseOut: 0.18,
+      cfOut: 0.71,
+      delta: 0.53,
+      strengthen: true,
+      evidence: [
+        { t: 'ok', s: 'Matched seed 1842 held for both runs' },
+        { t: 'ok', s: 'Only altitude changed in the counterfactual' },
+        { t: 'ok', s: 'Δ outcome +0.53 under controlled geometry' },
+        { t: 'warn', s: 'Held-out timing/visibility still open' }
+      ]
+    },
+    timing: {
+      label: 'Timing',
+      base: 'Timing: observed sequence',
+      cf: 'Timing: +8 s stagger',
+      baseOut: 0.22,
+      cfOut: 0.64,
+      delta: 0.42,
+      strengthen: true,
+      evidence: [
+        { t: 'ok', s: 'Same seed; only relative timing changed' },
+        { t: 'ok', s: 'Closest-approach margin improved' },
+        { t: 'warn', s: 'Communications assumptions unchanged' },
+        { t: 'warn', s: 'Needs held-out confirmation on visibility' }
+      ]
+    },
+    visibility: {
+      label: 'Visibility',
+      base: 'Visibility: night / haze',
+      cf: 'Visibility: clearer corridor',
+      baseOut: 0.25,
+      cfOut: 0.41,
+      delta: 0.16,
+      strengthen: false,
+      evidence: [
+        { t: 'ok', s: 'Matched seed preserved' },
+        { t: 'warn', s: 'Δ +0.16 — weak separation alone' },
+        { t: 'warn', s: 'Competing geometry/timing still viable' },
+        { t: 'ok', s: 'Honest result: not decisive by itself' }
+      ]
+    }
+  };
+
+  let factor = 'altitude';
+  let phase = 'observe';
+  let running = false;
+  let expN = 0;
+
+  const $ = (id) => document.getElementById(id);
+  const phaseBtns = [...document.querySelectorAll('#phases button')];
+  const factorBtns = [...document.querySelectorAll('.factor-btn')];
+
+  function setPhase(p) {
+    phase = p;
+    const order = ['observe', 'frame', 'test', 'validate', 'learn'];
+    const idx = order.indexOf(p);
+    phaseBtns.forEach((b, i) => {
+      b.classList.toggle('active', b.dataset.phase === p);
+      b.classList.toggle('done', i < idx);
+    });
+    $('cpa').setAttribute('opacity', p === 'observe' ? '0' : '1');
+    $('predA').setAttribute('opacity', (p === 'frame' || p === 'test') ? '0.8' : '0');
+    $('predB').setAttribute('opacity', (p === 'frame' || p === 'test') ? '0.8' : '0');
+  }
+
+  function setFactor(f) {
+    factor = f;
+    factorBtns.forEach((b) => b.classList.toggle('active', b.dataset.factor === f));
+    const cfg = factors[f];
+    $('hudFactor').textContent = cfg.label;
+    $('baseFactor').textContent = cfg.base;
+    $('cfFactor').textContent = cfg.cf;
+    $('baseOut').textContent = 'outcome —';
+    $('cfOut').textContent = 'outcome —';
+    $('deltaVal').textContent = 'Δ —';
+    $('deltaBar').style.width = '0%';
+    $('deltaText').textContent = 'Ready to run matched comparison under seed 1842.';
+    $('evList').innerHTML = '<div>Factor selected. Run the experiment to build evidence.</div>';
+    $('loopNote').textContent = 'OBSERVE → FRAME → TEST → VALIDATE → LEARN';
+  }
+
+  function placeAircraft(t) {
+    // t in [0,1] along approach
+    const ax = 80 + t * 260;
+    const ay = 90 + t * 120;
+    const bx = 120 + t * 240;
+    const by = 320 - t * 90;
+    $('acA').setAttribute('transform', `translate(${ax - 80} ${ay - 90})`);
+    $('acB').setAttribute('transform', `translate(${bx - 120} ${by - 320})`);
+    $('trailA').setAttribute('d', `M80 90 C${140 + t * 40} ${110 + t * 20},${220 + t * 40} ${150 + t * 40},${ax} ${ay}`);
+    $('trailB').setAttribute('d', `M120 320 C${180 + t * 40} ${310 - t * 20},${260 + t * 40} ${280 - t * 40},${bx} ${by}`);
+    const clock = 34 * 60 + Math.floor(t * 18);
+    const mm = String(Math.floor(clock / 60)).padStart(2, '0');
+    const ss = String(clock % 60).padStart(2, '0');
+    $('hudClock').textContent = `00:${mm}:${ss}`;
+    $('acAmeta').textContent = `alt ${(1200 + t * 40) | 0} · hdg 145`;
+    $('acBmeta').textContent = `alt ${(900 - (factor === 'altitude' && phase === 'test' ? 0 : 0)) | 0} · hdg 310`;
+  }
+
+  function animateRun(done) {
+    if (running) return;
+    running = true;
+    setPhase('test');
+    let t = 0;
+    const start = performance.now();
+    function frame(now) {
+      t = Math.min(1, (now - start) / 2200);
+      placeAircraft(t);
+      if (t < 1) requestAnimationFrame(frame);
+      else {
+        running = false;
+        done && done();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function showEvidence() {
+    const cfg = factors[factor];
+    expN = Math.min(3, expN + 1);
+    $('expLabel').textContent = `EXPERIMENT 0${expN} / 03`;
+    setPhase('validate');
+    $('baseOut').textContent = `outcome ${cfg.baseOut.toFixed(2)}`;
+    $('cfOut').textContent = `outcome ${cfg.cfOut.toFixed(2)}`;
+    $('deltaVal').textContent = `Δ ${cfg.delta >= 0 ? '+' : ''}${cfg.delta.toFixed(2)}`;
+    $('deltaBar').style.width = `${Math.min(100, Math.abs(cfg.delta) * 140)}%`;
+    $('deltaText').textContent = cfg.strengthen
+      ? 'Evidence strengthens under this controlled change.'
+      : 'Weak separation — competing explanations remain viable.';
+    $('evList').innerHTML = cfg.evidence.map((e) => `<div class="${e.t}">${e.s}</div>`).join('');
+    setTimeout(() => {
+      setPhase('learn');
+      $('loopNote').innerHTML = cfg.strengthen
+        ? '<strong>A claim survives the test</strong> within this envelope — then the evidence moves into memory with its limits attached.'
+        : '<strong>No decisive claim yet</strong> — keep rivals alive and choose a more separating test.';
+    }, 700);
+  }
+
+  function runExperiment() {
+    setPhase('frame');
+    setTimeout(() => {
+      animateRun(showEvidence);
+    }, 450);
+  }
+
+  async function playWalkthrough() {
+    if (running) return;
+    const order = ['altitude', 'timing', 'visibility'];
+    for (const f of order) {
+      setFactor(f);
+      setPhase('observe');
+      placeAircraft(0.15);
+      await wait(700);
+      setPhase('frame');
+      await wait(800);
+      await new Promise((resolve) => animateRun(resolve));
+      showEvidence();
+      await wait(1600);
+    }
+  }
+
+  function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
+
+  function reset() {
+    expN = 0;
+    $('expLabel').textContent = 'EXPERIMENT 00 / 03';
+    setFactor('altitude');
+    setPhase('observe');
+    placeAircraft(0.2);
+  }
+
+  factorBtns.forEach((b) => b.addEventListener('click', () => setFactor(b.dataset.factor)));
+  phaseBtns.forEach((b) => b.addEventListener('click', () => setPhase(b.dataset.phase)));
+  $('btnRun').addEventListener('click', runExperiment);
+  $('btnPlay').addEventListener('click', playWalkthrough);
+  $('btnReset').addEventListener('click', reset);
+
+  const toggle = document.querySelector('.mobile-toggle');
+  const nav = document.querySelector('.nav');
+  if (toggle && nav) toggle.addEventListener('click', () => nav.classList.toggle('open'));
+
+  reset();
+})();
+</script>
+</body>
+</html>
