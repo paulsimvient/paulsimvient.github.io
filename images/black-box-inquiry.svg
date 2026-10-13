@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
-<rect width="1920" height="1080" fill="#f3efe6"/>
+<rect width="1920" height="1080" fill="#fffaf2"/>
 <rect x="0" y="0" width="24" height="1080" fill="#994220"/>
 <g font-family="Arial, Helvetica, sans-serif">
   <text x="110" y="120" fill="#102928" font-size="58" font-weight="700">Opening the black box by experiment</text>
   <text x="112" y="172" fill="#994220" font-size="26" font-weight="500">The model stays opaque. Controlled interventions make behavior testable.</text>
 
-  <rect x="110" y="250" width="380" height="420" rx="16" fill="#fffaf2"/>
+  <rect x="110" y="250" width="380" height="420" rx="16" fill="#f3efe6" stroke="#d8e0dd" stroke-width="2"/>
   <text x="140" y="310" fill="#102928" font-size="28" font-weight="700">Observe</text>
-  <text x="140" y="360" fill="#102928" font-size="20">Prompt ’ response</text>
+  <text x="140" y="360" fill="#102928" font-size="20">Prompt to response</text>
   <text x="140" y="400" fill="#102928" font-size="20">Record what happened</text>
   <text x="140" y="440" fill="#102928" font-size="20">Keep context fixed</text>
 
@@ -16,28 +16,28 @@
   <rect x="575" y="250" width="420" height="420" rx="16" fill="#102a3c"/>
   <text x="605" y="310" fill="#ffffff" font-size="28" font-weight="700">LLM black box</text>
   <text x="605" y="360" fill="#ed8751" font-size="20">Internal parameters unknown</text>
-  <text x="605" y="410" fill="#ffffff" font-size="20">Self-explanation ` mechanism</text>
+  <text x="605" y="410" fill="#ffffff" font-size="20">Self-explanation is not mechanism</text>
   <text x="605" y="460" fill="#ffffff" font-size="20">Behavior is what we can test</text>
   <rect x="620" y="510" width="330" height="90" rx="12" fill="#1b4257"/>
   <text x="650" y="565" fill="#65c4ed" font-size="22" font-weight="600">opaque process</text>
 
   <path d="M1015 460 L1065 460" stroke="#994220" stroke-width="5"/>
 
-  <rect x="1080" y="250" width="380" height="420" rx="16" fill="#fffaf2"/>
+  <rect x="1080" y="250" width="380" height="420" rx="16" fill="#f3efe6" stroke="#d8e0dd" stroke-width="2"/>
   <text x="1110" y="310" fill="#102928" font-size="28" font-weight="700">Intervene</text>
-  <text x="1110" y="360" fill="#102928" font-size="20">Paraphrase · reorder</text>
+  <text x="1110" y="360" fill="#102928" font-size="20">Paraphrase / reorder</text>
   <text x="1110" y="400" fill="#102928" font-size="20">Counterfactual change</text>
-  <text x="1110" y="440" fill="#102928" font-size="20">Transfer · repetition</text>
+  <text x="1110" y="440" fill="#102928" font-size="20">Transfer / repetition</text>
 
   <path d="M1480 460 L1530 460" stroke="#994220" stroke-width="5"/>
 
-  <rect x="1545" y="250" width="265" height="420" rx="16" fill="#fffaf2"/>
+  <rect x="1545" y="250" width="265" height="420" rx="16" fill="#f3efe6" stroke="#d8e0dd" stroke-width="2"/>
   <text x="1570" y="310" fill="#102928" font-size="26" font-weight="700">Compare</text>
   <text x="1570" y="370" fill="#102928" font-size="18">Which claims</text>
   <text x="1570" y="405" fill="#102928" font-size="18">survive?</text>
-  <text x="1570" y="460" fill="#994220" font-size="18" font-weight="700">Falsify · retain</text>
+  <text x="1570" y="460" fill="#994220" font-size="18" font-weight="700">Falsify / retain</text>
 
-  <text x="110" y="760" fill="#102928" font-size="32" font-weight="600">We decipher the black box by discovering which explanations survive attempts to disprove them.</text>
+  <text x="110" y="760" fill="#102928" font-size="30" font-weight="600">We decipher the black box by discovering which explanations survive attempts to disprove them.</text>
 </g>
-<text x="110" y="1035" fill="#102928" font-family="Arial" font-size="20">THINKING TOGETHER  /  PAUL CUMMINGS, Ph.D.   "   Conceptual illustration  not measured results</text>
+<text x="110" y="1035" fill="#102928" font-family="Arial" font-size="20">THINKING TOGETHER  /  PAUL CUMMINGS, Ph.D.   -   Conceptual illustration - not measured results</text>
 </svg>
