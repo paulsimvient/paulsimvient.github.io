@@ -1,18 +1,75 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Demo | CoAgentics</title><link rel="stylesheet" href="styles.css?v=28"><style>
-.demo-shell{max-width:1500px;margin:auto;padding:22px}.demo-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:14px}.demo-grid{display:grid;grid-template-columns:240px 1fr 330px;gap:12px;min-height:760px}.pane{border:1px solid var(--line);border-radius:10px;background:#0d1317;overflow:hidden}.pane h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--line);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}.padded{padding:14px}.scenario{border:1px solid var(--line);padding:12px;border-radius:7px;margin-bottom:8px}.scenario strong{display:block;font-size:.82rem}.scenario small{color:var(--muted)}.model{border:1px solid var(--line);border-radius:7px;padding:12px;margin-bottom:8px}.model .bar{height:4px;background:#1f2a31;margin-top:10px}.model .bar i{display:block;height:100%;background:var(--cyan);width:45%;transition:width .8s}.center-stack{display:grid;grid-template-rows:300px 1fr;gap:12px}.canvas{position:relative;background:radial-gradient(circle at 50% 45%,#182127,#0b1014 65%);overflow:hidden}.node{position:absolute;width:118px;padding:10px;border:1px solid #38505d;border-radius:8px;background:#0f171c;text-align:center;font-size:.72rem}.node b{display:block}.node span{color:var(--muted);font-size:.63rem}.n1{left:7%;top:40%}.n2{left:29%;top:16%}.n3{left:29%;top:63%}.n4{left:54%;top:38%}.n5{right:7%;top:18%}.n6{right:7%;top:62%}.beam{position:absolute;height:1px;background:#46616d;transform-origin:left center}.event-stream{font-family:ui-monospace,monospace;font-size:.72rem;height:100%;overflow:auto}.event{padding:9px 0;border-bottom:1px solid #202a31}.event time{color:#72838d;margin-right:10px}.event .ok{color:var(--green)}.event .run{color:var(--cyan)}.right-metric{border-bottom:1px solid var(--line);padding:14px}.right-metric span{display:block;color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.12em}.right-metric strong{font-family:ui-monospace,monospace;font-size:1.05rem}.gate{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:.75rem}.gate i{font-style:normal;color:var(--green)}.controls{display:flex;gap:8px}.controls button{background:#111b21;color:var(--text);border:1px solid #33434c;border-radius:6px;padding:8px 11px}.controls button:hover{border-color:var(--cyan)}@media(max-width:1050px){.demo-grid{grid-template-columns:1fr}.center-stack{grid-template-rows:320px 500px}}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live Demo | CoAgentics</title>
+<link rel="stylesheet" href="styles.css?v=30">
+<style>
+.demo-shell{max-width:1500px;margin:auto;padding:22px}
+.demo-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:14px}
+.callout{
+  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
+  margin:0 0 14px;padding:16px 18px;border-radius:12px;
+  background:#123734;border:1px solid #3a5550;color:#f4f7f5;
+  box-shadow:0 14px 40px rgba(18,32,30,.16);
+}
+.callout .tag{
+  font:700 .68rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;text-transform:uppercase;color:#f0b487;
+  background:rgba(182,72,36,.18);border:1px solid rgba(182,72,36,.35);
+  border-radius:999px;padding:8px 10px;white-space:nowrap;
+}
+.callout h2{margin:0 0 6px;font-size:1.15rem;color:#fff3df;letter-spacing:-.02em}
+.callout p{margin:0;color:#c8d4d1;font-size:.95rem;line-height:1.5;max-width:920px}
+.callout .why{margin-top:8px;color:#9fd0c6;font-size:.82rem}
+.demo-grid{display:grid;grid-template-columns:240px 1fr 330px;gap:12px;min-height:760px}
+.pane{border:1px solid #3a5058;border-radius:10px;background:#0f1a1d;overflow:hidden;color:#e8efe9}
+.pane h3{margin:0;padding:12px 14px;border-bottom:1px solid #3a5058;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#f4f7f5}
+.padded{padding:14px}
+.scenario,.model{border:1px solid #3a5058;padding:12px;border-radius:7px;margin-bottom:8px;transition:border-color .25s,box-shadow .25s}
+.scenario strong,.model strong{display:block;font-size:.82rem;color:#f4f7f5}
+.scenario small,.model small{color:#b7c4c8}
+.model.hot{border-color:#67c7d3;box-shadow:0 0 0 1px rgba(103,199,211,.35)}
+.model .bar{height:4px;background:#24343b;margin-top:10px}
+.model .bar i{display:block;height:100%;background:#67c7d3;width:45%;transition:width .8s}
+.center-stack{display:grid;grid-template-rows:300px 1fr;gap:12px}
+.canvas{position:relative;background:radial-gradient(circle at 50% 45%,#1a2a30,#0b1215 65%);overflow:hidden}
+.node{position:absolute;width:118px;padding:10px;border:1px solid #3a5058;border-radius:8px;background:#0f171c;text-align:center;font-size:.72rem;color:#e8efe9;transition:border-color .25s,box-shadow .25s,transform .25s}
+.node b{display:block;color:#f4f7f5}
+.node span{color:#b7c4c8;font-size:.63rem}
+.node.active{border-color:#67c7d3;box-shadow:0 0 0 2px rgba(103,199,211,.25),0 0 28px rgba(103,199,211,.18);transform:translateY(-2px)}
+.node.active b{color:#9fe4ef}
+.n1{left:7%;top:40%}.n2{left:29%;top:16%}.n3{left:29%;top:63%}.n4{left:54%;top:38%}.n5{right:7%;top:18%}.n6{right:7%;top:62%}
+.event-stream{font-family:ui-monospace,monospace;font-size:.72rem;height:100%;overflow:auto}
+.event{padding:9px 0;border-bottom:1px solid #202a31}
+.event time{color:#8a9aa3;margin-right:10px}
+.event .ok{color:#8cbf90}.event .run{color:#67c7d3}
+.right-metric{border-bottom:1px solid #3a5058;padding:14px}
+.right-metric span{display:block;color:#b7c4c8;font-size:.67rem;text-transform:uppercase;letter-spacing:.12em}
+.right-metric strong{font-family:ui-monospace,monospace;font-size:1.05rem;color:#f4f7f5}
+.gate{padding:11px 14px;border-bottom:1px solid #3a5058;display:flex;justify-content:space-between;font-size:.75rem;color:#b7c4c8}
+.gate i{font-style:normal;color:#8cbf90}
+.controls{display:flex;gap:8px}
+.controls button{background:#b64824;color:#fff8eb;border:1px solid #b64824;border-radius:6px;padding:8px 11px;cursor:pointer}
+.controls button:hover{background:#8f351c;border-color:#8f351c}
+.mini-callouts{display:grid;gap:8px;margin-top:10px}
+.mini{
+  border:1px solid #3a5058;border-radius:8px;padding:10px 12px;background:#0c1619;
+  font-size:.78rem;line-height:1.4;color:#c8d4d1;
+}
+.mini b{display:block;color:#9fe4ef;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+@media(max-width:1050px){
+  .demo-grid{grid-template-columns:1fr}
+  .center-stack{grid-template-rows:320px 500px}
+  .callout{grid-template-columns:1fr}
+}
 </style>
 <style id="book-palette-system">
 :root{
-  --book-cream:#f4ebdc;
-  --book-paper:#fffaf1;
-  --book-teal:#153f3b;
-  --book-teal2:#315e59;
-  --book-rust:#b64824;
-  --book-rust2:#8f351c;
-  --book-tan:#e9dcc5;
-  --book-line:#d8c8b0;
-  --book-ink:#17302e;
-  --book-muted:#69746f;
+  --book-cream:#f4ebdc; --book-paper:#fffaf1; --book-teal:#153f3b; --book-teal2:#315e59;
+  --book-rust:#b64824; --book-rust2:#8f351c; --book-tan:#e9dcc5; --book-line:#d8c8b0;
+  --book-ink:#17302e; --book-muted:#69746f;
 }
 html,body{background:#f4ebdc!important;color:var(--book-ink)!important}
 body{
@@ -20,108 +77,258 @@ body{
     radial-gradient(circle at 92% 6%, rgba(182,72,36,.09), transparent 22rem),
     linear-gradient(180deg,#faf3e8 0%,#efe4d2 100%)!important;
 }
-header,.site-header{
-  background:#f8f0e3!important;
-  border-bottom:1px solid var(--book-line)!important;
-}
+header,.site-header{background:#f8f0e3!important;border-bottom:1px solid var(--book-line)!important}
 header a,.site-header a,.brand,.nav a{color:var(--book-teal)!important}
 .nav a:hover,.nav a.active{color:var(--book-rust)!important}
-
 .demo-top h1{color:var(--book-teal)!important}
 .eyebrow{color:var(--book-rust)!important}
-
-/* Dark panes: cream page chrome, light text inside instruments */
-.demo-grid{color:#e8efe9!important}
-.pane,
-.canvas,
-.node{
-  background:#0f1a1d!important;
-  color:#e8efe9!important;
-  border-color:#3a5058!important;
-}
-.pane h3,
-.pane strong,
-.pane b,
-.node b,
-.right-metric strong,
-.model strong,
-.scenario strong{
-  color:#f4f7f5!important;
-}
-.pane small,
-.pane span,
-.node span,
-.right-metric span,
-.scenario small,
-.model small,
-.event time,
-.gate span{
-  color:#b7c4c8!important;
-}
-.event .ok{color:#8cbf90!important}
-.event .run{color:#67c7d3!important}
-.gate i{color:#8cbf90!important}
-.model .bar{background:#24343b!important}
-.model .bar i{background:#67c7d3!important}
-.canvas{
-  background:radial-gradient(circle at 50% 45%,#1a2a30,#0b1215 65%)!important;
-}
-.controls button{
-  background:var(--book-rust)!important;
-  color:#fff8eb!important;
-  border-color:var(--book-rust)!important;
-}
-.controls button:hover{
-  background:var(--book-rust2)!important;
-  border-color:var(--book-rust2)!important;
-}
-
-.market-surface,.market-floor,.lab,.controlled-market{
-  background:linear-gradient(180deg,#edf0e8 0%,#efe1cc 100%)!important;
-  border-color:#cdbb9f!important;
-}
-.bid-bar,.buyer-bar,.ref-bar,.bar.teal{background:var(--book-teal)!important}
-.ask-bar,.seller-bar,.agent-bar,.bar.rust{background:var(--book-rust)!important}
-.track,.meter-track,.prob-track{background:#e3ddd1!important}
-.fill,.meter-fill,.prob-fill{background:var(--book-teal)!important}
-.agent.reference,.reference-agent{background:var(--book-teal)!important}
-.agent.blackbox,.black-box-agent{background:#e7ddcd!important;border-color:var(--book-rust)!important;color:var(--book-rust)!important}
-.agent.reference *, .reference-agent *{color:#fff8eb!important}
-
-.matrix-cell,.condition-cell,.cell{
-  background:#eee5d6!important;
-  color:var(--book-teal)!important;
-  border-color:#dac8ad!important;
-}
-.matrix-cell.active,.condition-cell.active,.cell.active{
-  background:#dce9e3!important;
-  outline:2px solid var(--book-rust)!important;
-}
-.log,.evidence-log,.terminal,.trace-log,pre,code{
-  background:#163b37!important;
-  color:#f7ecd9!important;
-  border-color:#315b56!important;
-}
-.runtime-layer,.layer{
-  background:#f6efe4!important;
-  color:var(--book-teal)!important;
-  border-color:#d6c5aa!important;
-}
-.runtime-layer.active,.layer.active{
-  background:var(--book-teal)!important;
-  color:#fff4df!important;
-  border-color:var(--book-teal)!important;
-}
-.status-dot,.status.ready,.accent{background:var(--book-rust)!important;color:var(--book-rust)!important}
-button,.demo-button,.run-btn{
-  background:var(--book-rust)!important;
-  color:#fff8eb!important;
-  border-color:var(--book-rust)!important;
-}
-button:hover,.demo-button:hover,.run-btn:hover{background:var(--book-rust2)!important}
 </style>
+</head>
+<body>
+<header class="site-header">
+<div class="nav-wrap">
+<a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
+<nav class="nav">
+<a href="index.html">System</a>
+<a href="research.html">Architecture</a>
+<a href="economics.html">Economics</a>
+<a class="active" href="system-demo.html">Live demo</a>
+<a href="book.html">Book</a>
+</nav>
+</div>
+</header>
+<main class="demo-shell">
+<div class="demo-top">
+<div>
+<div class="eyebrow">Executable demonstration</div>
+<h1 style="margin:3px 0;font-size:2rem">Counterfactual investigation</h1>
+</div>
+<div class="controls">
+<button id="run">Run next experiment</button>
+<button id="reset">Reset</button>
+</div>
+</div>
 
-</head><body><header class="site-header"><div class="nav-wrap"><a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a><nav class="nav"><a href="index.html">System</a><a href="research.html">Architecture</a><a href="economics.html">Economics</a><a class="active" href="system-demo.html">Live demo</a><a href="book.html">Book</a></nav></div></header><main class="demo-shell"><div class="demo-top"><div><div class="eyebrow">Executable demonstration</div><h1 style="margin:3px 0;font-size:2rem">Counterfactual investigation</h1></div><div class="controls"><button id="run">Run next experiment</button><button id="reset">Reset</button></div></div><div class="demo-grid"><section class="pane"><h3>Candidate models</h3><div class="padded"><div class="scenario"><strong>Observed anomaly</strong><small>classification delayed under degraded communications</small></div><div class="model"><strong>H1 / timing</strong><small>delay is caused by message latency</small><div class="bar"><i id="b1"></i></div></div><div class="model"><strong>H2 / sensor</strong><small>delay is caused by ambiguous observations</small><div class="bar"><i id="b2"></i></div></div><div class="model"><strong>H3 / interaction</strong><small>latency and ambiguity interact</small><div class="bar"><i id="b3"></i></div></div></div></section><section class="center-stack"><div class="pane canvas"><div class="node n1"><b>DOMAIN</b><span>scenario + state</span></div><div class="node n2"><b>STRATEGY</b><span>H1 H2 H3</span></div><div class="node n3"><b>EXPERIMENT</b><span>paired intervention</span></div><div class="node n4"><b>VALIDATION</b><span>holdout + CI</span></div><div class="node n5"><b>KNOWLEDGE</b><span>claim + boundary</span></div><div class="node n6"><b>WORKBENCH</b><span>human review</span></div></div><div class="pane"><h3>Execution trace</h3><div class="padded event-stream" id="events"></div></div></section><section class="pane"><h3>Validation state</h3><div class="right-metric"><span>phase</span><strong id="phase">discovery</strong></div><div class="right-metric"><span>seed</span><strong id="seed">0042</strong></div><div class="right-metric"><span>paired effect</span><strong id="effect">pending</strong></div><div class="right-metric"><span>claim status</span><strong id="status">candidate</strong></div><div class="gate"><span>protocol frozen</span><i id="g1">NO</i></div><div class="gate"><span>holdout sealed</span><i id="g2">YES</i></div><div class="gate"><span>evidence retained</span><i id="g3">YES</i></div><div class="gate"><span>human approval</span><i id="g4">PENDING</i></div></section></div></main><script>
-const steps=[
-['00:00.000','instantiate domain state','run'],['00:00.014','load candidate models H1/H2/H3','run'],['00:00.026','score feasible interventions','run'],['00:00.041','select E1: isolate communication delay','ok'],['00:00.058','launch HOLD / seed 0042','run'],['00:00.071','launch E1 / seed 0042','run'],['00:00.119','paired delta = 28 ticks','ok'],['00:00.137','update discovery evidence','ok'],['00:00.154','freeze model set + thresholds','ok'],['00:00.177','open reserved confirmation','run'],['00:00.229','holdout effect consistent','ok'],['00:00.245','claim promoted: validated within tested envelope','ok']];let i=0;const E=document.getElementById('events');function run(){if(i>=steps.length)return;const s=steps[i];const d=document.createElement('div');d.className='event';d.innerHTML='<time>'+s[0]+'</time><span class="'+s[2]+'">'+s[1]+'</span>';E.appendChild(d);E.scrollTop=E.scrollHeight;i++;document.getElementById('seed').textContent=String(41+i).padStart(4,'0');if(i>=7)document.getElementById('effect').textContent='28 ticks';if(i>=8)document.getElementById('status').textContent='provisional';if(i>=9){document.getElementById('phase').textContent='confirmation';document.getElementById('g1').textContent='YES'}if(i>=11)document.getElementById('g4').textContent='REVIEW';if(i>=12){document.getElementById('status').textContent='validated';document.getElementById('g4').textContent='APPROVED'}document.getElementById('b1').style.width=Math.min(92,35+i*5)+'%';document.getElementById('b2').style.width=Math.max(14,55-i*3)+'%';document.getElementById('b3').style.width=Math.max(20,48-i*2)+'%'}document.getElementById('run').onclick=run;document.getElementById('reset').onclick=()=>location.reload();for(let k=0;k<4;k++)setTimeout(run,500+k*420);
-</script></body></html>
+<aside class="callout" id="callout" aria-live="polite">
+<div class="tag" id="callout-tag">STEP 0 / READY</div>
+<div>
+<h2 id="callout-title">What is happening</h2>
+<p id="callout-body">This demo walks a claim through CoAgentics: keep rival explanations alive, choose a discriminating intervention, run a matched pair, then confirm on a sealed holdout before promoting the claim.</p>
+<p class="why" id="callout-why">Press “Run next experiment” to advance one step at a time.</p>
+</div>
+</aside>
+
+<div class="demo-grid">
+<section class="pane">
+<h3>Candidate models</h3>
+<div class="padded">
+<div class="scenario"><strong>Observed anomaly</strong><small>classification delayed under degraded communications</small></div>
+<div class="model" id="m1"><strong>H1 / timing</strong><small>delay is caused by message latency</small><div class="bar"><i id="b1"></i></div></div>
+<div class="model" id="m2"><strong>H2 / sensor</strong><small>delay is caused by ambiguous observations</small><div class="bar"><i id="b2"></i></div></div>
+<div class="model" id="m3"><strong>H3 / interaction</strong><small>latency and ambiguity interact</small><div class="bar"><i id="b3"></i></div></div>
+<div class="mini-callouts">
+<div class="mini"><b>Watch this panel</b><span id="models-note">Bars show relative support. They should move only when evidence arrives — not because a story sounds persuasive.</span></div>
+</div>
+</div>
+</section>
+
+<section class="center-stack">
+<div class="pane canvas" id="canvas">
+<div class="node n1" data-layer="domain"><b>DOMAIN</b><span>scenario + state</span></div>
+<div class="node n2" data-layer="strategy"><b>STRATEGY</b><span>H1 H2 H3</span></div>
+<div class="node n3" data-layer="experiment"><b>EXPERIMENT</b><span>paired intervention</span></div>
+<div class="node n4" data-layer="validation"><b>VALIDATION</b><span>holdout + CI</span></div>
+<div class="node n5" data-layer="knowledge"><b>KNOWLEDGE</b><span>claim + boundary</span></div>
+<div class="node n6" data-layer="workbench"><b>WORKBENCH</b><span>human review</span></div>
+</div>
+<div class="pane">
+<h3>Execution trace</h3>
+<div class="padded event-stream" id="events"></div>
+</div>
+</section>
+
+<section class="pane">
+<h3>Validation state</h3>
+<div class="right-metric"><span>phase</span><strong id="phase">discovery</strong></div>
+<div class="right-metric"><span>seed</span><strong id="seed">0042</strong></div>
+<div class="right-metric"><span>paired effect</span><strong id="effect">pending</strong></div>
+<div class="right-metric"><span>claim status</span><strong id="status">candidate</strong></div>
+<div class="gate"><span>protocol frozen</span><i id="g1">NO</i></div>
+<div class="gate"><span>holdout sealed</span><i id="g2">YES</i></div>
+<div class="gate"><span>evidence retained</span><i id="g3">YES</i></div>
+<div class="gate"><span>human approval</span><i id="g4">PENDING</i></div>
+<div class="padded">
+<div class="mini"><b>Watch this panel</b><span id="state-note">Discovery stays open until a paired result exists. Confirmation uses a sealed holdout the discovery path never saw.</span></div>
+</div>
+</section>
+</div>
+</main>
+<script>
+const narrations = [
+  {
+    time:'00:00.000', event:'instantiate domain state', kind:'run', layer:'domain',
+    title:'Lock the world state',
+    body:'Create a reproducible scenario: communications degrade and classification slows. Everything later is judged against this sealed domain state.',
+    why:'If the world is not fixed, rival explanations cannot be compared fairly.',
+    models:'No model wins yet. The anomaly is only an observation.',
+    state:'Phase = discovery. Holdout remains sealed.'
+  },
+  {
+    time:'00:00.014', event:'load candidate models H1/H2/H3', kind:'run', layer:'strategy',
+    title:'Keep competing explanations alive',
+    body:'Load three predictive stories: latency (H1), ambiguous sensing (H2), and an interaction (H3). None is promoted yet.',
+    why:'Collapsing early to one narrative is exactly what black-box fluency encourages.',
+    models:'All three models remain active candidates.',
+    state:'Claim status stays candidate.'
+  },
+  {
+    time:'00:00.026', event:'score feasible interventions', kind:'run', layer:'experiment',
+    title:'Find a discriminating test',
+    body:'Score interventions by how differently H1–H3 predict the outcome. Prefer tests that separate explanations.',
+    why:'A useful experiment is not “interesting.” It is one where rival models disagree.',
+    models:'Bars stay flat until evidence arrives.',
+    state:'Still discovery — no paired effect yet.'
+  },
+  {
+    time:'00:00.041', event:'select E1: isolate communication delay', kind:'ok', layer:'experiment',
+    title:'Choose the intervention',
+    body:'Select E1: isolate communication delay. That treatment should move H1 more than H2 if timing is the cause.',
+    why:'The intervention is chosen because models disagree about its effect.',
+    models:'H1 is now the most exposed hypothesis.',
+    state:'Paired effect still pending.'
+  },
+  {
+    time:'00:00.058', event:'launch HOLD / seed 0042', kind:'run', layer:'experiment',
+    title:'Run the matched control',
+    body:'Launch HOLD with seed 0042. This is the baseline twin of the treatment run.',
+    why:'Matched seeds keep everything fixed except the intervention.',
+    models:'Waiting for the paired comparison.',
+    state:'Seed locked at 0042 for the pair.'
+  },
+  {
+    time:'00:00.071', event:'launch E1 / seed 0042', kind:'run', layer:'experiment',
+    title:'Run the matched treatment',
+    body:'Launch E1 with the same seed. Only the communication-delay intervention differs from HOLD.',
+    why:'Any outcome gap can be attributed to the intervention, not random restarts.',
+    models:'Evidence is about to arrive.',
+    state:'Awaiting paired delta.'
+  },
+  {
+    time:'00:00.119', event:'paired delta = 28 ticks', kind:'ok', layer:'validation',
+    title:'Read the paired effect',
+    body:'The treatment delayed classification by 28 ticks relative to HOLD. That is the discovery result.',
+    why:'The number is an effect under controlled conditions — not a personality label for the agent.',
+    models:'H1 support rises; H2 and H3 lose relative support.',
+    state:'Paired effect = 28 ticks.'
+  },
+  {
+    time:'00:00.137', event:'update discovery evidence', kind:'ok', layer:'validation',
+    title:'Update discovery evidence',
+    body:'Attach the paired result to the evidence record and revise model weights under discovery rules.',
+    why:'Discovery can update beliefs, but it cannot open the sealed holdout.',
+    models:'H1 continues to pull ahead from the matched comparison.',
+    state:'Claim status → provisional.'
+  },
+  {
+    time:'00:00.154', event:'freeze model set + thresholds', kind:'ok', layer:'validation',
+    title:'Freeze the protocol',
+    body:'Freeze the model set and acceptance thresholds before confirmation. No quiet post-hoc retuning.',
+    why:'Confirmation is worthless if thresholds move after seeing the holdout.',
+    models:'Model identities are locked for the confirmation pass.',
+    state:'Protocol frozen = YES. Phase → confirmation.'
+  },
+  {
+    time:'00:00.177', event:'open reserved confirmation', kind:'run', layer:'validation',
+    title:'Open the sealed holdout',
+    body:'Only now open reserved confirmation conditions the discovery path never used.',
+    why:'Holdout protects against fitting a story to one lucky paired run.',
+    models:'Bars wait on confirmation, not another discovery tweak.',
+    state:'Holdout sealed was YES; confirmation is now running.'
+  },
+  {
+    time:'00:00.229', event:'holdout effect consistent', kind:'ok', layer:'knowledge',
+    title:'Confirmation agrees',
+    body:'The holdout effect is consistent with the discovery result. The claim survives outside the original sample.',
+    why:'Consistency on reserved conditions is what turns provisional into validated-within-envelope.',
+    models:'H1 remains favored after confirmation.',
+    state:'Human approval moves to REVIEW.'
+  },
+  {
+    time:'00:00.245', event:'claim promoted: validated within tested envelope', kind:'ok', layer:'workbench',
+    title:'Promote with boundaries',
+    body:'Promote the claim as validated within the tested envelope. The workbench still requires human approval before treating it as operational authority.',
+    why:'Even a validated claim keeps its limits, provenance, and human gate attached.',
+    models:'Support for H1 is highest — still an evidence-weighted explanation, not a final truth.',
+    state:'Claim status → validated. Human approval → APPROVED.'
+  }
+];
+
+let i = 0;
+const E = document.getElementById('events');
+const nodes = [...document.querySelectorAll('.node')];
+const models = [document.getElementById('m1'), document.getElementById('m2'), document.getElementById('m3')];
+
+function setCallout(step, index) {
+  document.getElementById('callout-tag').textContent = step
+    ? `STEP ${index} / ${step.layer.toUpperCase()}`
+    : 'STEP 0 / READY';
+  document.getElementById('callout-title').textContent = step ? step.title : 'What is happening';
+  document.getElementById('callout-body').textContent = step
+    ? step.body
+    : 'This demo walks a claim through CoAgentics: keep rival explanations alive, choose a discriminating intervention, run a matched pair, then confirm on a sealed holdout before promoting the claim.';
+  document.getElementById('callout-why').textContent = step
+    ? step.why
+    : 'Press “Run next experiment” to advance one step at a time.';
+  document.getElementById('models-note').textContent = step
+    ? step.models
+    : 'Bars show relative support. They should move only when evidence arrives — not because a story sounds persuasive.';
+  document.getElementById('state-note').textContent = step
+    ? step.state
+    : 'Discovery stays open until a paired result exists. Confirmation uses a sealed holdout the discovery path never saw.';
+}
+
+function highlight(layer) {
+  nodes.forEach(n => n.classList.toggle('active', n.dataset.layer === layer));
+}
+
+function run() {
+  if (i >= narrations.length) return;
+  const s = narrations[i];
+  const d = document.createElement('div');
+  d.className = 'event';
+  d.innerHTML = '<time>' + s.time + '</time><span class="' + s.kind + '">' + s.event + '</span>';
+  E.appendChild(d);
+  E.scrollTop = E.scrollHeight;
+  i += 1;
+  setCallout(s, i);
+  highlight(s.layer);
+
+  document.getElementById('seed').textContent = String(41 + i).padStart(4, '0');
+  if (i >= 7) document.getElementById('effect').textContent = '28 ticks';
+  if (i >= 8) document.getElementById('status').textContent = 'provisional';
+  if (i >= 9) {
+    document.getElementById('phase').textContent = 'confirmation';
+    document.getElementById('g1').textContent = 'YES';
+  }
+  if (i >= 11) document.getElementById('g4').textContent = 'REVIEW';
+  if (i >= 12) {
+    document.getElementById('status').textContent = 'validated';
+    document.getElementById('g4').textContent = 'APPROVED';
+  }
+
+  document.getElementById('b1').style.width = Math.min(92, 35 + i * 5) + '%';
+  document.getElementById('b2').style.width = Math.max(14, 55 - i * 3) + '%';
+  document.getElementById('b3').style.width = Math.max(20, 48 - i * 2) + '%';
+
+  models.forEach(m => m.classList.remove('hot'));
+  if (i >= 4 && i < 12) models[0].classList.add('hot');
+  if (i >= 7) models[0].classList.add('hot');
+}
+
+setCallout(null, 0);
+document.getElementById('run').onclick = run;
+document.getElementById('reset').onclick = () => location.reload();
+for (let k = 0; k < 3; k++) setTimeout(run, 600 + k * 900);
+</script>
+</body>
+</html>

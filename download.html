@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Get the book | Paul Cummings, Ph.D.</title>
-<meta name="description" content="Leave your email to download Thinking Together as an EPUB.">
+<meta name="description" content="Leave your name and email to download Thinking Together as an EPUB.">
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="styles.css?v=28">
+<link rel="stylesheet" href="styles.css?v=30">
 </head>
 <body>
 <header class="site-header">
@@ -29,13 +29,15 @@
 <div class="shell">
 <div class="eyebrow">The book</div>
 <h1>Get the EPUB</h1>
-<p>Leave an email and the download unlocks. Occasional notes on human-AI inquiry — no spam.</p>
+<p>Leave your name and email and the download unlocks. Occasional notes on human-AI inquiry — no spam.</p>
 </div>
 </section>
 <section class="section" style="border-top:0;padding-top:28px">
 <div class="shell" style="max-width:560px">
 <div id="gate">
 <form id="access-form" novalidate style="display:grid;gap:14px">
+<label for="name" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Name</label>
+<input autocomplete="name" id="name" name="name" placeholder="Your name" required type="text" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
 <label for="email" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Email</label>
 <input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
 <input aria-hidden="true" autocomplete="off" name="_gotcha" tabindex="-1" type="text" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
@@ -52,11 +54,11 @@
 </section>
 </main>
 <footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="script.js?v=28"></script>
+<script src="script.js?v=30"></script>
 <script>
 (function () {
   var KEY = "tt-book-access-v1";
-  var ENDPOINT = "https://formsubmit.co/ajax/paul@invia.com";
+  var ENDPOINT = "https://formsubmit.co/ajax/paulsimvient@gmail.com";
   var gate = document.getElementById("gate");
   var unlocked = document.getElementById("unlocked");
   var form = document.getElementById("access-form");
@@ -72,10 +74,16 @@
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    var name = (form.elements.namedItem("name").value || "").trim();
     var email = (form.elements.namedItem("email").value || "").trim();
     var honeypot = (form.elements.namedItem("_gotcha") && form.elements.namedItem("_gotcha").value) || "";
     statusEl.textContent = "";
     if (honeypot) { showUnlocked(); return; }
+    if (!name) {
+      statusEl.textContent = "Enter your name.";
+      form.elements.namedItem("name").focus();
+      return;
+    }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       statusEl.textContent = "Enter a valid email address.";
       form.elements.namedItem("email").focus();
@@ -88,11 +96,13 @@
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
+        name: name,
         email: email,
         _subject: "Thinking Together — book access",
         source: "paulsimvient.github.io/download.html",
         _template: "table",
-        _captcha: "false"
+        _captcha: "false",
+        _cc: "paul@invia.com"
       })
     })
       .then(function (res) {
@@ -105,7 +115,7 @@
         window.location.href = epub.getAttribute("href");
       })
       .catch(function () {
-        statusEl.textContent = "Something went wrong. Try again, or email paul@invia.com.";
+        statusEl.textContent = "Something went wrong. Try again, or email paulsimvient@gmail.com.";
         btn.disabled = false;
       });
   });
