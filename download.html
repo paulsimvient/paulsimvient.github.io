@@ -6,7 +6,7 @@
 <title>Get the book | Paul Cummings, Ph.D.</title>
 <meta name="description" content="Leave your email to download Thinking Together as an EPUB.">
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="styles.css?v=25">
 </head>
 <body>
 <header class="site-header">
@@ -14,11 +14,11 @@
 <a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
 <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
 <nav class="nav">
-<a href="index.html">Home</a>
+<a href="index.html">System</a>
+<a href="research.html">Architecture</a>
+<a href="economics.html">Economics</a>
+<a href="system-demo.html">Live demo</a>
 <a href="book.html">Book</a>
-<a href="research.html">Research</a>
-<a href="consulting.html">Consulting</a>
-<a href="blog.html">Blog</a>
 <a href="about.html">About</a>
 <a class="contact-pill" href="contact.html">Contact</a>
 </nav>
@@ -26,57 +26,33 @@
 </header>
 <main>
 <section class="page-hero">
-<div class="container">
+<div class="shell">
 <div class="eyebrow">The book</div>
-<h1>Get the <span class="accent">EPUB</span></h1>
-<p class="lead">Leave an email and the download unlocks. Occasional notes on human-AI inquiry — no spam.</p>
+<h1>Get the EPUB</h1>
+<p>Leave an email and the download unlocks. Occasional notes on human-AI inquiry — no spam.</p>
 </div>
 </section>
-<section class="section">
-<div class="container" style="max-width:560px">
+<section class="section" style="border-top:0;padding-top:28px">
+<div class="shell" style="max-width:560px">
 <div id="gate">
-<form class="form" id="access-form" novalidate>
-<div>
-<label for="email">Email</label>
-<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email">
-</div>
+<form id="access-form" novalidate style="display:grid;gap:14px">
+<label for="email" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Email</label>
+<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
 <input aria-hidden="true" autocomplete="off" name="_gotcha" tabindex="-1" type="text" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
-<button class="btn primary" type="submit">Unlock download →</button>
-<p aria-live="polite" class="caption" id="access-status" role="status"></p>
+<button class="btn rust" type="submit">Unlock download →</button>
+<p aria-live="polite" id="access-status" role="status" class="micro" style="color:var(--muted);margin:0"></p>
 </form>
 </div>
 <div hidden id="unlocked">
-<p class="lead">Thanks — the download is ready.</p>
-<a class="btn primary" href="downloads/Thinking-Together.epub" id="epub-link">Download Thinking Together →</a>
-<p class="caption" style="margin-top:16px">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
+<p class="lead" style="color:var(--ink)">Thanks — the download is ready.</p>
+<a class="btn rust" href="downloads/Thinking-Together.epub" id="epub-link">Download Thinking Together →</a>
+<p class="micro" style="margin-top:14px;color:var(--muted)">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
 </div>
 </div>
 </section>
 </main>
-<footer class="site-footer">
-<div class="container">
-<div class="footer-grid">
-<div>
-<div class="footer-title">PAUL CUMMINGS, Ph.D.</div>
-<p>Agent-based simulation, multi-agent AI, experimental validation, and human-AI inquiry.</p>
-</div>
-<div class="footer-links">
-<strong>Explore</strong>
-<a href="book.html">Thinking Together</a>
-<a href="research.html">Research</a>
-<a href="consulting.html">Consulting</a>
-</div>
-<div class="footer-links">
-<strong>Connect</strong>
-<a href="contact.html">Contact</a>
-<a href="https://github.com/paulsimvient" target="_blank" rel="noopener">GitHub</a>
-<a href="https://github.com/paulsimvient/ThinkingTogetherBook" target="_blank" rel="noopener">Book repository</a>
-</div>
-</div>
-<div class="fineprint">© 2026 Paul Cummings, Ph.D. All rights reserved.</div>
-</div>
-</footer>
-<script src="script.js?v=23"></script>
+<footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
+<script src="script.js?v=25"></script>
 <script>
 (function () {
   var KEY = "tt-book-access-v1";
@@ -92,36 +68,25 @@
     unlocked.hidden = false;
   }
 
-  if (sessionStorage.getItem(KEY) === "1") {
-    showUnlocked();
-  }
+  if (sessionStorage.getItem(KEY) === "1") showUnlocked();
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     var email = (form.elements.namedItem("email").value || "").trim();
     var honeypot = (form.elements.namedItem("_gotcha") && form.elements.namedItem("_gotcha").value) || "";
     statusEl.textContent = "";
-
-    if (honeypot) {
-      showUnlocked();
-      return;
-    }
+    if (honeypot) { showUnlocked(); return; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       statusEl.textContent = "Enter a valid email address.";
       form.elements.namedItem("email").focus();
       return;
     }
-
     var btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
     statusEl.textContent = "Sending…";
-
     fetch(ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
         email: email,
         _subject: "Thinking Together — book access",

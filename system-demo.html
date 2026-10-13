@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Demo | CoAgentics</title><link rel="stylesheet" href="styles.css?v=25"><style>
+.demo-shell{max-width:1500px;margin:auto;padding:22px}.demo-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:14px}.demo-grid{display:grid;grid-template-columns:240px 1fr 330px;gap:12px;min-height:760px}.pane{border:1px solid var(--line);border-radius:10px;background:#0d1317;overflow:hidden}.pane h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--line);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}.padded{padding:14px}.scenario{border:1px solid var(--line);padding:12px;border-radius:7px;margin-bottom:8px}.scenario strong{display:block;font-size:.82rem}.scenario small{color:var(--muted)}.model{border:1px solid var(--line);border-radius:7px;padding:12px;margin-bottom:8px}.model .bar{height:4px;background:#1f2a31;margin-top:10px}.model .bar i{display:block;height:100%;background:var(--cyan);width:45%;transition:width .8s}.center-stack{display:grid;grid-template-rows:300px 1fr;gap:12px}.canvas{position:relative;background:radial-gradient(circle at 50% 45%,#182127,#0b1014 65%);overflow:hidden}.node{position:absolute;width:118px;padding:10px;border:1px solid #38505d;border-radius:8px;background:#0f171c;text-align:center;font-size:.72rem}.node b{display:block}.node span{color:var(--muted);font-size:.63rem}.n1{left:7%;top:40%}.n2{left:29%;top:16%}.n3{left:29%;top:63%}.n4{left:54%;top:38%}.n5{right:7%;top:18%}.n6{right:7%;top:62%}.beam{position:absolute;height:1px;background:#46616d;transform-origin:left center}.event-stream{font-family:ui-monospace,monospace;font-size:.72rem;height:100%;overflow:auto}.event{padding:9px 0;border-bottom:1px solid #202a31}.event time{color:#72838d;margin-right:10px}.event .ok{color:var(--green)}.event .run{color:var(--cyan)}.right-metric{border-bottom:1px solid var(--line);padding:14px}.right-metric span{display:block;color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.12em}.right-metric strong{font-family:ui-monospace,monospace;font-size:1.05rem}.gate{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:.75rem}.gate i{font-style:normal;color:var(--green)}.controls{display:flex;gap:8px}.controls button{background:#111b21;color:var(--text);border:1px solid #33434c;border-radius:6px;padding:8px 11px}.controls button:hover{border-color:var(--cyan)}@media(max-width:1050px){.demo-grid{grid-template-columns:1fr}.center-stack{grid-template-rows:320px 500px}}
+</style>
+<style id="book-palette-system">
+:root{
+  --book-cream:#f4ebdc;
+  --book-paper:#fffaf1;
+  --book-teal:#153f3b;
+  --book-teal2:#315e59;
+  --book-rust:#b64824;
+  --book-rust2:#8f351c;
+  --book-tan:#e9dcc5;
+  --book-line:#d8c8b0;
+  --book-ink:#17302e;
+  --book-muted:#69746f;
+}
+html,body{background:#f4ebdc!important;color:var(--book-ink)!important}
+body{
+  background:
+    radial-gradient(circle at 92% 6%, rgba(182,72,36,.09), transparent 22rem),
+    linear-gradient(180deg,#faf3e8 0%,#efe4d2 100%)!important;
+}
+header,.site-header{
+  background:#f8f0e3!important;
+  border-bottom:1px solid var(--book-line)!important;
+}
+header a,.site-header a,.brand,.nav a{color:var(--book-teal)!important}
+.nav a:hover,.nav a.active{color:var(--book-rust)!important}
+
+.demo-wrap,.demo-grid,.main-stage{color:var(--book-ink)!important}
+.demo-card,.control-card,.info-card,.matrix-card,.evidence-card,.architecture-card,
+.market-card,.step-card,.explanation-card,.cell-card,.runtime-card{
+  background:rgba(255,250,241,.97)!important;
+  color:var(--book-ink)!important;
+  border-color:var(--book-line)!important;
+  box-shadow:0 12px 34px rgba(55,50,40,.08)!important;
+}
+.demo-card *, .control-card *, .info-card *, .matrix-card *, .evidence-card *,
+.architecture-card *, .market-card *, .step-card *, .explanation-card *,
+.cell-card *, .runtime-card *{
+  color:inherit;
+}
+h1,h2,h3,h4,.title,.section-title,.card-title{color:var(--book-teal)!important}
+.kicker,.eyebrow,.step-label,.mini-label,.section-label{color:var(--book-rust)!important}
+
+.market-surface,.market-floor,.lab,.controlled-market{
+  background:linear-gradient(180deg,#edf0e8 0%,#efe1cc 100%)!important;
+  border-color:#cdbb9f!important;
+}
+.bid-bar,.buyer-bar,.ref-bar,.bar.teal{background:var(--book-teal)!important}
+.ask-bar,.seller-bar,.agent-bar,.bar.rust{background:var(--book-rust)!important}
+.track,.meter-track,.prob-track{background:#e3ddd1!important}
+.fill,.meter-fill,.prob-fill{background:var(--book-teal)!important}
+.agent.reference,.reference-agent{background:var(--book-teal)!important}
+.agent.blackbox,.black-box-agent{background:#e7ddcd!important;border-color:var(--book-rust)!important;color:var(--book-rust)!important}
+.agent.reference *, .reference-agent *{color:#fff8eb!important}
+
+.matrix-cell,.condition-cell,.cell{
+  background:#eee5d6!important;
+  color:var(--book-teal)!important;
+  border-color:#dac8ad!important;
+}
+.matrix-cell.active,.condition-cell.active,.cell.active{
+  background:#dce9e3!important;
+  outline:2px solid var(--book-rust)!important;
+}
+.log,.evidence-log,.terminal,.trace-log,pre,code{
+  background:#163b37!important;
+  color:#f7ecd9!important;
+  border-color:#315b56!important;
+}
+.runtime-layer,.layer{
+  background:#f6efe4!important;
+  color:var(--book-teal)!important;
+  border-color:#d6c5aa!important;
+}
+.runtime-layer.active,.layer.active{
+  background:var(--book-teal)!important;
+  color:#fff4df!important;
+  border-color:var(--book-teal)!important;
+}
+.status-dot,.status.ready,.accent{background:var(--book-rust)!important;color:var(--book-rust)!important}
+button,.demo-button,.run-btn{
+  background:var(--book-rust)!important;
+  color:#fff8eb!important;
+  border-color:var(--book-rust)!important;
+}
+button:hover,.demo-button:hover,.run-btn:hover{background:var(--book-rust2)!important}
+</style>
+
+</head><body><header class="site-header"><div class="nav-wrap"><a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a><nav class="nav"><a href="index.html">System</a><a href="research.html">Architecture</a><a href="economics.html">Economics</a><a class="active" href="system-demo.html">Live demo</a><a href="book.html">Book</a></nav></div></header><main class="demo-shell"><div class="demo-top"><div><div class="eyebrow">Executable demonstration</div><h1 style="margin:3px 0;font-size:2rem">Counterfactual investigation</h1></div><div class="controls"><button id="run">Run next experiment</button><button id="reset">Reset</button></div></div><div class="demo-grid"><section class="pane"><h3>Candidate models</h3><div class="padded"><div class="scenario"><strong>Observed anomaly</strong><small>classification delayed under degraded communications</small></div><div class="model"><strong>H1 / timing</strong><small>delay is caused by message latency</small><div class="bar"><i id="b1"></i></div></div><div class="model"><strong>H2 / sensor</strong><small>delay is caused by ambiguous observations</small><div class="bar"><i id="b2"></i></div></div><div class="model"><strong>H3 / interaction</strong><small>latency and ambiguity interact</small><div class="bar"><i id="b3"></i></div></div></div></section><section class="center-stack"><div class="pane canvas"><div class="node n1"><b>DOMAIN</b><span>scenario + state</span></div><div class="node n2"><b>STRATEGY</b><span>H1 H2 H3</span></div><div class="node n3"><b>EXPERIMENT</b><span>paired intervention</span></div><div class="node n4"><b>VALIDATION</b><span>holdout + CI</span></div><div class="node n5"><b>KNOWLEDGE</b><span>claim + boundary</span></div><div class="node n6"><b>WORKBENCH</b><span>human review</span></div></div><div class="pane"><h3>Execution trace</h3><div class="padded event-stream" id="events"></div></div></section><section class="pane"><h3>Validation state</h3><div class="right-metric"><span>phase</span><strong id="phase">discovery</strong></div><div class="right-metric"><span>seed</span><strong id="seed">0042</strong></div><div class="right-metric"><span>paired effect</span><strong id="effect">pending</strong></div><div class="right-metric"><span>claim status</span><strong id="status">candidate</strong></div><div class="gate"><span>protocol frozen</span><i id="g1">NO</i></div><div class="gate"><span>holdout sealed</span><i id="g2">YES</i></div><div class="gate"><span>evidence retained</span><i id="g3">YES</i></div><div class="gate"><span>human approval</span><i id="g4">PENDING</i></div></section></div></main><script>
+const steps=[
+['00:00.000','instantiate domain state','run'],['00:00.014','load candidate models H1/H2/H3','run'],['00:00.026','score feasible interventions','run'],['00:00.041','select E1: isolate communication delay','ok'],['00:00.058','launch HOLD / seed 0042','run'],['00:00.071','launch E1 / seed 0042','run'],['00:00.119','paired delta = 28 ticks','ok'],['00:00.137','update discovery evidence','ok'],['00:00.154','freeze model set + thresholds','ok'],['00:00.177','open reserved confirmation','run'],['00:00.229','holdout effect consistent','ok'],['00:00.245','claim promoted: validated within tested envelope','ok']];let i=0;const E=document.getElementById('events');function run(){if(i>=steps.length)return;const s=steps[i];const d=document.createElement('div');d.className='event';d.innerHTML='<time>'+s[0]+'</time><span class="'+s[2]+'">'+s[1]+'</span>';E.appendChild(d);E.scrollTop=E.scrollHeight;i++;document.getElementById('seed').textContent=String(41+i).padStart(4,'0');if(i>=7)document.getElementById('effect').textContent='28 ticks';if(i>=8)document.getElementById('status').textContent='provisional';if(i>=9){document.getElementById('phase').textContent='confirmation';document.getElementById('g1').textContent='YES'}if(i>=11)document.getElementById('g4').textContent='REVIEW';if(i>=12){document.getElementById('status').textContent='validated';document.getElementById('g4').textContent='APPROVED'}document.getElementById('b1').style.width=Math.min(92,35+i*5)+'%';document.getElementById('b2').style.width=Math.max(14,55-i*3)+'%';document.getElementById('b3').style.width=Math.max(20,48-i*2)+'%'}document.getElementById('run').onclick=run;document.getElementById('reset').onclick=()=>location.reload();for(let k=0;k<4;k++)setTimeout(run,500+k*420);
+</script></body></html>

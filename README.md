@@ -1,17 +1,13 @@
-# Paul Cummings website
+# Paul Cummings / CoAgentics site
 
-Static, GitHub Pages ready website.
+Static GitHub Pages site. Upload the contents of this folder to the repository root.
 
-## Pages
-- index.html
-- book.html
-- research.html
-- consulting.html
-- blog.html
-- about.html
-- contact.html
+Entry point: `index.html`
 
-## Publish on GitHub Pages
-For a personal site at `https://paulsimvient.github.io/`, create a repository named exactly `paulsimvient.github.io`, place these files at the repository root, then enable Pages from the `main` branch in Settings → Pages.
-
-The contact form is intentionally a front-end demo. Connect it to Formspree, Basin, Netlify Forms, or your own endpoint before publishing if you want submissions.
+Primary pages:
+- `index.html` — system overview
+- `research.html` — architecture
+- `economics.html` — economics case study
+- `system-demo.html` — interactive CoAgentics demonstration
+- `economics-demo.html` — animated economics demonstration
+- `book.html` — Thinking Together

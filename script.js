@@ -1,54 +1,13 @@
-const toggle = document.querySelector('.mobile-toggle');
-const nav = document.querySelector('.nav');
-if (toggle && nav) {
-  toggle.addEventListener('click', () => nav.classList.toggle('open'));
-}
-
-const form = document.querySelector('.form:not(#access-form)');
-if (form) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const note = document.querySelector('#form-note');
-    const btn = form.querySelector('button[type="submit"]');
-    const name = (form.elements.namedItem('name')?.value || '').trim();
-    const email = (form.elements.namedItem('email')?.value || '').trim();
-    const message = (form.elements.namedItem('message')?.value || '').trim();
-
-    if (!email || !message) {
-      if (note) note.textContent = 'Please complete the required fields.';
-      return;
-    }
-
-    if (btn) btn.disabled = true;
-    if (note) note.textContent = 'Sending…';
-
-    fetch('https://formsubmit.co/ajax/paul@invia.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        message,
-        _subject: 'Paul Cummings site — contact',
-        source: 'paulsimvient.github.io/contact.html',
-        _template: 'table',
-        _captcha: 'false'
-      })
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('request failed');
-        return res.json().catch(() => ({}));
-      })
-      .then(() => {
-        form.reset();
-        if (note) note.textContent = 'Thanks — the message was sent.';
-      })
-      .catch(() => {
-        if (note) note.textContent = 'Something went wrong. Email paul@invia.com instead.';
-        if (btn) btn.disabled = false;
-      });
-  });
-}
+const toggle=document.querySelector('.mobile-toggle');const nav=document.querySelector('.nav');if(toggle&&nav){toggle.addEventListener('click',()=>nav.classList.toggle('open'));}
+const traces=[
+  '[domain] sealed market state instantiated',
+  '[strategy] 3 competing models retained',
+  '[experiment] choose intervention: news × history',
+  '[experiment] paired seed 0042 launched',
+  '[validation] discovery result recorded',
+  '[validation] holdout remains sealed',
+  '[knowledge] claim status: provisional',
+  '[workbench] next discriminating test proposed'
+];
+let ti=0;const tr=document.querySelector('.trace');if(tr){setInterval(()=>{const line=document.createElement('div');line.className='trace-line hot';line.textContent=traces[ti%traces.length];tr.appendChild(line);[...tr.children].forEach((x,i,a)=>x.className='trace-line'+(i===a.length-1?' hot':''));while(tr.children.length>6)tr.removeChild(tr.firstChild);ti++;},1450)}
+const q=document.querySelector('[data-query]');const claim=document.querySelector('[data-claim]');const layerEls=[...document.querySelectorAll('.layer')];let step=0;if(q){setInterval(()=>{step=(step+1)%6;q.textContent=['24','20','16','12','8','4'][step];if(claim)claim.textContent=['candidate','candidate','provisional','provisional','validated','validated'][step];layerEls.forEach((x,i)=>x.classList.toggle('active',i===step));},1700)}
