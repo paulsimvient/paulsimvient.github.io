@@ -21,23 +21,29 @@ main{overflow:hidden}.shell{max-width:var(--max);margin:auto;padding:0 24px}.her
 
 
 /* =========================================================
-   Thinking Together — Book Palette Override
-   Cream / deep teal / rust / warm stone / muted blue
+   Professional research palette — cool slate / steel / white
    ========================================================= */
 :root{
-  --bg:#f3eadb;
-  --bg-soft:#fbf6ec;
-  --paper:#fffaf0;
-  --ink:#102f2d;
-  --muted:#66736e;
-  --line:#d8c9b4;
-  --teal:#153f3b;
-  --teal-2:#315e59;
-  --rust:#b64824;
-  --rust-dark:#8f351c;
-  --sand:#e7d8bf;
-  --blue:#6f9695;
-  --black:#15201f;
+  --bg:#f3f5f8;
+  --bg-soft:#f8fafc;
+  --paper:#ffffff;
+  --ink:#152033;
+  --muted:#5b667a;
+  --line:#d5dbe6;
+  --teal:#1f4e79;
+  --teal-2:#2f6f9f;
+  --rust:#1f4e79;
+  --rust-dark:#163a5c;
+  --sand:#e8edf3;
+  --blue:#3b82a8;
+  --black:#0f172a;
+  --cyan:#3b82a8;
+  --green:#2d6a4f;
+  --amber:#b45309;
+  --warm:#eef2f6;
+  --text:#152033;
+  --panel:#ffffff;
+  --panel2:#f8fafc;
 }
 
 html,body{
@@ -47,71 +53,76 @@ html,body{
 
 body{
   background:
-    radial-gradient(circle at 85% 8%, rgba(182,72,36,.09), transparent 22rem),
-    linear-gradient(180deg,#f8f1e5 0%,#efe4d2 100%);
+    radial-gradient(circle at 88% 0%, rgba(31,78,121,.07), transparent 28rem),
+    linear-gradient(180deg,#f8fafc 0%,#eef2f6 100%);
+  font-family:"Source Sans 3", "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 a{color:var(--teal)}
-a:hover{color:var(--rust)}
+a:hover{color:var(--teal-2)}
 
 .site-header,
 header.site-header{
-  background:rgba(248,241,229,.96) !important;
+  background:rgba(255,255,255,.96) !important;
   border-bottom:1px solid var(--line) !important;
-  box-shadow:0 8px 30px rgba(33,39,36,.06);
+  box-shadow:0 1px 0 rgba(21,32,51,.04);
 }
 
 .site-header .brand,
 .site-header a,
 .nav a{
-  color:var(--teal) !important;
+  color:var(--ink) !important;
 }
 
+.nav a{color:var(--muted) !important}
 .nav a.active,
 .nav a:hover{
-  color:var(--rust) !important;
+  color:var(--teal) !important;
 }
 
 .btn{
   background:transparent;
-  color:var(--teal) !important;
-  border:1px solid var(--teal) !important;
+  color:var(--ink) !important;
+  border:1px solid #9aa8b8 !important;
+  border-radius:6px;
 }
 
 .btn:hover{
-  background:var(--teal) !important;
-  color:#fff8ed !important;
+  background:var(--ink) !important;
+  color:#fff !important;
+  border-color:var(--ink) !important;
 }
 
 .nav .contact,
 .nav a.contact,
+.nav .contact-pill,
 .btn.primary,
 .btn.rust{
-  background:var(--rust) !important;
-  color:#fff8ed !important;
-  border-color:var(--rust) !important;
+  background:var(--teal) !important;
+  color:#fff !important;
+  border-color:var(--teal) !important;
 }
 
 .btn.primary:hover,
 .btn.rust:hover{
   background:var(--rust-dark) !important;
-  color:#fff8ed !important;
+  color:#fff !important;
 }
 
 .hero-tech .lead,
 .hero-copy .lead,
 .page-hero p,
 .section .intro{
-  color:#3a4844 !important;
+  color:#3d4a5c !important;
 }
 
 .hero-tech .micro,
 .hero-copy .micro{
-  color:#5c6964 !important;
+  color:#5b667a !important;
 }
 
 .eyebrow{
-  color:var(--rust) !important;
+  color:var(--teal) !important;
 }
 
 .hero,
@@ -129,21 +140,15 @@ h1,h2,h3,h4,
 .eyebrow,
 .kicker,
 .section-label{
-  color:var(--teal) !important;
+  color:var(--ink) !important;
 }
 
-.eyebrow,
-.kicker,
-.section-label,
-.metric-label,
-.small-label{
-  letter-spacing:.12em;
-}
-
+.hero-tech h1 span,
 .accent,
 .rust,
-.highlight{
-  color:var(--rust) !important;
+.highlight,
+.quote strong{
+  color:var(--teal) !important;
 }
 
 .panel,
@@ -152,25 +157,43 @@ h1,h2,h3,h4,
 .tech-card,
 .case-card,
 .architecture,
-.demo-panel{
-  background:rgba(255,250,240,.94) !important;
+.demo-panel,
+.demo-card{
+  background:var(--paper) !important;
   border-color:var(--line) !important;
-  box-shadow:0 12px 34px rgba(57,54,46,.08);
+  box-shadow:0 8px 28px rgba(21,32,51,.06);
 }
 
-/* Keep dark instrument / diagram panels readable (light text on dark) */
+.demo-card:before{
+  background:radial-gradient(circle at 100% 0, rgba(31,78,121,.08),transparent 40%) !important;
+}
+
+.section.warm{
+  background:#e8edf3 !important;
+  color:var(--ink) !important;
+}
+.warm .intro{color:#4a5568 !important}
+.warm .tech-card{
+  background:#fff !important;
+  border-color:var(--line) !important;
+}
+.warm .tech-card p{color:var(--muted) !important}
+.warm .tech-card code{color:#334155 !important}
+.warm .book-copy p{color:#4a5568 !important}
+
+/* Dark instrument / diagram panels */
 .diagram,
 .instrument,
 .console{
-  background:#123734 !important;
-  color:#f6ead8 !important;
-  border-color:#315d57 !important;
-  box-shadow:0 18px 50px rgba(18,32,30,.18);
+  background:#0f172a !important;
+  color:#e8eef6 !important;
+  border-color:#334155 !important;
+  box-shadow:0 18px 50px rgba(15,23,42,.22);
 }
 .diagram-node{
-  background:#0f2421 !important;
-  border-color:#3a5550 !important;
-  color:#f6ead8 !important;
+  background:#1e293b !important;
+  border-color:#475569 !important;
+  color:#e8eef6 !important;
 }
 .diagram-node b,
 .diagram-node strong,
@@ -178,7 +201,7 @@ h1,h2,h3,h4,
 .instrument strong,
 .console strong,
 .console b{
-  color:#fff3df !important;
+  color:#f8fafc !important;
 }
 .diagram-node span,
 .instrument span,
@@ -187,93 +210,77 @@ h1,h2,h3,h4,
 .metric span,
 .trace,
 .instrument-top{
-  color:#c8d0c6 !important;
+  color:#94a3b8 !important;
 }
 .layer{
-  background:#0f2421 !important;
-  border-color:#3a5550 !important;
-  color:#f6ead8 !important;
+  background:#1e293b !important;
+  border-color:#475569 !important;
+  color:#e8eef6 !important;
 }
-.layer b{color:#fff3df !important}
+.layer b{color:#f8fafc !important}
 .layer.active{
-  border-color:var(--cyan) !important;
-  background:rgba(103,199,211,.10) !important;
+  border-color:var(--blue) !important;
+  background:rgba(59,130,168,.14) !important;
 }
 .metric{
-  background:#0c1c1a !important;
-  border-color:#3a5550 !important;
-  color:#f6ead8 !important;
+  background:#0b1220 !important;
+  border-color:#334155 !important;
+  color:#e8eef6 !important;
 }
 
 code, pre, .code, .console-output, .trace{
-  background:#183d39 !important;
-  color:#f7edda !important;
-  border-color:#2d5752 !important;
+  background:#1e293b !important;
+  color:#e2e8f0 !important;
+  border-color:#334155 !important;
 }
 
 .tag, .badge, .pill{
-  background:#e9dcc5 !important;
+  background:#e8edf3 !important;
   color:var(--teal) !important;
-  border-color:#d2bea0 !important;
-}
-
-.rule, hr{
   border-color:var(--line) !important;
 }
 
 footer,
 .site-footer{
-  background:#143936 !important;
-  color:#eee4d2 !important;
-  border-top:1px solid #244d48 !important;
+  background:#0f172a !important;
+  color:#cbd5e1 !important;
+  border-top:1px solid #1e293b !important;
 }
-
-footer a,.site-footer a{
-  color:#f6ead5 !important;
-}
+footer a,.site-footer a{color:#e2e8f0 !important}
 
 table{
   background:var(--paper);
   color:var(--ink);
   border-color:var(--line);
 }
-th{
-  color:var(--teal);
-  border-color:var(--line);
-}
-td{
-  border-color:var(--line);
-}
+th{color:var(--teal);border-color:var(--line)}
+td{border-color:var(--line)}
 
-/* Dark instrument shells only — cream demos keep book-ink text */
 .tech-shell,
 .system-shell,
 .runtime-shell{
-  background:#123734 !important;
-  color:#f6ead8 !important;
-  border-color:#315d57 !important;
+  background:#0f172a !important;
+  color:#e8eef6 !important;
+  border-color:#334155 !important;
 }
-
 .tech-shell h1,.tech-shell h2,.tech-shell h3,
 .system-shell h1,.system-shell h2,.system-shell h3,
 .runtime-shell h1,.runtime-shell h2,.runtime-shell h3{
-  color:#fff3df !important;
+  color:#f8fafc !important;
 }
-
 .tech-shell .muted,
 .system-shell .muted,
 .runtime-shell .muted{
-  color:#c8d0c6 !important;
+  color:#94a3b8 !important;
 }
 
-/* System/live demo dark panes stay light-on-dark */
 .pane,
 .pane h3,
 .pane strong,
 .pane b,
 .node,
 .node b{
-  color:#f4f7f5 !important;
+  color:#e8eef6 !important;
 }
 .pane small,
 .pane span,
@@ -281,15 +288,14 @@ td{
 .right-metric span,
 .event time,
 .gate span{
-  color:#b7c4c8 !important;
+  color:#94a3b8 !important;
 }
 .pane,
 .node{
-  background:#0f1a1d !important;
-  border-color:#3a5058 !important;
+  background:#1e293b !important;
+  border-color:#475569 !important;
 }
 
-/* Cream demo pages: readable ink on warm paper */
 .demo-shell{
   background:transparent !important;
   color:var(--ink) !important;
@@ -297,29 +303,66 @@ td{
 .demo-shell h1,
 .demo-shell h2,
 .demo-shell h3{
-  color:var(--teal) !important;
+  color:var(--ink) !important;
 }
 .demo-shell p,
 .demo-shell .demo-note,
 .demo-shell .lead,
 .demo-shell .intro{
-  color:#3a4844 !important;
+  color:#3d4a5c !important;
 }
-.demo-shell .muted{
-  color:var(--muted) !important;
-}
+.demo-shell .muted{color:var(--muted) !important}
 .demo-shell .accent{
   background:transparent !important;
-  color:var(--rust) !important;
+  color:var(--teal) !important;
 }
 
-
-/* Homepage instrument plot labels must stay light on dark */
 .plot svg text,
 .instrument .plot text{
-  fill:#e8f0ee !important;
+  fill:#e8eef6 !important;
 }
 .plot svg text[fill="#67c7d3"],
-.instrument .plot text[fill="#67c7d3"]{ fill:#67c7d3 !important; }
+.instrument .plot text[fill="#67c7d3"]{ fill:#7dd3fc !important; }
 .plot svg text[fill="#c7522a"],
-.instrument .plot text[fill="#c7522a"]{ fill:#e07a4f !important; }
+.instrument .plot text[fill="#c7522a"]{ fill:#93c5fd !important; }
+
+/* =========================================================
+   Demo tooltips + help guide
+   ========================================================= */
+.tip-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;margin-left:6px;border-radius:50%;
+  border:1px solid #9aa8b8;color:#5b667a;font:700 10px/1 ui-sans-serif,system-ui;
+  vertical-align:middle;cursor:help;background:#fff;
+}
+.tip-mark:hover,.tip-mark:focus{border-color:var(--teal);color:var(--teal)}
+
+[data-tip]{position:relative}
+[data-tip].tip-anchor{cursor:help}
+
+#site-tip{
+  position:fixed;z-index:9999;max-width:280px;padding:10px 12px;
+  background:#0f172a;color:#e8eef6;border:1px solid #334155;border-radius:8px;
+  font-size:.8rem;line-height:1.4;box-shadow:0 12px 32px rgba(15,23,42,.28);
+  pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;
+}
+#site-tip.show{opacity:1;transform:translateY(0)}
+#site-tip strong{display:block;margin-bottom:4px;color:#93c5fd;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+
+.demo-guide{
+  display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;
+  margin:0 0 16px;padding:14px 16px;border-radius:10px;
+  background:#fff;border:1px solid var(--line);
+  box-shadow:0 6px 20px rgba(21,32,51,.05);
+}
+.demo-guide .tag{
+  font:700 .65rem/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;background:var(--teal);border-radius:4px;padding:7px 9px;white-space:nowrap;
+  border:0 !important;box-shadow:none !important;
+}
+.demo-guide p{margin:0;color:#3d4a5c;font-size:.95rem;line-height:1.45}
+.demo-guide .hint{display:block;margin-top:6px;color:var(--teal);font-size:.84rem;font-weight:600}
+
+@media (hover:none){
+  #site-tip{max-width:min(320px,92vw)}
+}

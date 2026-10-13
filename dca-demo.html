@@ -5,113 +5,113 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DCA Night Crossing · Instrument | Paul Cummings</title>
 <meta name="description" content="Interactive teaching instrument: same world, same seed, one controlled change. Compare what happens.">
-<link rel="stylesheet" href="styles.css?v=50">
+<link rel="stylesheet" href="styles.css?v=51">
 <style>
 :root{
-  --ink:#102f2d; --teal:#153f3b; --rust:#b64824; --cream:#f4ebdc; --paper:#fffaf1;
-  --line:#d8c8b0; --panel:#0f2926; --panel2:#123734; --hi:#67c7d3; --warn:#f0b487; --ok:#8cbf90;
+  --ink:#152033; --navy:#1f4e79; --steel:#3b82a8; --line:#d5dbe6; --paper:#fff;
+  --panel:#0f172a; --panel2:#1e293b; --hi:#7dd3fc; --warn:#fbbf24; --ok:#6ee7b7;
 }
 .page{max-width:1280px;margin:0 auto;padding:22px 20px 56px}
-.lead-box{max-width:820px;margin:0 0 18px;padding:18px 20px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
-.lead-box h1{margin:0 0 10px;font-size:clamp(1.8rem,4vw,2.7rem);color:var(--teal);letter-spacing:-.03em}
-.lead-box p{margin:0;color:#3a4844;font-size:1.05rem;line-height:1.55}
-.note{margin-top:10px;font-size:.86rem;color:#5c6964}
+.lead-box{max-width:820px;margin:0 0 14px;padding:18px 20px;border-radius:10px;background:var(--paper);border:1px solid var(--line)}
+.lead-box h1{margin:0 0 10px;font-size:clamp(1.8rem,4vw,2.7rem);color:var(--ink);letter-spacing:-.03em}
+.lead-box p{margin:0;color:#3d4a5c;font-size:1.05rem;line-height:1.55}
+.note{margin-top:10px;font-size:.86rem;color:#5b667a}
 .instrument{
-  border:1px solid #2f5b55;border-radius:16px;overflow:hidden;background:var(--panel2);
-  box-shadow:0 22px 60px rgba(18,32,30,.22);color:#f4f7f5;
+  border:1px solid #334155;border-radius:12px;overflow:hidden;background:var(--panel);
+  box-shadow:0 18px 48px rgba(15,23,42,.2);color:#e8eef6;
 }
 .inst-top{
   display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;
-  padding:14px 16px;border-bottom:1px solid #2f5b55;background:#0f2421;
+  padding:14px 16px;border-bottom:1px solid #334155;background:#0b1220;
   font-family:ui-monospace,Menlo,monospace;font-size:.72rem;letter-spacing:.08em;
 }
 .inst-top .live{color:var(--ok)}
 .inst-body{display:grid;grid-template-columns:1.35fr .9fr}
 .stage{
   position:relative;min-height:420px;background:
-    radial-gradient(circle at 70% 30%,rgba(103,199,211,.08),transparent 35%),
-    linear-gradient(180deg,#102c29,#0b1f1d 70%);
-  border-right:1px solid #2f5b55;
+    radial-gradient(circle at 70% 30%,rgba(59,130,168,.12),transparent 35%),
+    linear-gradient(180deg,#152033,#0f172a 70%);
+  border-right:1px solid #334155;
 }
 .stage svg{width:100%;height:100%;min-height:420px;display:block}
 .hud{
   position:absolute;left:12px;right:12px;bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
 }
 .hud div{
-  background:rgba(8,20,18,.82);border:1px solid #355853;border-radius:8px;padding:8px 10px;
+  background:rgba(15,23,42,.88);border:1px solid #475569;border-radius:8px;padding:8px 10px;
   font-family:ui-monospace,Menlo,monospace;font-size:.68rem;
 }
-.hud span{display:block;color:#9fb4af;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
-.hud b{color:#fff8eb;font-size:.86rem}
-.side{display:flex;flex-direction:column;min-height:420px}
+.hud span{display:block;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.hud b{color:#f8fafc;font-size:.86rem}
+.side{display:flex;flex-direction:column;min-height:420px;background:#111827}
 .phase-bar{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:12px;border-bottom:1px solid #2f5b55;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:12px;border-bottom:1px solid #334155;
 }
 .phase-bar button{
-  appearance:none;border:1px solid #355853;background:#0f2421;color:#c8d4d1;border-radius:8px;
+  appearance:none;border:1px solid #475569;background:#1e293b;color:#cbd5e1;border-radius:6px;
   padding:8px 6px;font:700 .62rem/1.2 ui-sans-serif,system-ui;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
 }
-.phase-bar button.active{background:var(--rust);border-color:var(--rust);color:#fff8eb}
-.phase-bar button.done{border-color:#4a7a72;color:#9fd0c6}
-.tests{padding:12px;border-bottom:1px solid #2f5b55}
-.tests .label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#9fb4af;margin-bottom:8px}
+.phase-bar button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.phase-bar button.done{border-color:#64748b;color:#93c5fd}
+.tests{padding:12px;border-bottom:1px solid #334155}
+.tests .label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:8px}
 .tests .row{display:flex;flex-wrap:wrap;gap:8px}
 .tests button{
-  appearance:none;border:1px solid #3a5550;background:#0f2421;color:#fff8eb;border-radius:999px;
+  appearance:none;border:1px solid #475569;background:#1e293b;color:#f1f5f9;border-radius:6px;
   padding:9px 12px;font:600 .78rem/1 system-ui;cursor:pointer;
 }
-.tests button.active{background:#1a4d47;border-color:var(--hi);color:#fff}
-.tests button:hover{border-color:var(--hi)}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border-bottom:1px solid #2f5b55}
+.tests button.active{background:#1e3a5f;border-color:var(--steel);color:#fff}
+.tests button:hover{border-color:var(--steel)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border-bottom:1px solid #334155}
 .card{
-  background:#0f2421;border:1px solid #355853;border-radius:10px;padding:12px;
+  background:#1e293b;border:1px solid #475569;border-radius:8px;padding:12px;
 }
 .card h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--hi)}
 .card.cf h3{color:var(--warn)}
-.card p{margin:0 0 6px;font-size:.86rem;color:#dce6e3}
-.card .out{font-family:ui-monospace,Menlo,monospace;font-size:1.15rem;color:#fff8eb}
+.card p{margin:0 0 6px;font-size:.86rem;color:#cbd5e1}
+.card .out{font-family:ui-monospace,Menlo,monospace;font-size:1.15rem;color:#f8fafc}
 .delta{
-  margin:0 12px 12px;padding:14px;border-radius:10px;background:#0f2421;border:1px solid #355853;text-align:center;
+  margin:0 12px 12px;padding:14px;border-radius:8px;background:#1e293b;border:1px solid #475569;text-align:center;
 }
 .delta .big{font-family:ui-monospace,Menlo,monospace;font-size:1.6rem;color:var(--ok);margin:4px 0}
-.delta .bar{height:8px;border-radius:999px;background:#243f3b;overflow:hidden;margin:10px auto;max-width:220px}
-.delta .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--hi),var(--ok));transition:width .8s ease}
+.delta .bar{height:8px;border-radius:999px;background:#334155;overflow:hidden;margin:10px auto;max-width:220px}
+.delta .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--steel),var(--ok));transition:width .8s ease}
 .evidence{padding:0 12px 12px;flex:1}
-.evidence h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#9fb4af}
+.evidence h3{margin:0 0 8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8}
 .ev-list{display:grid;gap:6px}
 .ev-list div{
-  border:1px solid #355853;border-radius:8px;padding:8px 10px;font-size:.8rem;color:#dce6e3;background:#0f2421;
+  border:1px solid #475569;border-radius:8px;padding:8px 10px;font-size:.8rem;color:#cbd5e1;background:#1e293b;
 }
-.ev-list .ok{border-color:#3d6f66}
-.ev-list .warn{border-color:#8a5a3a}
+.ev-list .ok{border-color:#2d6a4f}
+.ev-list .warn{border-color:#b45309}
 .controls{display:flex;flex-wrap:wrap;gap:8px;padding:0 12px 14px}
 .controls button{
-  appearance:none;border:1px solid var(--rust);background:var(--rust);color:#fff8eb;border-radius:8px;
+  appearance:none;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:6px;
   padding:10px 14px;font:600 .82rem/1 system-ui;cursor:pointer;
 }
-.controls button.ghost{background:transparent;border-color:#4a6f68;color:#dce6e3}
-.loop{padding:10px 16px 16px;font-size:.84rem;color:#b7c9c4}
-.loop strong{color:#fff8eb}
+.controls button.ghost{background:transparent;border-color:#64748b;color:#e2e8f0}
+.loop{padding:10px 16px 16px;font-size:.84rem;color:#94a3b8}
+.loop strong{color:#f8fafc}
 .tagline{
-  margin-top:18px;padding:22px 24px;border-radius:14px;background:var(--teal);color:#fff8eb;
+  margin-top:18px;padding:22px 24px;border-radius:10px;background:var(--navy);color:#fff;
   font-size:clamp(1.2rem,2.5vw,1.7rem);letter-spacing:-.02em;
 }
-.tagline span{display:block;margin-top:8px;font-size:.95rem;color:#c6e6df;letter-spacing:0}
+.tagline span{display:block;margin-top:8px;font-size:.95rem;color:#bfdbfe;letter-spacing:0}
 .footer-links{margin-top:18px;display:flex;flex-wrap:wrap;gap:14px}
-.footer-links a{color:var(--rust);font-size:.92rem}
-.ac{fill:#67c7d3}.ac2{fill:#f0b487}
+.footer-links a{color:var(--navy);font-size:.92rem}
+.ac{fill:#7dd3fc}.ac2{fill:#fbbf24}
 .trail{fill:none;stroke-width:2;stroke-linecap:round;opacity:.85}
-.trail-a{stroke:#67c7d3}.trail-b{stroke:#f0b487}
-.pred{stroke:#9aa7af;stroke-dasharray:4 5;opacity:.7}
-.xmark{fill:none;stroke:#fff8eb;stroke-width:1.5}
-.river{fill:#163f4a;opacity:.55}
-.runway{stroke:#d8c8b0;stroke-width:3;opacity:.35}
-.corridor{fill:rgba(240,180,135,.08);stroke:rgba(240,180,135,.25);stroke-width:1}
-.label{fill:#c8d4d1;font:600 11px ui-sans-serif,system-ui}
-.muted{fill:#8aa09a;font:500 10px ui-monospace,Menlo,monospace}
+.trail-a{stroke:#7dd3fc}.trail-b{stroke:#fbbf24}
+.pred{stroke:#94a3b8;stroke-dasharray:4 5;opacity:.7}
+.xmark{fill:none;stroke:#f8fafc;stroke-width:1.5}
+.river{fill:#1e3a5f;opacity:.55}
+.runway{stroke:#94a3b8;stroke-width:3;opacity:.35}
+.corridor{fill:rgba(251,191,36,.08);stroke:rgba(251,191,36,.28);stroke-width:1}
+.label{fill:#e2e8f0;font:600 11px ui-sans-serif,system-ui}
+.muted{fill:#94a3b8;font:500 10px ui-monospace,Menlo,monospace}
 @media(max-width:900px){
   .inst-body{grid-template-columns:1fr}
-  .stage{border-right:0;border-bottom:1px solid #2f5b55}
+  .stage{border-right:0;border-bottom:1px solid #334155}
   .hud{grid-template-columns:1fr 1fr}
   .split{grid-template-columns:1fr}
 }
@@ -126,8 +126,8 @@
 <a href="index.html">Home</a>
 <a href="research.html">How it works</a>
 <a href="system-demo.html">Example</a>
-<a href="economics.html">Economics</a>
 <a class="active" href="dca-demo.html">DCA</a>
+<a href="economics.html">Economics</a>
 <a href="book.html">Book</a>
 <a href="about.html">About</a>
 <a class="contact-pill" href="contact.html">Contact</a>
@@ -137,50 +137,53 @@
 
 <main class="page">
 <div class="lead-box">
-<div class="eyebrow" style="color:var(--rust)">Teaching instrument · Night Crossing</div>
+<div class="eyebrow">Teaching instrument · Night Crossing</div>
 <h1>Same world. Same seed. One controlled change.</h1>
-<p>Watch an abstract encounter near a busy airport environment. The point is not a crash reenactment. The point is the method: keep competing explanations alive, run a matched comparison, and see what the evidence supports.</p>
-<p class="note">Illustrative teaching case with surrogate labels. Not an accident reconstruction or measured finding about a real event.</p>
+<p>Hover any labeled control for a short explanation. The map shows abstract encounter geometry — not a crash reenactment. What you learn is the method.</p>
+<p class="note">Illustrative teaching case with surrogate labels. Not an accident reconstruction.</p>
 </div>
 
+<aside class="demo-guide" id="guide" aria-live="polite">
+<div class="tag">HOW TO READ</div>
+<div>
+<p id="guideText">Start by choosing one factor to test, then run the matched experiment. Baseline and counterfactual share the same seed — only that one factor changes.</p>
+<span class="hint" id="guideHint">Tip: hover buttons, HUD tiles, and outcome cards for definitions.</span>
+</div>
+</aside>
+
 <section class="instrument" aria-label="DCA Night Crossing experiment console">
-<div class="inst-top">
+<div class="inst-top" data-tip="This is a teaching console. LIVE means the instrument is interactive — not a live air-traffic feed." data-tip-title="Instrument header">
 <div><span class="live">● LIVE</span> &nbsp; DCA NIGHT CROSSING &nbsp;·&nbsp; SCIENTIFIC INSTRUMENT</div>
-<div id="expLabel">EXPERIMENT 00 / 03</div>
+<div id="expLabel" data-tip="Counts how many matched experiments you have run in this session (out of three factor demos)." data-tip-title="Experiment counter">EXPERIMENT 00 / 03</div>
 </div>
 <div class="inst-body">
-<div class="stage">
+<div class="stage" data-tip="Abstract map of a busy airport environment. Two aircraft symbols move along paths so you can see geometry and timing — not a literal reenactment." data-tip-title="Encounter map">
 <svg id="map" viewBox="0 0 720 420" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Abstract map with two aircraft paths">
-  <rect width="720" height="420" fill="#0b1f1d"/>
-  <!-- abstract river / shoreline -->
+  <rect width="720" height="420" fill="#0f172a"/>
   <path class="river" d="M0 80 C140 60,220 140,360 160 S560 90,720 120 L720 420 L0 420 Z"/>
   <line class="runway" x1="420" y1="300" x2="680" y2="250"/>
   <path class="corridor" d="M380 210 L520 175 L560 210 L430 250 Z"/>
   <text class="muted" x="520" y="238">corridor</text>
   <text class="muted" x="600" y="268">runway axis</text>
 
-  <!-- predicted / trails -->
   <path id="trailA" class="trail trail-a" d="M80 90 C180 120,260 160,340 210"/>
   <path id="trailB" class="trail trail-b" d="M120 320 C220 300,300 270,360 230"/>
   <path id="predA" class="trail pred" d="M340 210 C400 245,455 270,520 285" opacity="0"/>
   <path id="predB" class="trail pred" d="M360 230 C420 215,470 205,540 200" opacity="0"/>
 
-  <!-- closest approach marker -->
-  <g id="cpa" opacity="0">
+  <g id="cpa" opacity="0" data-tip="Point of closest approach: where the two paths come nearest under the current geometry." data-tip-title="Closest approach">
     <circle cx="355" cy="220" r="10" class="xmark"/>
     <line x1="348" y1="213" x2="362" y2="227" class="xmark"/>
     <line x1="362" y1="213" x2="348" y2="227" class="xmark"/>
     <text class="label" x="370" y="216">closest approach</text>
   </g>
 
-  <!-- aircraft A PAT25 -->
-  <g id="acA">
+  <g id="acA" data-tip="Surrogate aircraft PAT25. Trail shows recent path; altitude and heading update during a run." data-tip-title="PAT25">
     <circle class="ac" r="6" cx="80" cy="90"/>
     <text class="label" x="92" y="86">PAT25</text>
     <text class="muted" id="acAmeta" x="92" y="100">alt · hdg</text>
   </g>
-  <!-- aircraft B PSA5342 -->
-  <g id="acB">
+  <g id="acB" data-tip="Surrogate aircraft PSA5342. Compared against PAT25 under the same seed and one controlled change." data-tip-title="PSA5342">
     <circle class="ac2" r="6" cx="120" cy="320"/>
     <text class="label" x="132" y="316">PSA5342</text>
     <text class="muted" id="acBmeta" x="132" y="330">alt · hdg</text>
@@ -189,64 +192,64 @@
   <text class="muted" x="18" y="24">ABSTRACT GEOMETRY · TEACHING SURROGATES</text>
 </svg>
 <div class="hud">
-  <div><span>Clock</span><b id="hudClock">00:34:00</b></div>
-  <div><span>Factor</span><b id="hudFactor">—</b></div>
-  <div><span>Visibility</span><b id="hudVis">night / haze</b></div>
-  <div><span>Seed</span><b id="hudSeed">1842</b></div>
+  <div data-tip="Simulated mission clock for the encounter. It advances while trajectories animate." data-tip-title="Clock"><span>Clock</span><b id="hudClock">00:34:00</b></div>
+  <div data-tip="Which single factor you chose to change in the counterfactual run." data-tip-title="Factor"><span>Factor</span><b id="hudFactor">—</b></div>
+  <div data-tip="Environmental condition held or changed depending on the selected test." data-tip-title="Visibility"><span>Visibility</span><b id="hudVis">night / haze</b></div>
+  <div data-tip="Random seed shared by baseline and counterfactual. Same seed = same world noise — only your factor differs." data-tip-title="Seed"><span>Seed</span><b id="hudSeed">1842</b></div>
 </div>
 </div>
 
 <div class="side">
 <div class="phase-bar" id="phases">
-  <button data-phase="observe" class="active">Observe</button>
-  <button data-phase="frame">Frame</button>
-  <button data-phase="test">Test</button>
-  <button data-phase="validate">Validate</button>
-  <button data-phase="learn">Learn</button>
+  <button data-phase="observe" class="active" data-tip="Lock the shared world: paths, timing, corridor, and partial views." data-tip-title="Observe">Observe</button>
+  <button data-phase="frame" data-tip="Freeze the critical encounter and list competing explanatory factors." data-tip-title="Frame">Frame</button>
+  <button data-phase="test" data-tip="Run baseline and matched counterfactual together under the same seed." data-tip-title="Test">Test</button>
+  <button data-phase="validate" data-tip="Read Δ outcome, confidence signals, and what still remains open." data-tip-title="Validate">Validate</button>
+  <button data-phase="learn" data-tip="Record whether a claim survived — with limits — into memory." data-tip-title="Learn">Learn</button>
 </div>
 
 <div class="tests">
-  <div class="label">Choose one controlled change</div>
+  <div class="label">Choose one controlled change <span class="tip-mark" data-tip="Pick exactly one factor. Everything else stays matched so the difference can be attributed to that change." data-tip-title="Controlled change">?</span></div>
   <div class="row">
-    <button class="factor-btn active" data-factor="altitude">Test altitude</button>
-    <button class="factor-btn" data-factor="timing">Test timing</button>
-    <button class="factor-btn" data-factor="visibility">Test visibility</button>
+    <button class="factor-btn active" data-factor="altitude" data-tip="Counterfactual raises altitude by +200 ft while keeping seed, timing, and visibility matched." data-tip-title="Test altitude">Test altitude</button>
+    <button class="factor-btn" data-factor="timing" data-tip="Counterfactual adds an 8-second stagger. Geometry and seed stay the same." data-tip-title="Test timing">Test timing</button>
+    <button class="factor-btn" data-factor="visibility" data-tip="Counterfactual clears corridor visibility. Often a weaker separator — rival explanations may remain." data-tip-title="Test visibility">Test visibility</button>
   </div>
 </div>
 
 <div class="split">
-  <div class="card">
+  <div class="card" data-tip="Observed world under seed 1842 with no intentional change." data-tip-title="Baseline">
     <h3>Baseline · seed 1842</h3>
     <p id="baseFactor">Altitude: observed</p>
     <p class="out" id="baseOut">outcome —</p>
   </div>
-  <div class="card cf">
+  <div class="card cf" data-tip="Same seed and world as baseline, except the one factor you selected." data-tip-title="Matched counterfactual">
     <h3>Matched counterfactual · seed 1842</h3>
     <p id="cfFactor">Altitude: +200 ft</p>
     <p class="out" id="cfOut">outcome —</p>
   </div>
 </div>
 
-<div class="delta">
-  <div style="font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#9fb4af">Paired difference</div>
+<div class="delta" data-tip="Difference between counterfactual and baseline outcomes. Larger Δ with matched controls means stronger evidence for that factor." data-tip-title="Paired difference">
+  <div style="font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8">Paired difference</div>
   <div class="big" id="deltaVal">Δ —</div>
   <div class="bar"><i id="deltaBar"></i></div>
-  <div id="deltaText" style="font-size:.84rem;color:#c8d4d1">Run a test to compare matched outcomes.</div>
+  <div id="deltaText" style="font-size:.84rem;color:#94a3b8">Run a test to compare matched outcomes.</div>
 </div>
 
 <div class="evidence">
-  <h3>Evidence building</h3>
+  <h3 data-tip="Supporting and challenging notes from the controlled comparison. Warnings mean rivals are still alive." data-tip-title="Evidence">Evidence building</h3>
   <div class="ev-list" id="evList">
     <div>Waiting for a controlled comparison.</div>
   </div>
 </div>
 
 <div class="controls">
-  <button id="btnRun">Run matched experiment</button>
-  <button class="ghost" id="btnPlay">Play walkthrough</button>
-  <button class="ghost" id="btnReset">Reset</button>
+  <button id="btnRun" data-tip="Animates both trajectories, then shows baseline vs counterfactual outcomes and evidence." data-tip-title="Run">Run matched experiment</button>
+  <button class="ghost" id="btnPlay" data-tip="Automatically cycles altitude, timing, and visibility tests so you can watch the full loop." data-tip-title="Walkthrough">Play walkthrough</button>
+  <button class="ghost" id="btnReset" data-tip="Clears outcomes and returns to the starting encounter." data-tip-title="Reset">Reset</button>
 </div>
-<div class="loop" id="loopNote">OBSERVE → FRAME → TEST → VALIDATE → LEARN</div>
+<div class="loop" id="loopNote" data-tip="The scientific loop this instrument teaches. Each cycle can try a different hypothesis." data-tip-title="Method loop">OBSERVE → FRAME → TEST → VALIDATE → LEARN</div>
 </div>
 </div>
 </section>
@@ -262,6 +265,7 @@
 </div>
 </main>
 
+<script src="tip.js?v=51"></script>
 <script>
 (function () {
   const factors = {
@@ -273,6 +277,7 @@
       cfOut: 0.71,
       delta: 0.53,
       strengthen: true,
+      guide: 'Altitude test: baseline uses observed altitude; counterfactual adds +200 ft under the same seed.',
       evidence: [
         { t: 'ok', s: 'Matched seed 1842 held for both runs' },
         { t: 'ok', s: 'Only altitude changed in the counterfactual' },
@@ -288,6 +293,7 @@
       cfOut: 0.64,
       delta: 0.42,
       strengthen: true,
+      guide: 'Timing test: same geometry and seed; only relative timing changes.',
       evidence: [
         { t: 'ok', s: 'Same seed; only relative timing changed' },
         { t: 'ok', s: 'Closest-approach margin improved' },
@@ -303,6 +309,7 @@
       cfOut: 0.41,
       delta: 0.16,
       strengthen: false,
+      guide: 'Visibility test: often a weaker separator. Watch whether Δ is decisive or rivals remain.',
       evidence: [
         { t: 'ok', s: 'Matched seed preserved' },
         { t: 'warn', s: 'Δ +0.16 — weak separation alone' },
@@ -320,6 +327,18 @@
   const $ = (id) => document.getElementById(id);
   const phaseBtns = [...document.querySelectorAll('#phases button')];
   const factorBtns = [...document.querySelectorAll('.factor-btn')];
+  const guides = {
+    observe: 'Observe: fix the shared encounter world before changing anything.',
+    frame: 'Frame: freeze closest approach and keep several explanatory factors on the table.',
+    test: 'Test: animate baseline and matched counterfactual together.',
+    validate: 'Validate: read the paired difference and supporting/challenging evidence.',
+    learn: 'Learn: decide whether a claim survived — then attach its limits.'
+  };
+
+  function setGuide(text, hint) {
+    $('guideText').textContent = text;
+    if (hint) $('guideHint').textContent = hint;
+  }
 
   function setPhase(p) {
     phase = p;
@@ -332,6 +351,7 @@
     $('cpa').setAttribute('opacity', p === 'observe' ? '0' : '1');
     $('predA').setAttribute('opacity', (p === 'frame' || p === 'test') ? '0.8' : '0');
     $('predB').setAttribute('opacity', (p === 'frame' || p === 'test') ? '0.8' : '0');
+    setGuide(guides[p] || factors[factor].guide, 'Hover any control for a definition.');
   }
 
   function setFactor(f) {
@@ -348,10 +368,10 @@
     $('deltaText').textContent = 'Ready to run matched comparison under seed 1842.';
     $('evList').innerHTML = '<div>Factor selected. Run the experiment to build evidence.</div>';
     $('loopNote').textContent = 'OBSERVE → FRAME → TEST → VALIDATE → LEARN';
+    setGuide(cfg.guide, 'Next: click “Run matched experiment”.');
   }
 
   function placeAircraft(t) {
-    // t in [0,1] along approach
     const ax = 80 + t * 260;
     const ay = 90 + t * 120;
     const bx = 120 + t * 240;
@@ -365,7 +385,7 @@
     const ss = String(clock % 60).padStart(2, '0');
     $('hudClock').textContent = `00:${mm}:${ss}`;
     $('acAmeta').textContent = `alt ${(1200 + t * 40) | 0} · hdg 145`;
-    $('acBmeta').textContent = `alt ${(900 - (factor === 'altitude' && phase === 'test' ? 0 : 0)) | 0} · hdg 310`;
+    $('acBmeta').textContent = `alt ${(900) | 0} · hdg 310`;
   }
 
   function animateRun(done) {
@@ -399,6 +419,12 @@
       ? 'Evidence strengthens under this controlled change.'
       : 'Weak separation — competing explanations remain viable.';
     $('evList').innerHTML = cfg.evidence.map((e) => `<div class="${e.t}">${e.s}</div>`).join('');
+    setGuide(
+      cfg.strengthen
+        ? 'Result: the controlled change moved the outcome. A claim can survive — with limits still attached.'
+        : 'Result: weak separation. Do not force a single answer; try a more discriminating factor.',
+      'Hover evidence rows mentally: green borders support, amber borders challenge.'
+    );
     setTimeout(() => {
       setPhase('learn');
       $('loopNote').innerHTML = cfg.strengthen
@@ -438,6 +464,7 @@
     setFactor('altitude');
     setPhase('observe');
     placeAircraft(0.2);
+    setGuide('Start by choosing one factor to test, then run the matched experiment. Baseline and counterfactual share the same seed — only that one factor changes.', 'Tip: hover buttons, HUD tiles, and outcome cards for definitions.');
   }
 
   factorBtns.forEach((b) => b.addEventListener('click', () => setFactor(b.dataset.factor)));
