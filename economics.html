@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Economic markets — Thinking Together</title>
-  <meta name="description" content="A Phase I market laboratory for identifying how unfamiliar AI agents behave when prices, information, and other agents change.">
+  <meta name="description" content="Experimental identification and validation of AI behavior in dynamic economic markets: a controlled market laboratory for black-box LLM agents.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
   <header class="site-header">
@@ -26,7 +26,7 @@
   <main class="page wide">
     <p class="eyebrow">Case study · Economics</p>
     <h1>Dynamic economic markets</h1>
-    <p class="intro">Can controlled market experiments identify how an unfamiliar AI agent will act, and does that account still hold when the market changes?</p>
+    <p class="intro">Experimental identification and validation of AI behavior in a controlled market laboratory — can we tell what an unfamiliar LLM agent will do when prices, information, and other agents change?</p>
 
     <figure class="figure">
       <div class="figure-media diagram">
@@ -35,7 +35,31 @@
     </figure>
     <p class="figure-note">Conceptual illustration — not measured experimental results.</p>
 
-    <p>This is the economics case in a Phase I white paper led by Paul Cummings, with Dale Rothman of George Mason University as research lead. It applies the same inquiry loop as <a href="book.html">Thinking Together</a> to agents that buy and sell. It is a research design. It is not a report of completed market results.</p>
+    <p>This case applies the inquiry loop in <a href="book.html">Thinking Together</a> to agents that buy and sell. It is a research design for studying black-box LLM agents under controlled economic conditions. It is not a report of completed market results.</p>
+
+    <h2>The problem</h2>
+    <p>AI agents in these markets observe prices and public information, react to other agents, and submit orders that affect subsequent market state. Competing predictive models of that behavior can look plausible in a single transcript and still fail under a controlled change.</p>
+    <p>The research goal is to determine when observable economic behavior distinguishes competing predictive models — and how much experimentation is required. Models relate to response patterns we can measure. They are not claims about internal mechanism. LLMs are judged by prediction, reproducibility, calibration, and generalization. If two models remain indistinguishable, the result is non-identifiability.</p>
+
+    <h2>What Phase I asks</h2>
+    <ul>
+      <li>
+        <strong>Identifiability</strong>
+        Which behavioral models can actually be separated with feasible market interventions? Blind recovery of known programmed decision rules, including deliberately ambiguous cases. Failure: incorrect recovery, unsupported classification, or failure to abstain when rules are observationally equivalent.
+      </li>
+      <li>
+        <strong>Experimental efficiency</strong>
+        Can adaptive experiment selection reach the same validated conclusion with fewer model queries than fixed-factorial or randomized designs at equal budget? Failure: no improvement in cost-to-identification without loss of calibration or replication.
+      </li>
+      <li>
+        <strong>Predictive generalization</strong>
+        Does a model learned in one set of conditions predict behavior under held-out valuations, costs, histories, another auction mechanism, and selected interface conditions? Failure: predictive performance collapses on reserved conditions.
+      </li>
+      <li>
+        <strong>Collective prediction</strong>
+        When multiple AI agents share a market, do individual-agent models predict prices, volume, gains from trade, and efficiency — or are interaction-specific terms required?
+      </li>
+    </ul>
 
     <figure class="figure">
       <div class="figure-media diagram">
@@ -43,21 +67,68 @@
       </div>
     </figure>
 
-    <h2>What the experiment asks</h2>
-    <ul>
-      <li>
-        <strong>Identifiability</strong>
-        Which behavioral models can actually be separated with feasible market interventions? If they cannot, the result is non-identifiability.
-      </li>
-      <li>
-        <strong>Experimental efficiency</strong>
-        Can an adaptive design reach the same validated conclusion with fewer model queries than fixed or randomized designs?
-      </li>
-      <li>
-        <strong>Generalization</strong>
-        Does a model learned in one set of conditions predict behavior under held-out values, another auction, and markets with other AI agents?
-      </li>
+    <h2>Market laboratory</h2>
+    <p>The testbed separates the true economic state from each agent’s permitted observations. Valuations, costs, accounts, auction rules, and outcomes live in the Domain layer. Experiment controls exposure to public information, news, history, and peer observations. Validation enforces a discovery / holdout boundary so confirmation is not just replaying discovery.</p>
+    <p>At least two mechanisms are used:</p>
+    <ul class="plain-list">
+      <li>Continuous double auction (CDA)</li>
+      <li>Sealed-bid double auction</li>
     </ul>
+    <p>The market tracks private buyer values and seller costs, cash and inventory, public bids and asks, completed trades, and controlled news. The AI action is a structured order under those constraints — not free-form text treated as settlement.</p>
+    <p>Allocative efficiency compares realized gains from trade to the maximum feasible gain for that market instance. Market qualification requires mechanism and accounting verification, including a documented high-efficiency demonstration under proof-of-concept conditions.</p>
+
+    <h2>Information as an experimental variable</h2>
+    <p>The news feed is not free-form context. Truth status, economic relevance, reliability, timing, and wording can vary while private value, cash, and quantity constraints stay fixed. A signature design crosses news with price history so competing explanations of “why the agent bid that way” become separable — or are reported as non-identifiable when they cannot be separated at the available resolution and budget.</p>
+    <p>Treatment effects support claims about observable response. They do not establish an internal mechanism. Model self-description is not treated as ground truth.</p>
+
+    <div class="table-wrap">
+      <table class="research-table">
+        <thead>
+          <tr>
+            <th scope="col">Gate</th>
+            <th scope="col">What acceptance requires</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Market qualification</td>
+            <td>Verified mechanics and accounting; documented efficiency under qualification conditions</td>
+          </tr>
+          <tr>
+            <td>Reference identification</td>
+            <td>Known-rule recovery, calibration, and abstention when rules are observationally equivalent</td>
+          </tr>
+          <tr>
+            <td>Adaptive selection</td>
+            <td>Equal-budget advantage versus fixed or randomized designs without weaker confirmation</td>
+          </tr>
+          <tr>
+            <td>LLM validation</td>
+            <td>Replicated effects plus held-out predictive performance; provider failures reported separately</td>
+          </tr>
+          <tr>
+            <td>Generalization</td>
+            <td>Prespecified performance on reserved conditions and explicit transfer limits</td>
+          </tr>
+          <tr>
+            <td>Collective behavior</td>
+            <td>Predicted versus observed multi-agent outcomes; evidence for or against interaction terms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>How this opens the black box</h2>
+    <p>Unfamiliar LLMs enter as stock agents under a standardized black-box action protocol. Programmed reference agents establish that the laboratory can recover known rules before any LLM claim is entertained. Classifiers describe systematic, reproducible changes in observable economic response — predictive signatures, not psychological traits.</p>
+    <p>Every trial carries enough context to reconstruct what happened: experiment identity, discovery versus confirmation status, seed, model configuration, observations, actions, and market outcomes. Pilot and discovery runs establish feasibility; confirmation freezes outcomes, thresholds, and holdouts before independent tests.</p>
+
+    <figure class="figure">
+      <div class="figure-media diagram">
+        <img src="images/evidence-uncertainty.svg" width="1920" height="1080" alt="Evidence and uncertainty.">
+      </div>
+    </figure>
+
+    <p>This is the same scientific stance as the broader research program: we learn what an AI system does by designing experiments that challenge competing explanations — not by trusting what the model says about itself. See <a href="research.html">Opening the AI Black Box</a>.</p>
 
     <div class="actions">
       <a class="btn btn-ghost" href="book.html">Back to the book <span aria-hidden="true">→</span></a>
