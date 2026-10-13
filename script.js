@@ -33,14 +33,14 @@ if (tr) {
 const q = document.querySelector('[data-query]');
 const claim = document.querySelector('[data-claim]');
 const layerEls = [...document.querySelectorAll('.layer')];
-let step = 0;
+let layerAnimStep = 0;
 if (q) {
   setInterval(() => {
-    step = (step + 1) % 6;
-    q.textContent = ['3', '3', '2', '2', '1', '1'][step];
+    layerAnimStep = (layerAnimStep + 1) % 6;
+    q.textContent = ['3', '3', '2', '2', '1', '1'][layerAnimStep];
     if (claim) {
-      claim.textContent = ['candidate', 'candidate', 'provisional', 'provisional', 'supported', 'supported'][step];
+      claim.textContent = ['candidate', 'candidate', 'provisional', 'provisional', 'supported', 'supported'][layerAnimStep];
     }
-    layerEls.forEach((x, i) => x.classList.toggle('active', i === step));
+    layerEls.forEach((x, i) => x.classList.toggle('active', i === layerAnimStep));
   }, 1800);
 }

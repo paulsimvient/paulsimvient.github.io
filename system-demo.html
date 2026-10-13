@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Worked example | Paul Cummings</title>
 <meta name="description" content="A plain-language walkthrough of one investigation: competing explanations, one controlled test, and a checked result.">
-<link rel="stylesheet" href="styles.css?v=41">
+<link rel="stylesheet" href="styles.css?v=42">
 <style>
 .demo-shell{max-width:1500px;margin:auto;padding:22px}
 .demo-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap}
@@ -19,21 +19,26 @@
 .callout{
   display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
   margin:0 0 14px;padding:18px 20px;border-radius:12px;
-  background:#123734;border:1px solid #3a5550;
+  background:#153f3b;border:1px solid #2f5b55;
   box-shadow:0 14px 40px rgba(18,32,30,.16);
 }
 .callout .tag{
   font:700 .68rem/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;
   color:#17302e;background:#f2ead9;border-radius:999px;padding:8px 10px;white-space:nowrap;
 }
-.callout h2{margin:0 0 8px;font-size:1.2rem;color:#fff8eb}
-.callout p{margin:0;color:#e8f0ee;font-size:1rem;line-height:1.55;max-width:920px}
-.callout .why{margin-top:10px;color:#b7e0d6;font-size:.9rem}
-.callout .look{margin-top:8px;color:#f0b487;font-size:.88rem;font-weight:600}
+.callout h2{margin:0 0 8px;font-size:1.2rem;color:#fff8eb !important}
+.callout p{margin:0;color:#f4f7f5 !important;font-size:1rem;line-height:1.55;max-width:920px}
+.callout .why{margin-top:10px;color:#c6e6df !important;font-size:.9rem}
+.callout .look{margin-top:8px;color:#f0b487 !important;font-size:.88rem;font-weight:600}
 .demo-grid{display:grid;grid-template-columns:240px 1fr 300px;gap:12px;min-height:700px}
-.pane{border:1px solid #3a5058;border-radius:10px;background:#0f1a1d;overflow:hidden;color:#e8efe9;opacity:.55;transition:opacity .3s,box-shadow .3s}
-.pane.focus{opacity:1;box-shadow:0 0 0 2px rgba(103,199,211,.35)}
-.pane h3{margin:0;padding:12px 14px;border-bottom:1px solid #3a5058;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#f4f7f5}
+.pane{
+  border:1px solid #3a5550;border-radius:12px;background:#123734 !important;
+  overflow:hidden;color:#f4f7f5 !important;
+  box-shadow:0 10px 28px rgba(18,32,30,.12);
+  transition:box-shadow .25s,border-color .25s;
+}
+.pane.focus{border-color:#67c7d3;box-shadow:0 0 0 2px rgba(103,199,211,.28),0 14px 34px rgba(18,32,30,.18)}
+.pane h3{margin:0;padding:12px 14px;border-bottom:1px solid #2f5b55;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#fff8eb !important}
 .padded{padding:14px}
 .scenario,.model{border:1px solid #3a5058;padding:12px;border-radius:7px;margin-bottom:8px}
 .scenario strong,.model strong{display:block;font-size:.9rem;color:#fff8eb;margin-bottom:4px}
@@ -42,10 +47,10 @@
 .model .bar{height:4px;background:#24343b;margin-top:10px}
 .model .bar i{display:block;height:100%;background:#67c7d3;width:34%;transition:width .8s}
 .center-stack{display:grid;grid-template-rows:280px 1fr;gap:12px}
-.canvas{position:relative;background:radial-gradient(circle at 50% 45%,#1a2a30,#0b1215 65%);min-height:280px}
-.node{position:absolute;width:120px;padding:10px;border:1px solid #3a5058;border-radius:8px;background:#0f171c;text-align:center;font-size:.72rem;color:#e8efe9;transition:.25s}
-.node b{display:block;color:#fff8eb;margin-bottom:3px}
-.node span{color:#c8d4d1;font-size:.62rem}
+.canvas{position:relative;background:radial-gradient(circle at 50% 45%,#1a3733,#0f2926 65%) !important;min-height:280px}
+.node{position:absolute;width:120px;padding:10px;border:1px solid #3a5550;border-radius:8px;background:#0f2926 !important;text-align:center;font-size:.72rem;color:#f4f7f5 !important;transition:.25s}
+.node b{display:block;color:#fff8eb !important;margin-bottom:3px}
+.node span{color:#c8d4d1 !important;font-size:.62rem}
 .node.active{border-color:#67c7d3;box-shadow:0 0 0 2px rgba(103,199,211,.25);transform:translateY(-2px)}
 .n1{left:6%;top:38%}.n2{left:28%;top:14%}.n3{left:28%;top:60%}.n4{left:52%;top:36%}.n5{right:6%;top:16%}.n6{right:6%;top:60%}
 .event-stream{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;max-height:280px;overflow:auto}
@@ -64,7 +69,6 @@
   .demo-grid{grid-template-columns:1fr}
   .center-stack{grid-template-rows:280px auto}
   .callout{grid-template-columns:1fr}
-  .pane{opacity:1}
 }
 </style>
 </head>
@@ -284,6 +288,6 @@ focusPanes(['pane-models']);
 document.getElementById('run').onclick = run;
 document.getElementById('reset').onclick = () => location.reload();
 </script>
-<script src="script.js?v=41"></script>
+<script src="script.js?v=42"></script>
 </body>
 </html>
