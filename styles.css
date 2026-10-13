@@ -592,6 +592,49 @@ a.figure-media {
   letter-spacing: -0.02em;
 }
 
+.page h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.offer {
+  margin: 36px 0 0;
+  max-width: 42em;
+  padding: 22px 0 4px;
+  border-top: 1px solid rgba(16, 41, 40, 0.12);
+}
+
+.offer .offer-lead {
+  margin: 8px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--rust);
+  max-width: 40em;
+}
+
+.offer .plain-list {
+  margin-top: 12px;
+}
+
+.consulting-cases {
+  padding-left: 0;
+  padding-right: 0;
+  margin: 24px 0 8px;
+}
+
+.consulting-cases .case-card strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
 .loop {
   display: flex;
   flex-wrap: wrap;
