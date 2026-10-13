@@ -312,3 +312,14 @@ td{
   background:transparent !important;
   color:var(--rust) !important;
 }
+
+
+/* Homepage instrument plot labels must stay light on dark */
+.plot svg text,
+.instrument .plot text{
+  fill:#e8f0ee !important;
+}
+.plot svg text[fill="#67c7d3"],
+.instrument .plot text[fill="#67c7d3"]{ fill:#67c7d3 !important; }
+.plot svg text[fill="#c7522a"],
+.instrument .plot text[fill="#c7522a"]{ fill:#e07a4f !important; }
