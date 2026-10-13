@@ -6,7 +6,7 @@
 <title>Get the book | Paul Cummings, Ph.D.</title>
 <meta name="description" content="Leave your name and email to download Thinking Together as an EPUB.">
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="styles.css?v=32">
+<link rel="stylesheet" href="styles.css?v=40">
 </head>
 <body>
 <header class="site-header">
@@ -14,10 +14,10 @@
 <a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
 <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
 <nav class="nav">
-<a href="index.html">System</a>
-<a href="research.html">Architecture</a>
+<a href="index.html">Home</a>
+<a href="research.html">How it works</a>
+<a href="system-demo.html">Example</a>
 <a href="economics.html">Economics</a>
-<a href="system-demo.html">Live demo</a>
 <a href="book.html">Book</a>
 <a href="about.html">About</a>
 <a class="contact-pill" href="contact.html">Contact</a>
@@ -46,7 +46,7 @@
 </form>
 </div>
 <div hidden id="unlocked">
-<p class="lead" style="color:var(--ink)">Thanks — the download is ready.</p>
+<p style="color:var(--ink);font-size:1.15rem">Thanks — the download is ready.</p>
 <a class="btn rust" href="downloads/Thinking-Together.epub" id="epub-link">Download Thinking Together →</a>
 <p class="micro" style="margin-top:14px;color:var(--muted)">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
 </div>
@@ -54,7 +54,7 @@
 </section>
 </main>
 <footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="script.js?v=32"></script>
+<script src="script.js?v=40"></script>
 <script>
 (function () {
   var KEY = "tt-book-access-v1";
@@ -64,14 +64,8 @@
   var form = document.getElementById("access-form");
   var statusEl = document.getElementById("access-status");
   var epub = document.getElementById("epub-link");
-
-  function showUnlocked() {
-    gate.hidden = true;
-    unlocked.hidden = false;
-  }
-
+  function showUnlocked() { gate.hidden = true; unlocked.hidden = false; }
   if (sessionStorage.getItem(KEY) === "1") showUnlocked();
-
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     var name = (form.elements.namedItem("name").value || "").trim();
@@ -79,11 +73,7 @@
     var honeypot = (form.elements.namedItem("_gotcha") && form.elements.namedItem("_gotcha").value) || "";
     statusEl.textContent = "";
     if (honeypot) { showUnlocked(); return; }
-    if (!name) {
-      statusEl.textContent = "Enter your name.";
-      form.elements.namedItem("name").focus();
-      return;
-    }
+    if (!name) { statusEl.textContent = "Enter your name."; form.elements.namedItem("name").focus(); return; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       statusEl.textContent = "Enter a valid email address.";
       form.elements.namedItem("email").focus();

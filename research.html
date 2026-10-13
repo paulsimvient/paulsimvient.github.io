@@ -1,1 +1,112 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Architecture | CoAgentics</title><link rel="stylesheet" href="styles.css?v=32"></head><body><header class="site-header"><div class="nav-wrap"><a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a><button class="mobile-toggle">☰</button><nav class="nav"><a href="index.html">System</a><a class="active" href="research.html">Architecture</a><a href="economics.html">Economics</a><a href="system-demo.html">Live demo</a><a href="book.html">Book</a><a href="about.html">About</a><a class="contact-pill" href="contact.html">Contact</a></nav></div></header><main><section class="page-hero"><div class="shell"><div class="eyebrow">Architecture</div><h1>Inspectable by construction.</h1><p>CoAgentics treats AI analysis as a controlled computational process. Each layer has a distinct job, and evidence moves through explicit interfaces.</p></div></section><section class="section"><div class="shell case-layout"><aside class="case-nav"><a href="#layers">Six layers</a><a href="#counterfactual">Counterfactuals</a><a href="#validation">Validation</a><a href="#knowledge">Knowledge</a><a href="#authority">Authority</a></aside><div class="case-main"><section id="layers"><h2>Six-layer system</h2><div class="diagram"><div class="diagram-row"><div class="diagram-node"><b>Domain</b><span>state, scenarios, observations, actions, outcomes</span></div><div class="diagram-node"><b>Strategy</b><span>candidate models, heuristics, incumbent baseline</span></div><div class="diagram-node"><b>Experiment</b><span>paired runs, interventions, seeds, manifests</span></div><div class="diagram-node"><b>Validation</b><span>preregistration, holdouts, uncertainty, checks</span></div></div><div class="diagram-row" style="margin-top:8px"><div class="diagram-node"><b>Knowledge</b><span>claims, evidence registry, boundaries, revisions</span></div><div class="diagram-node"><b>Human Workbench</b><span>map, timeline, causal graph, experiment console</span></div></div></div></section><section id="counterfactual"><h2>Matched counterfactuals</h2><p>Where possible, baseline and intervention runs share exogenous randomness. This reduces irrelevant run-to-run variation and makes the contrast easier to interpret.</p><table class="data-table"><tr><th>Run</th><th>Seed</th><th>Condition</th><th>Purpose</th></tr><tr><td>A</td><td>42</td><td>HOLD</td><td>baseline</td></tr><tr><td>B</td><td>42</td><td>E1</td><td>intervention</td></tr></table><p><span class="pill">paired difference</span> outcome(HOLD,S) − outcome(E1,S)</p></section><section id="validation"><h2>Discovery stays separate from confirmation</h2><p>Candidate models, thresholds, exclusions, and stopping rules can evolve during discovery. Before confirmation they are frozen. Reserved conditions remain inaccessible to the selector and classifier until validation.</p><div class="tech-grid"><div class="tech-card"><div class="num">DISCOVERY</div><h3>Learn what to test</h3><p>Explore candidate explanations and choose discriminating interventions.</p></div><div class="tech-card"><div class="num">FREEZE</div><h3>Lock the protocol</h3><p>Freeze model set, metrics, exclusions, thresholds, and holdout definition.</p></div><div class="tech-card"><div class="num">CONFIRM</div><h3>Test what survives</h3><p>Run independent reserved conditions and report both support and failure.</p></div></div></section><section id="knowledge"><h2>Evidence is a first-class object</h2><p>Results are retained with provenance. A claim is never just a sentence. It carries source configuration, experiment identity, treatment, seed, model version, uncertainty, contradictions, and stated limits.</p><div class="diagram"><code>{ claim_id, status, evidence_refs, counterevidence_refs, uncertainty, validity_envelope, provenance }</code></div></section><section id="authority"><h2>AI does not acquire authority by sounding certain</h2><p>Conversational models may organize, summarize, compare, and explain. They do not select or authorize operational action. That boundary is architectural, not a prompt convention.</p></section></div></div></section></main><footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer><script src="script.js?v=32"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How it works | Paul Cummings</title>
+<meta name="description" content="How an investigation stays inspectable: world, alternatives, test, check, memory, and human review.">
+<link rel="stylesheet" href="styles.css?v=40">
+</head>
+<body>
+<header class="site-header">
+<div class="nav-wrap">
+<a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
+<button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+<nav class="nav">
+<a href="index.html">Home</a>
+<a class="active" href="research.html">How it works</a>
+<a href="system-demo.html">Example</a>
+<a href="economics.html">Economics</a>
+<a href="book.html">Book</a>
+<a href="about.html">About</a>
+<a class="contact-pill" href="contact.html">Contact</a>
+</nav>
+</div>
+</header>
+<main>
+<section class="page-hero">
+<div class="shell">
+<div class="eyebrow">How it works</div>
+<h1>Make the investigation inspectable.</h1>
+<p>AI systems can sound finished while remaining opaque. The approach is simple to say and strict in practice: keep competing explanations visible, run controlled comparisons, and retain what the evidence actually supports.</p>
+</div>
+</section>
+
+<section class="section">
+<div class="shell case-layout">
+<aside class="case-nav">
+<a href="#layers">Six jobs</a>
+<a href="#compare">Fair comparisons</a>
+<a href="#check">Explore, then confirm</a>
+<a href="#memory">Keep the limits</a>
+<a href="#not">What this is not</a>
+</aside>
+<div class="case-main">
+<section id="layers">
+<h2>Six jobs in one evidence trail</h2>
+<p>Each job stays separate enough that a person can see what was assumed, what was tested, and what remains open.</p>
+<div class="diagram">
+<div class="diagram-row">
+<div class="diagram-node"><b>World</b><span>what is fixed in the situation</span></div>
+<div class="diagram-node"><b>Alternatives</b><span>rival explanations kept alive</span></div>
+<div class="diagram-node"><b>Test</b><span>control vs change, same setup</span></div>
+<div class="diagram-node"><b>Check</b><span>does the result still hold?</span></div>
+</div>
+<div class="diagram-row" style="margin-top:8px">
+<div class="diagram-node"><b>Memory</b><span>claim, evidence, boundaries</span></div>
+<div class="diagram-node"><b>Human review</b><span>inspect, approve, or reject</span></div>
+</div>
+</div>
+</section>
+
+<section id="compare">
+<h2>Fair comparisons</h2>
+<p>Where possible, the unchanged case and the changed case share the same setup. That makes the difference easier to interpret: only the intended change should explain the gap.</p>
+<table class="data-table">
+<tr><th>Run</th><th>Setup</th><th>Condition</th><th>Purpose</th></tr>
+<tr><td>A</td><td>same</td><td>unchanged</td><td>control</td></tr>
+<tr><td>B</td><td>same</td><td>one change</td><td>treatment</td></tr>
+</table>
+<p><span class="pill">read the difference</span> outcome(control) versus outcome(treatment)</p>
+</section>
+
+<section id="check">
+<h2>Explore, then confirm</h2>
+<p>During exploration, explanations and tests can evolve. Before the final check, lock the rules. Keep a reserved case the first pass never used.</p>
+<div class="tech-grid">
+<div class="tech-card"><div class="num">EXPLORE</div><h3>Learn what to test</h3><p>Carry rivals and choose comparisons that should separate them.</p></div>
+<div class="tech-card"><div class="num">LOCK</div><h3>Freeze the standard</h3><p>Lock which explanations count and what confirmation requires.</p></div>
+<div class="tech-card"><div class="num">CONFIRM</div><h3>Test what survives</h3><p>Use reserved conditions and report both support and failure.</p></div>
+</div>
+</section>
+
+<section id="memory">
+<h2>Keep the limits with the claim</h2>
+<p>A result is never just a sentence. It carries what was tested, what conflicted, how uncertain it is, and where it stops applying.</p>
+</section>
+
+<section id="not">
+<h2>What this is not</h2>
+<p>This is not a chatbot that decides for you. Conversational models may help organize and explain. They do not acquire authority by sounding certain. People remain responsible for what becomes an operational conclusion.</p>
+<div class="actions" style="margin-top:28px">
+<a class="btn primary" href="system-demo.html">See a worked example →</a>
+<a class="btn" href="economics.html">Economics case study →</a>
+</div>
+</section>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="shell">
+<div class="footer-grid">
+<div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div>
+<div class="footer-links"><strong>Explore</strong><a href="system-demo.html">Example</a><a href="economics.html">Economics</a><a href="book.html">Book</a></div>
+<div class="footer-links"><strong>Elsewhere</strong><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+</div>
+<div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
+</div>
+</footer>
+<script src="script.js?v=40"></script>
+</body>
+</html>
