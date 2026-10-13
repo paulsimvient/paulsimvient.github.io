@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <header class="site-header">
@@ -41,7 +41,7 @@
 
     <div id="unlocked" class="access-panel" hidden>
       <p class="access-ready">Thanks — your download is ready.</p>
-      <a class="btn btn-fill" id="epub-link" href="downloads/access/Thinking-Together.epub" download>Download Thinking Together <span aria-hidden="true">→</span></a>
+      <a class="btn btn-fill" id="epub-link" href="downloads/Thinking-Together.epub">Download Thinking Together <span aria-hidden="true">→</span></a>
       <p class="figure-note">EPUB works in Apple Books, Kindle (after conversion), Calibre, and most e-readers.</p>
     </div>
   </main>
@@ -108,8 +108,7 @@
           .then(function () {
             sessionStorage.setItem(KEY, "1");
             showUnlocked();
-            // Offer the file immediately after unlock.
-            epub.click();
+            window.location.href = epub.getAttribute("href");
           })
           .catch(function () {
             statusEl.textContent = "Something went wrong. Try again, or email paul@invia.com.";
