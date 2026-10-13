@@ -266,6 +266,29 @@ td{
   color:#c8d0c6 !important;
 }
 
+/* System/live demo dark panes stay light-on-dark */
+.pane,
+.pane h3,
+.pane strong,
+.pane b,
+.node,
+.node b{
+  color:#f4f7f5 !important;
+}
+.pane small,
+.pane span,
+.node span,
+.right-metric span,
+.event time,
+.gate span{
+  color:#b7c4c8 !important;
+}
+.pane,
+.node{
+  background:#0f1a1d !important;
+  border-color:#3a5058 !important;
+}
+
 /* Cream demo pages: readable ink on warm paper */
 .demo-shell{
   background:transparent !important;

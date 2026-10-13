@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Demo | CoAgentics</title><link rel="stylesheet" href="styles.css?v=27"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Live Demo | CoAgentics</title><link rel="stylesheet" href="styles.css?v=28"><style>
 .demo-shell{max-width:1500px;margin:auto;padding:22px}.demo-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:14px}.demo-grid{display:grid;grid-template-columns:240px 1fr 330px;gap:12px;min-height:760px}.pane{border:1px solid var(--line);border-radius:10px;background:#0d1317;overflow:hidden}.pane h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--line);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}.padded{padding:14px}.scenario{border:1px solid var(--line);padding:12px;border-radius:7px;margin-bottom:8px}.scenario strong{display:block;font-size:.82rem}.scenario small{color:var(--muted)}.model{border:1px solid var(--line);border-radius:7px;padding:12px;margin-bottom:8px}.model .bar{height:4px;background:#1f2a31;margin-top:10px}.model .bar i{display:block;height:100%;background:var(--cyan);width:45%;transition:width .8s}.center-stack{display:grid;grid-template-rows:300px 1fr;gap:12px}.canvas{position:relative;background:radial-gradient(circle at 50% 45%,#182127,#0b1014 65%);overflow:hidden}.node{position:absolute;width:118px;padding:10px;border:1px solid #38505d;border-radius:8px;background:#0f171c;text-align:center;font-size:.72rem}.node b{display:block}.node span{color:var(--muted);font-size:.63rem}.n1{left:7%;top:40%}.n2{left:29%;top:16%}.n3{left:29%;top:63%}.n4{left:54%;top:38%}.n5{right:7%;top:18%}.n6{right:7%;top:62%}.beam{position:absolute;height:1px;background:#46616d;transform-origin:left center}.event-stream{font-family:ui-monospace,monospace;font-size:.72rem;height:100%;overflow:auto}.event{padding:9px 0;border-bottom:1px solid #202a31}.event time{color:#72838d;margin-right:10px}.event .ok{color:var(--green)}.event .run{color:var(--cyan)}.right-metric{border-bottom:1px solid var(--line);padding:14px}.right-metric span{display:block;color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.12em}.right-metric strong{font-family:ui-monospace,monospace;font-size:1.05rem}.gate{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:.75rem}.gate i{font-style:normal;color:var(--green)}.controls{display:flex;gap:8px}.controls button{background:#111b21;color:var(--text);border:1px solid #33434c;border-radius:6px;padding:8px 11px}.controls button:hover{border-color:var(--cyan)}@media(max-width:1050px){.demo-grid{grid-template-columns:1fr}.center-stack{grid-template-rows:320px 500px}}
 </style>
 <style id="book-palette-system">
@@ -27,21 +27,54 @@ header,.site-header{
 header a,.site-header a,.brand,.nav a{color:var(--book-teal)!important}
 .nav a:hover,.nav a.active{color:var(--book-rust)!important}
 
-.demo-wrap,.demo-grid,.main-stage{color:var(--book-ink)!important}
-.demo-card,.control-card,.info-card,.matrix-card,.evidence-card,.architecture-card,
-.market-card,.step-card,.explanation-card,.cell-card,.runtime-card{
-  background:rgba(255,250,241,.97)!important;
-  color:var(--book-ink)!important;
-  border-color:var(--book-line)!important;
-  box-shadow:0 12px 34px rgba(55,50,40,.08)!important;
+.demo-top h1{color:var(--book-teal)!important}
+.eyebrow{color:var(--book-rust)!important}
+
+/* Dark panes: cream page chrome, light text inside instruments */
+.demo-grid{color:#e8efe9!important}
+.pane,
+.canvas,
+.node{
+  background:#0f1a1d!important;
+  color:#e8efe9!important;
+  border-color:#3a5058!important;
 }
-.demo-card *, .control-card *, .info-card *, .matrix-card *, .evidence-card *,
-.architecture-card *, .market-card *, .step-card *, .explanation-card *,
-.cell-card *, .runtime-card *{
-  color:inherit;
+.pane h3,
+.pane strong,
+.pane b,
+.node b,
+.right-metric strong,
+.model strong,
+.scenario strong{
+  color:#f4f7f5!important;
 }
-h1,h2,h3,h4,.title,.section-title,.card-title{color:var(--book-teal)!important}
-.kicker,.eyebrow,.step-label,.mini-label,.section-label{color:var(--book-rust)!important}
+.pane small,
+.pane span,
+.node span,
+.right-metric span,
+.scenario small,
+.model small,
+.event time,
+.gate span{
+  color:#b7c4c8!important;
+}
+.event .ok{color:#8cbf90!important}
+.event .run{color:#67c7d3!important}
+.gate i{color:#8cbf90!important}
+.model .bar{background:#24343b!important}
+.model .bar i{background:#67c7d3!important}
+.canvas{
+  background:radial-gradient(circle at 50% 45%,#1a2a30,#0b1215 65%)!important;
+}
+.controls button{
+  background:var(--book-rust)!important;
+  color:#fff8eb!important;
+  border-color:var(--book-rust)!important;
+}
+.controls button:hover{
+  background:var(--book-rust2)!important;
+  border-color:var(--book-rust2)!important;
+}
 
 .market-surface,.market-floor,.lab,.controlled-market{
   background:linear-gradient(180deg,#edf0e8 0%,#efe1cc 100%)!important;
