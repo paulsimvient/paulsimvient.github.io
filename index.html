@@ -7,48 +7,55 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Paul Cummings, Ph.D. | Thinking Together</title>
 <meta name="description" content="Making AI behavior testable: competing explanations, controlled comparisons, and evidence people can inspect.">
-<link rel="stylesheet" href="styles.css?v=67">
+<link rel="stylesheet" href="styles.css?v=68">
 <style>
-/* Full-bleed sandbox preview card — no side step list */
-.instrument.sb-card{min-height:0;padding:0;overflow:hidden}
+/* Full-bleed sandbox preview — show entire graphic (no slice crop) */
+.hero-tech{align-items:start;overflow:visible}
+.instrument.sb-card{
+  display:block;min-height:0;height:auto;padding:0;overflow:visible;
+  text-decoration:none;color:inherit;
+}
 .instrument.sb-card .instrument-top,
 .instrument.sb-card .layers,
 .instrument.sb-card .trace,
 .instrument.sb-card .console-head{display:none!important}
 .instrument-body.sandbox-preview{
-  display:block!important;grid-template-columns:1fr!important;min-height:0;flex:1;
-}
-.sb-link{
-  display:block;color:inherit;text-decoration:none;height:100%;
+  display:flex!important;flex-direction:column;grid-template-columns:1fr!important;
+  min-height:0;height:auto;flex:none;
 }
 .sb-observe{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:14px 18px;background:#0b1218;border-bottom:1px solid #26343d;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;
+  padding:14px 18px;background:#0b1218;border-bottom:1px solid #26343d;border-radius:14px 14px 0 0;
 }
 .sb-observe .go{
   font:700 1.05rem ui-sans-serif,system-ui;color:#7dd3fc;letter-spacing:-.02em;
 }
-.sb-link:hover .sb-observe .go{color:#fff}
+.instrument.sb-card:hover .sb-observe .go{color:#fff}
 .sb-observe .tag{
   font:600 .68rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.1em;
 }
 .sb-stage{
-  position:relative;min-height:480px;
+  position:relative;flex:0 0 auto;width:100%;
+  aspect-ratio:16 / 11;
+  min-height:360px;
   background:radial-gradient(ellipse at 55% 35%,rgba(30,80,110,.28),transparent 55%),#081018;
+  border-radius:0 0 14px 14px;overflow:hidden;
 }
-.sb-stage svg{width:100%;height:480px;display:block}
+.sb-stage svg{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+}
 .sb-hud{
-  position:absolute;left:14px;right:14px;bottom:14px;
+  position:absolute;left:14px;right:14px;bottom:14px;z-index:2;
   display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;pointer-events:none;
 }
 .sb-chip{
-  background:rgba(7,13,19,.9);border:1px solid rgba(255,255,255,.12);border-radius:8px;
+  background:rgba(7,13,19,.92);border:1px solid rgba(255,255,255,.12);border-radius:8px;
   padding:10px 11px;color:#edf4f8;font:600 .62rem ui-monospace,monospace;
 }
 .sb-chip span{display:block;color:#8aa0b2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
 .sb-chip strong{font-size:.88rem;color:#f8fafc}
 .sb-radar{
-  position:absolute;right:16px;top:16px;width:92px;height:92px;border-radius:50%;
+  position:absolute;right:16px;top:16px;width:92px;height:92px;border-radius:50%;z-index:2;
   border:2px solid #1f8f3a;background:#031408;box-shadow:0 0 18px rgba(30,180,70,.4);
 }
 .sb-radar:after{
@@ -56,8 +63,12 @@
   transform-origin:left center;animation:sbSweep 2.2s linear infinite;
 }
 @keyframes sbSweep{to{transform:rotate(360deg)}}
+@media(max-width:980px){
+  .hero-tech{align-items:stretch}
+  .sb-stage{min-height:320px}
+}
 @media(max-width:720px){
-  .sb-stage,.sb-stage svg{min-height:320px;height:320px}
+  .sb-stage{min-height:280px;aspect-ratio:4 / 3}
   .sb-hud{grid-template-columns:1fr}
 }
 </style>
@@ -100,23 +111,23 @@
   <span class="tag">DCA NIGHT CROSSING</span>
 </div>
 <div class="sb-stage" aria-hidden="true">
-<svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice">
+<svg viewBox="0 0 640 440" preserveAspectRatio="xMidYMid meet">
 <defs>
 <linearGradient id="sbGrid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1822"/><stop offset="1" stop-color="#081018"/></linearGradient>
 </defs>
-<rect width="640" height="400" fill="url(#sbGrid)"/>
+<rect width="640" height="440" fill="url(#sbGrid)"/>
 <g stroke="#1a2b38" stroke-width="1">
-<line x1="40" y1="300" x2="600" y2="220"/><line x1="80" y1="320" x2="620" y2="230"/>
-<line x1="20" y1="260" x2="580" y2="190"/><line x1="60" y1="340" x2="560" y2="270"/>
+<line x1="40" y1="280" x2="600" y2="200"/><line x1="80" y1="300" x2="620" y2="210"/>
+<line x1="20" y1="240" x2="580" y2="170"/><line x1="60" y1="320" x2="560" y2="250"/>
 </g>
-<path d="M70 100 C180 140,260 180,340 230 S480 290,560 320" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
-<path d="M560 90 C460 150,380 190,300 230 S160 280,90 320" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
-<circle cx="320" cy="230" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
-<circle cx="320" cy="230" r="3" fill="#f0c879"/>
-<circle cx="210" cy="175" r="5" fill="#e8eef2"/>
-<circle cx="430" cy="170" r="5" fill="#7895a8"/>
-<text x="198" y="162" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
-<text x="400" y="156" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
+<path d="M70 90 C180 130,260 165,340 210 S480 270,560 300" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
+<path d="M560 80 C460 135,380 175,300 210 S160 255,90 295" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
+<circle cx="320" cy="210" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
+<circle cx="320" cy="210" r="3" fill="#f0c879"/>
+<circle cx="210" cy="155" r="5" fill="#e8eef2"/>
+<circle cx="430" cy="150" r="5" fill="#7895a8"/>
+<text x="198" y="142" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
+<text x="400" y="136" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
 <text x="18" y="36" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
 <text x="18" y="58" fill="#edf4f8" font-size="20" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
 </svg>
@@ -232,7 +243,7 @@
 <div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
 </div>
 </footer>
-<script src="tip.js?v=67"></script>
-<script src="script.js?v=67"></script>
+<script src="tip.js?v=68"></script>
+<script src="script.js?v=68"></script>
 </body>
 </html>
