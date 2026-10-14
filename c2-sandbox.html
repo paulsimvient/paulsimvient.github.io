@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CoAgentics C2 Sandbox | DCA Night Crossing</title>
 <meta name="description" content="A browser-based CoAgentics command-and-control sandbox separating historical NTSB data, reconstruction, and counterfactual experiments.">
-<link rel="stylesheet" href="styles.css?v=59">
+<link rel="stylesheet" href="styles.css?v=61">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -23,9 +24,18 @@
 .c2-overlay{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;z-index:2}
 .c2-titlebox,.c2-modebox{background:rgba(7,13,19,.77);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;color:#edf4f8}
 .c2-titlebox small,.c2-modebox small{display:block;color:#91a3b2;font:600 .67rem ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
-.c2-radar-wrap{position:absolute;right:14px;top:78px;width:168px;height:168px;pointer-events:none;z-index:2}
-#radarCanvas{width:100%;height:100%;display:block;border-radius:50%;background:rgba(4,10,16,.82);border:1px solid rgba(125,180,210,.35);box-shadow:0 8px 28px rgba(0,0,0,.35)}
-.c2-radar-cap{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);font:600 .58rem ui-monospace,monospace;letter-spacing:.1em;color:#8fb0c4;white-space:nowrap}
+.c2-radar-wrap{position:absolute;right:14px;top:72px;width:210px;height:210px;pointer-events:none;z-index:4}
+.craft-tag{position:absolute;transform:translate(-50%,-130%);pointer-events:none;z-index:5;background:rgba(7,13,19,.9);border:1px solid rgba(255,255,255,.22);border-radius:7px;padding:5px 9px;color:#edf4f8;font:700 .68rem ui-monospace,monospace;text-align:center;white-space:nowrap;opacity:0;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.craft-tag.on{opacity:1}
+.craft-tag span{display:block;font-weight:600;color:#9bb4c6;margin-top:2px;font-size:.62rem}
+.craft-tag.impact{border-color:#ff7a45;color:#ffd0b8}
+.impact-banner{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:6;pointer-events:none;display:none;text-align:center;background:rgba(40,10,6,.82);border:1px solid #ff7a45;border-radius:10px;padding:14px 22px;color:#ffd8c4;font:800 1.05rem ui-monospace,monospace;letter-spacing:.12em;box-shadow:0 0 40px rgba(255,90,40,.35)}
+.impact-banner.show{display:block}
+.impact-banner small{display:block;margin-top:6px;font:600 .68rem ui-monospace,monospace;letter-spacing:.08em;color:#c9a090}
+#radarCanvas{width:100%;height:100%;display:block;border-radius:50%;background:#031408;border:2px solid #1f8f3a;box-shadow:0 0 24px rgba(30,180,70,.35), inset 0 0 40px rgba(0,40,10,.65)}
+.c2-radar-cap{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);font:600 .58rem ui-monospace,monospace;letter-spacing:.1em;color:#3dcf5a;white-space:nowrap;text-shadow:0 0 8px rgba(40,200,80,.5)}
+#c2canvas{cursor:grab}
+#c2canvas.dragging{cursor:grabbing}
 .c2-live{position:absolute;left:14px;right:14px;bottom:14px;display:grid;gap:8px;pointer-events:none;z-index:2}
 .c2-live-row{display:grid;grid-template-columns:1.1fr 1.1fr .9fr;gap:8px}
 .c2-track{background:rgba(7,13,19,.82);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 12px;color:#edf4f8}
@@ -51,6 +61,12 @@
 .c2-event{cursor:pointer}
 .c2-event:hover{opacity:.9;background:#f7fafc}
 .side-hint{font-size:.78rem;color:var(--muted);margin:0 0 10px}
+.rank-row{display:grid;grid-template-columns:88px 1fr 52px;gap:8px;align-items:center;margin:6px 0;font-size:.78rem}
+.rank-row b{font-size:.72rem}
+.rank-track{height:10px;background:#e8eef2;border-radius:999px;overflow:hidden}
+.rank-fill{height:100%;background:var(--teal);border-radius:999px}
+.rank-row.winner .rank-fill{background:#1a7a4c}
+.rank-row.winner b{color:#1a7a4c}
 .c2-side{border:1px solid var(--line);border-radius:14px;background:#fff;padding:18px;box-shadow:0 10px 34px rgba(21,32,51,.06);max-height:590px;overflow:auto}
 .c2-side h3{font-size:1.12rem;margin:0 0 8px}.c2-side p{color:var(--muted);font-size:.9rem}
 .c2-event{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:72px 1fr;gap:10px;margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:8px;transition:background .2s,box-shadow .2s,opacity .2s;opacity:.55}
@@ -110,7 +126,7 @@
     <span class="c2-badge" id="sourceBadge">NTSB DCA25MA108</span>
     <button class="c2-btn" id="viewBtn">Change view</button>
     <button class="c2-btn primary" id="playBtn">Play reconstruction</button>
-    <button class="c2-btn primary hide" id="runExp">Run matched test</button>
+    <button class="c2-btn primary hide" id="runExp">Run matched trials</button>
   </div>
 </div>
 
@@ -121,6 +137,9 @@
       <div class="c2-titlebox"><small id="stageLabel">Historical reconstruction</small><strong id="stageTitle">DCA · Night Crossing</strong></div>
       <div class="c2-modebox"><small>Data layer</small><strong id="modeLabel">Recorded + derived</strong></div>
     </div>
+    <div class="craft-tag" id="tagPat"><b>PAT25</b><span id="tagPatMeta">—</span></div>
+    <div class="craft-tag" id="tagCrj"><b>CRJ 5342</b><span id="tagCrjMeta">—</span></div>
+    <div class="impact-banner" id="impactBanner">IMPACT<small>278 ft MSL · recorded collision</small></div>
     <div class="c2-radar-wrap" id="radarWrap" aria-hidden="true">
       <canvas id="radarCanvas" width="336" height="336"></canvas>
       <div class="c2-radar-cap">RADAR · DERIVED</div>
@@ -161,10 +180,10 @@
         </div>
       </div>
       <div class="c2-exp-strip hide" id="expMetrics">
-        <div class="c2-metric"><span>Seed</span><strong>1842</strong></div>
-        <div class="c2-metric"><span>Baseline sep</span><strong id="baseSepHud">—</strong></div>
-        <div class="c2-metric sim-metric"><span>CF sep</span><strong id="cfSepHud">—</strong></div>
-        <div class="c2-metric sim-metric"><span>Δ</span><strong id="deltaHud">—</strong></div>
+        <div class="c2-metric"><span>Trials</span><strong id="nHud">—</strong></div>
+        <div class="c2-metric"><span>Mean base</span><strong id="baseSepHud">—</strong></div>
+        <div class="c2-metric sim-metric"><span>Mean CF</span><strong id="cfSepHud">—</strong></div>
+        <div class="c2-metric sim-metric"><span>Mean Δ</span><strong id="deltaHud">—</strong></div>
       </div>
     </div>
   </div>
@@ -185,25 +204,38 @@
     </div>
 
     <div class="side-exp hide" id="sideExp">
-      <div class="eyebrow">Simulated · seed 1842</div>
+      <div class="eyebrow">Simulated · seed family 1842</div>
       <h3>Choose one change</h3>
-      <p>Keep the modeled world and seed fixed. Only the selected factor moves. Watch baseline and counterfactual on the same stage.</p>
-      <button class="hyp active" data-h="alt" data-tip-title="H1 · Altitude" data-tip="Raise the altitude cue by +100 ft under a matched seed." data-focus="Focus on the raised PAT25 path — one altitude change, everything else matched."><b>H1 · Altitude perception</b><small>Historical anchor: barometric altitude likely ~100 ft low.</small></button>
+      <p>Run thousands of matched trials: same world noise, one controlled change. Then rank which intervention moved minimum separation most.</p>
+      <button class="hyp active" data-h="alt" data-tip-title="H1 · Altitude" data-tip="Raise the altitude cue by +100 ft under matched seeds." data-focus="Focus on the raised PAT25 path — one altitude change, everything else matched."><b>H1 · Altitude perception</b><small>Historical anchor: barometric altitude likely ~100 ft low.</small></button>
       <button class="hyp" data-h="radio" data-tip-title="H2 · Advisory" data-tip="Deliver the complete circling advisory under matched conditions." data-focus="Focus on the milder divert path — information changed, seed held."><b>H2 · Traffic-advisory comprehension</b><small>Historical anchor: “circling” absent from PAT25 CVR advisory.</small></button>
       <button class="hyp" data-h="timing" data-tip-title="H3 · Timing" data-tip="Shift encounter timing by +7 s while holding route and seed." data-focus="Focus on the time-shifted path — same geometry, staggered timing."><b>H3 · Encounter timing</b><small>Shift timing only; route and initial state stay fixed.</small></button>
       <div class="exp-box">
-        <span class="c2-badge sim">SIMULATED COUNTERFACTUAL</span>
+        <span class="c2-badge sim">MONTE CARLO · MODEL</span>
         <h3 id="expTitle" style="margin-top:12px;font-size:1.05rem">Altitude perception test</h3>
-        <p id="expDesc" style="margin:6px 0 0;font-size:.88rem">Same modeled world, same seed. Change the altitude cue by +100 ft and compare minimum separation.</p>
+        <p id="expDesc" style="margin:6px 0 0;font-size:.88rem">1000 matched pairs from seed family 1842. Only the selected factor changes.</p>
+        <label class="mc-n" style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:.82rem;color:var(--muted)">Trials
+          <select id="trialN" style="margin-left:auto;font:inherit;padding:6px 8px;border-radius:6px;border:1px solid var(--line)">
+            <option value="250">250</option>
+            <option value="1000" selected>1000</option>
+            <option value="2500">2500</option>
+            <option value="5000">5000</option>
+          </select>
+        </label>
         <div class="exp-result" id="expResult">
           <div class="exp-result-grid">
-            <div class="c2-datum"><span>Baseline model</span><strong id="baseOut">0.11 nm</strong><em>illustrative min separation</em></div>
-            <div class="c2-datum"><span>Intervention model</span><strong id="cfOut">0.43 nm</strong><em>illustrative min separation</em></div>
+            <div class="c2-datum"><span>Mean baseline</span><strong id="baseOut">—</strong><em id="baseEm">min sep (nm)</em></div>
+            <div class="c2-datum"><span>Mean intervention</span><strong id="cfOut">—</strong><em id="cfEm">min sep (nm)</em></div>
           </div>
           <div style="margin-top:12px">
-            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Paired effect</span>
-            <strong id="deltaOut" style="display:block;font-size:1.8rem">+0.32 nm</strong>
-            <p id="claimOut" style="margin:8px 0 0;font-size:.86rem;color:var(--muted)">Illustrative sandbox result — not an NTSB finding.</p>
+            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Mean paired Δ · P(Δ&gt;0)</span>
+            <strong id="deltaOut" style="display:block;font-size:1.8rem">—</strong>
+            <p id="pPosOut" style="margin:4px 0 0;font-size:.86rem;color:var(--muted)"></p>
+            <p id="claimOut" style="margin:8px 0 0;font-size:.86rem;color:var(--muted)"></p>
+          </div>
+          <div id="rankBox" style="margin-top:14px;display:none">
+            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">What mattered (mean |Δ| across hyps)</span>
+            <div id="rankBars" style="margin-top:8px"></div>
           </div>
         </div>
       </div>
@@ -252,8 +284,8 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">C2 Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=59"></script>
-<script src="script.js?v=59"></script>
+<script src="tip.js?v=61"></script>
+<script src="script.js?v=61"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -265,7 +297,12 @@ let THREE, scene, camera, renderer;
 let craftA, craftB, craftAcf, craftBcf;
 let routeA, routeB, routeAcf, routeBcf;
 let tubeAcf, tubeBcf, sepLine, cpaMarker;
-let collision, anim = null, expAnim = null, view = 0;
+let collision, impactBurst, anim = null, expAnim = null, view = 0;
+let radarSweep = -Math.PI / 2;
+let lastRadar = null;
+let orbit = { theta: 0.95, phi: 0.92, radius: 25.5, targetY: 0.6 };
+let dragging = false;
+let dragLast = null;
 let mode = 'history';
 let useFallback = false;
 let fbCtx = null;
@@ -280,27 +317,101 @@ const GEO = { lat0: 38.8482, lon0: -77.0348, nmPerUnit: 0.46 };
 const defs = {
   alt: {
     title: 'Altitude perception test',
-    desc: 'Same modeled world, same seed. Raise the altitude cue by +100 ft and compare minimum separation.',
-    base: '0.11 nm', cf: '0.43 nm', delta: '+0.32 nm',
-    baseN: 0.11, cfN: 0.43,
-    claim: 'In this sandbox model, the altitude intervention materially changes the modeled encounter. That strengthens H1 inside this model; it does not replace NTSB findings.'
+    desc: 'Matched Monte Carlo: raise the altitude cue by +100 ft. Same noise draws as baseline; only altitude changes.',
+    effect: 0.32, // mean lift to min-sep in this schematic encounter model
+    noise: 0.055,
+    claim: 'In this sandbox encounter model, altitude is the strongest lever on min separation. Model result — not an NTSB finding.'
   },
   radio: {
     title: 'Traffic-advisory comprehension test',
-    desc: 'Same modeled world, same seed. Deliver the complete “circling to runway 33” advisory and compare the modeled response.',
-    base: '0.11 nm', cf: '0.31 nm', delta: '+0.20 nm',
-    baseN: 0.11, cfN: 0.31,
-    claim: 'In this sandbox model, receiving the complete advisory changes the modeled response. Illustrative — validate against a specified behavioral model.'
+    desc: 'Matched Monte Carlo: deliver the complete circling advisory. Same noise draws; only information/response changes.',
+    effect: 0.18,
+    noise: 0.06,
+    claim: 'In this sandbox model, the advisory changes the response distribution, but less than altitude. Model result — not an NTSB finding.'
   },
   timing: {
     title: 'Encounter timing test',
-    desc: 'Same modeled world, same seed. Shift the encounter by +7 seconds while holding route and initial state fixed.',
-    base: '0.11 nm', cf: '0.24 nm', delta: '+0.13 nm',
-    baseN: 0.11, cfN: 0.24,
-    claim: 'In this sandbox model, timing changes minimum separation, but the modeled effect is smaller than the altitude intervention.'
+    desc: 'Matched Monte Carlo: shift encounter timing by +7 s. Same noise draws; only phase changes.',
+    effect: 0.11,
+    noise: 0.07,
+    claim: 'In this sandbox model, timing moves separation less than altitude or advisory. Model result — not an NTSB finding.'
   }
 };
+const HYP_ORDER = ['alt', 'radio', 'timing'];
+const HYP_LABEL = { alt: 'H1 Alt', radio: 'H2 Radio', timing: 'H3 Time' };
+const MASTER_SEED = 1842;
 let sel = 'alt';
+
+/** Deterministic PRNG (mulberry32). */
+function mulberry32(a) {
+  return function () {
+    let t = (a += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function gauss(rand) {
+  // Box-Muller
+  const u = Math.max(1e-9, rand());
+  const v = rand();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+/**
+ * Schematic encounter model: sample minimum separation (nm).
+ * Matched pairs share the same noise draws; intervention adds a controlled miss component.
+ */
+function sampleMinSep(rand, hyp, intervene) {
+  // Shared world noise (geometry / timing jitter / sensor)
+  const geo = 0.09 + 0.04 * gauss(rand);
+  const phase = 0.03 * gauss(rand);
+  const sensor = 0.02 * gauss(rand);
+  let sep = Math.max(0.01, 0.10 + geo + phase + sensor);
+  if (intervene) {
+    const d = defs[hyp];
+    const lift = d.effect + d.noise * gauss(rand);
+    // soft saturation: large lifts still leave residual risk
+    sep = Math.max(0.02, sep + Math.max(0.02, lift));
+  }
+  return sep;
+}
+
+function runMatchedBatch(hyp, n, baseSeed = MASTER_SEED) {
+  const deltas = new Float64Array(n);
+  let sumB = 0, sumC = 0, sumD = 0, pos = 0;
+  for (let i = 0; i < n; i++) {
+    // Matched pair: identical PRNG streams so only the intervene flag differs.
+    const stream = (baseSeed * 10007 + i * 9973) >>> 0;
+    const rBase = mulberry32(stream);
+    const rCf = mulberry32(stream);
+    const b = sampleMinSep(rBase, hyp, false);
+    const c = sampleMinSep(rCf, hyp, true);
+    const d = c - b;
+    deltas[i] = d;
+    sumB += b; sumC += c; sumD += d;
+    if (d > 0) pos++;
+  }
+  const meanB = sumB / n, meanC = sumC / n, meanD = sumD / n;
+  // sample std of delta
+  let ss = 0;
+  for (let i = 0; i < n; i++) { const e = deltas[i] - meanD; ss += e * e; }
+  const sd = Math.sqrt(ss / Math.max(1, n - 1));
+  const se = sd / Math.sqrt(n);
+  return {
+    n, meanB, meanC, meanD, sd, se,
+    pPos: pos / n,
+    ci95: 1.96 * se
+  };
+}
+
+function rankHypotheses(n) {
+  return HYP_ORDER.map((h) => {
+    const r = runMatchedBatch(h, n);
+    return { hyp: h, label: HYP_LABEL[h], meanAbs: Math.abs(r.meanD), ...r };
+  }).sort((a, b) => b.meanAbs - a.meanAbs);
+}
 
 /** Anchors mix recorded NTSB values with derived interpolations between them. */
 const events = [
@@ -400,44 +511,113 @@ function bearingNm(ax, az, bx, bz) {
 }
 
 function drawRadar(pa, pb, pca, pcb) {
+  if (!radarCtx || !pa || !pb) return;
+  lastRadar = { pa, pb, pca, pcb };
   const w = radarCanvas.width, h = radarCanvas.height;
   const cx = w / 2, cy = h / 2;
-  const R = Math.min(cx, cy) - 8;
-  radarCtx.clearRect(0, 0, w, h);
-  radarCtx.fillStyle = 'rgba(4,12,18,0.92)';
-  radarCtx.beginPath(); radarCtx.arc(cx, cy, R + 4, 0, Math.PI * 2); radarCtx.fill();
-  radarCtx.strokeStyle = 'rgba(90,140,170,0.35)';
+  const R = Math.min(cx, cy) - 12;
+  // phosphor fade: dark green wash instead of hard clear
+  radarCtx.fillStyle = 'rgba(2, 12, 4, 0.22)';
+  radarCtx.fillRect(0, 0, w, h);
+
+  // scope face
+  radarCtx.beginPath();
+  radarCtx.arc(cx, cy, R + 6, 0, Math.PI * 2);
+  radarCtx.fillStyle = 'rgba(3, 18, 6, 0.55)';
+  radarCtx.fill();
+
+  // range rings
+  radarCtx.strokeStyle = 'rgba(40, 200, 70, 0.28)';
   radarCtx.lineWidth = 1.5;
-  for (let i = 1; i <= 3; i++) {
-    radarCtx.beginPath(); radarCtx.arc(cx, cy, R * i / 3, 0, Math.PI * 2); radarCtx.stroke();
+  for (let i = 1; i <= 4; i++) {
+    radarCtx.beginPath();
+    radarCtx.arc(cx, cy, R * i / 4, 0, Math.PI * 2);
+    radarCtx.stroke();
   }
+  // cross + outer rim
+  radarCtx.strokeStyle = 'rgba(55, 220, 85, 0.45)';
   radarCtx.beginPath(); radarCtx.moveTo(cx - R, cy); radarCtx.lineTo(cx + R, cy); radarCtx.stroke();
   radarCtx.beginPath(); radarCtx.moveTo(cx, cy - R); radarCtx.lineTo(cx, cy + R); radarCtx.stroke();
-  radarCtx.fillStyle = '#7ea8bf';
-  radarCtx.font = '18px ui-monospace,monospace';
-  radarCtx.fillText('N', cx - 6, cy - R + 22);
+  radarCtx.strokeStyle = 'rgba(60, 230, 90, 0.75)';
+  radarCtx.lineWidth = 2.5;
+  radarCtx.beginPath(); radarCtx.arc(cx, cy, R + 4, 0, Math.PI * 2); radarCtx.stroke();
 
-  const pts = [{ p: pa, c: '#e8eef2', r: 7 }, { p: pb, c: '#7d99aa', r: 7 }];
-  if (mode === 'experiment' && pca && pcb) {
-    pts.push({ p: pca, c: '#d4b8f5', r: 6 }, { p: pcb, c: '#a888d0', r: 5 });
-  }
-  const scale = R / 8; // world units visible radius
-  // center on midpoint of baseline pair
-  const ox = (pa.x + pb.x) / 2;
-  const oz = (pa.z + pb.z) / 2;
-  pts.forEach(({ p, c, r }) => {
-    const x = cx + (p.x - ox) * scale;
-    const y = cy - (p.z - oz) * scale;
-    radarCtx.fillStyle = c;
-    radarCtx.beginPath(); radarCtx.arc(x, y, r * 2, 0, Math.PI * 2); radarCtx.fill();
-  });
-  // range line baseline
-  radarCtx.strokeStyle = 'rgba(240,200,121,0.75)';
+  // sweep beam (classic green)
+  radarSweep = (radarSweep + 0.038) % (Math.PI * 2);
+  const sweepW = 0.7;
+  radarCtx.save();
+  radarCtx.beginPath();
+  radarCtx.moveTo(cx, cy);
+  radarCtx.arc(cx, cy, R, radarSweep - sweepW, radarSweep, false);
+  radarCtx.closePath();
+  const sg = radarCtx.createRadialGradient(cx, cy, 0, cx, cy, R);
+  sg.addColorStop(0, 'rgba(80,255,120,0.0)');
+  sg.addColorStop(0.55, 'rgba(60,255,100,0.08)');
+  sg.addColorStop(1, 'rgba(90,255,120,0.38)');
+  radarCtx.fillStyle = sg;
+  radarCtx.fill();
+  radarCtx.strokeStyle = 'rgba(160,255,170,0.95)';
   radarCtx.lineWidth = 2;
   radarCtx.beginPath();
-  radarCtx.moveTo(cx + (pa.x - ox) * scale, cy - (pa.z - oz) * scale);
-  radarCtx.lineTo(cx + (pb.x - ox) * scale, cy - (pb.z - oz) * scale);
+  radarCtx.moveTo(cx, cy);
+  radarCtx.lineTo(cx + Math.cos(radarSweep) * R, cy + Math.sin(radarSweep) * R);
   radarCtx.stroke();
+  radarCtx.restore();
+
+  radarCtx.fillStyle = 'rgba(90,255,120,0.9)';
+  radarCtx.font = 'bold 20px ui-monospace,monospace';
+  radarCtx.fillText('N', cx - 7, cy - R + 24);
+  radarCtx.font = '14px ui-monospace,monospace';
+  radarCtx.fillStyle = 'rgba(70,210,100,0.75)';
+  radarCtx.fillText('2 NM', cx + 6, cy - R * 0.48);
+
+  const scale = R / 9;
+  const ox = (pa.x + pb.x) / 2;
+  const oz = (pa.z + pb.z) / 2;
+  const toXY = (p) => ({
+    x: cx + (p.x - ox) * scale,
+    y: cy - (p.z - oz) * scale,
+    ang: Math.atan2((cy - (cy - (p.z - oz) * scale)), (cx + (p.x - ox) * scale) - cx)
+  });
+
+  const contacts = [
+    { p: pa, label: 'P25' },
+    { p: pb, label: '5342' }
+  ];
+  if (mode === 'experiment' && pca && pcb) {
+    contacts.push({ p: pca, label: "P'" }, { p: pcb, label: "C'" });
+  }
+
+  // contact line
+  const a = toXY(pa), b = toXY(pb);
+  radarCtx.strokeStyle = 'rgba(80,255,120,0.55)';
+  radarCtx.lineWidth = 1.5;
+  radarCtx.setLineDash([5, 4]);
+  radarCtx.beginPath(); radarCtx.moveTo(a.x, a.y); radarCtx.lineTo(b.x, b.y); radarCtx.stroke();
+  radarCtx.setLineDash([]);
+
+  contacts.forEach(({ p, label }) => {
+    const x = cx + (p.x - ox) * scale;
+    const y = cy - (p.z - oz) * scale;
+    let ang = Math.atan2(y - cy, x - cx);
+    let dAng = Math.abs(((ang - radarSweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+    // bright when sweep just hit, then phosphor decay via persistence layer
+    const hit = dAng < 0.35;
+    const glow = hit ? 1 : 0.45;
+    radarCtx.beginPath();
+    radarCtx.arc(x, y, hit ? 9 : 6, 0, Math.PI * 2);
+    radarCtx.fillStyle = `rgba(${hit ? 180 : 60}, ${hit ? 255 : 200}, ${hit ? 160 : 90}, ${glow})`;
+    radarCtx.fill();
+    if (hit) {
+      radarCtx.beginPath();
+      radarCtx.arc(x, y, 16, 0, Math.PI * 2);
+      radarCtx.strokeStyle = 'rgba(140,255,150,0.55)';
+      radarCtx.stroke();
+    }
+    radarCtx.fillStyle = 'rgba(160,255,170,0.9)';
+    radarCtx.font = 'bold 13px ui-monospace,monospace';
+    radarCtx.fillText(label, x + 10, y - 8);
+  });
 }
 
 function updateLiveHud(p, pa, pb, lookA, lookB, pca, pcb) {
@@ -478,6 +658,8 @@ function updateLiveHud(p, pa, pb, lookA, lookB, pca, pcb) {
   }
 
   drawRadar(pa, pb, pca, pcb);
+  placeCraftTag($('#tagPat'), pa, Math.round(s.pat.alt) + ' ft · ' + Math.round(s.pat.gs) + ' kt');
+  placeCraftTag($('#tagCrj'), pb, Math.round(s.crj.altRa) + ' ft RA · ' + Math.round(s.crj.gs) + ' kt');
 }
 
 function metric(e, idx) {
@@ -517,22 +699,49 @@ function setMode(exp) {
   }
 }
 
+const IMPACT = { x: 0, y: 1.05, z: 0 };
+
 function makePathPoints(hyp) {
-  // Baseline schematic routes
+  // Both historical tracks terminate at the same impact point (schematic).
   const baseA = [
-    { x: -7, y: 1, z: 8 }, { x: -4, y: 1, z: 3 }, { x: -1, y: 1, z: 0 }, { x: 5, y: 1, z: -6 }
+    { x: -9.5, y: 1.55, z: 10 },
+    { x: -5.5, y: 1.35, z: 5.5 },
+    { x: -2.4, y: 1.18, z: 2.2 },
+    { x: -0.55, y: 1.08, z: 0.55 },
+    { ...IMPACT }
   ];
   const baseB = [
-    { x: 7, y: 0.2, z: 7 }, { x: 4, y: 0.2, z: 3 }, { x: 1, y: 0.2, z: 0.2 }, { x: -5, y: 0.2, z: -7 }
+    { x: 10.5, y: 0.22, z: 9.5 },
+    { x: 5.5, y: 0.35, z: 4.2 },
+    { x: 2.2, y: 0.58, z: 1.6 },
+    { x: 0.55, y: 0.88, z: 0.45 },
+    { ...IMPACT }
   ];
-  // CF offsets by hypothesis (illustrative)
-  const cfA = baseA.map((p, i) => {
-    if (hyp === 'alt') return { x: p.x, y: p.y + 0.55, z: p.z };
-    if (hyp === 'radio') return { x: p.x + 0.35 + i * 0.08, y: p.y + 0.08, z: p.z - 0.25 };
-    // timing: same path, used with time lag in placement
-    return { ...p };
-  });
-  const cfB = baseB.map((p) => ({ ...p }));
+  let cfA, cfB;
+  if (hyp === 'alt') {
+    // Raise PAT25 so paths no longer meet — visible miss
+    cfA = [
+      { x: -9.5, y: 2.15, z: 10 },
+      { x: -5.5, y: 2.0, z: 5.5 },
+      { x: -2.4, y: 1.9, z: 2.2 },
+      { x: -0.4, y: 1.85, z: 0.4 },
+      { x: 0.2, y: 1.9, z: -0.3 }
+    ];
+    cfB = baseB.map((p) => ({ ...p }));
+  } else if (hyp === 'radio') {
+    cfA = [
+      { x: -9.5, y: 1.55, z: 10 },
+      { x: -5.2, y: 1.4, z: 5.8 },
+      { x: -1.2, y: 1.25, z: 3.2 },
+      { x: 1.8, y: 1.15, z: 1.6 },
+      { x: 3.5, y: 1.1, z: 0.2 }
+    ];
+    cfB = baseB.map((p) => ({ ...p }));
+  } else {
+    // timing: same geometry, playback applies lag
+    cfA = baseA.map((p) => ({ ...p }));
+    cfB = baseB.map((p) => ({ ...p }));
+  }
   return { baseA, baseB, cfA, cfB };
 }
 
@@ -685,38 +894,89 @@ function applyHyp(hyp) {
   placeExp(0);
 }
 
+function alongFallback(arr, t) {
+  const n = arr.length - 1;
+  const u = Math.min(1, Math.max(0, t)) * n;
+  const i = Math.min(n - 1, Math.floor(u));
+  const f = u - i;
+  return {
+    x: arr[i].x + (arr[i + 1].x - arr[i].x) * f,
+    y: arr[i].y + (arr[i + 1].y - arr[i].y) * f,
+    z: arr[i].z + (arr[i + 1].z - arr[i].z) * f
+  };
+}
+
+function setImpactVisual(on) {
+  const banner = $('#impactBanner');
+  if (banner) banner.classList.toggle('show', !!on && mode === 'history');
+  $('#tagPat')?.classList.toggle('impact', !!on);
+  $('#tagCrj')?.classList.toggle('impact', !!on);
+  if (collision) {
+    collision.visible = mode === 'history';
+    if (collision.material) {
+      collision.material.color.set(on ? 0xff5a2a : 0xf0c879);
+      collision.material.wireframe = !on;
+    }
+    collision.scale.setScalar(on ? 2.6 : 1.1);
+  }
+  if (impactBurst) impactBurst.visible = !!on && mode === 'history';
+  if (craftA) craftA.visible = !on;
+  if (craftB) craftB.visible = !on;
+}
+
+function projectToStage(pos) {
+  if (!camera || !renderer) return null;
+  const v = pos.clone ? pos.clone() : new THREE.Vector3(pos.x, pos.y, pos.z);
+  v.project(camera);
+  if (v.z > 1) return null;
+  const rect = stage.getBoundingClientRect();
+  return {
+    x: (v.x * 0.5 + 0.5) * rect.width,
+    y: (-v.y * 0.5 + 0.5) * rect.height
+  };
+}
+
+function placeCraftTag(el, pos, meta) {
+  if (!el) return;
+  const scr = projectToStage(pos);
+  if (!scr) { el.classList.remove('on'); return; }
+  el.style.left = scr.x + 'px';
+  el.style.top = scr.y + 'px';
+  el.classList.add('on');
+  const metaEl = el.querySelector('span');
+  if (metaEl && meta) metaEl.textContent = meta;
+}
+
 function placeHist(p) {
   fbProgress = p;
+  const impact = p >= 0.985;
   if (useFallback || !craftA) {
     drawFallback();
-    // approximate positions for HUD in fallback
     const pts = makePathPoints(fbHyp);
-    const along = (arr, t) => {
-      const n = arr.length - 1;
-      const u = Math.min(1, Math.max(0, t)) * n;
-      const i = Math.min(n - 1, Math.floor(u));
-      const f = u - i;
-      return {
-        x: arr[i].x + (arr[i + 1].x - arr[i].x) * f,
-        y: arr[i].y + (arr[i + 1].y - arr[i].y) * f,
-        z: arr[i].z + (arr[i + 1].z - arr[i].z) * f
-      };
-    };
-    const pa = along(pts.baseA, p);
-    const pb = along(pts.baseB, Math.min(1, p * 0.985));
-    const la = along(pts.baseA, Math.min(1, p + 0.02));
-    const lb = along(pts.baseB, Math.min(1, p * 0.985 + 0.02));
+    let pa = alongFallback(pts.baseA, p);
+    let pb = alongFallback(pts.baseB, p);
+    if (impact) { pa = { ...IMPACT }; pb = { ...IMPACT }; }
+    const la = alongFallback(pts.baseA, Math.min(1, p + 0.02));
+    const lb = alongFallback(pts.baseB, Math.min(1, p + 0.02));
     updateLiveHud(p, pa, pb, la, lb);
+    setImpactVisual(impact);
     return;
   }
-  const pa = routeA.getPoint(Math.min(1, p));
-  const pb = routeB.getPoint(Math.min(1, p * 0.985));
+  let pa = routeA.getPoint(Math.min(1, p));
+  let pb = routeB.getPoint(Math.min(1, p));
+  if (impact) {
+    pa = new THREE.Vector3(IMPACT.x, IMPACT.y, IMPACT.z);
+    pb = new THREE.Vector3(IMPACT.x, IMPACT.y, IMPACT.z);
+  }
   const la = routeA.getPoint(Math.min(1, p + 0.02));
   const lb = routeB.getPoint(Math.min(1, p + 0.02));
   craftA.position.copy(pa);
   craftB.position.copy(pb);
-  craftA.lookAt(la);
-  craftB.lookAt(lb);
+  if (!impact) {
+    craftA.lookAt(la);
+    craftB.lookAt(lb);
+  }
+  setImpactVisual(impact);
   updateLiveHud(p, pa, pb, la, lb);
 }
 
@@ -826,8 +1086,24 @@ async function init3D() {
       new THREE.SphereGeometry(0.35, 20, 12),
       new THREE.MeshBasicMaterial({ color: 0xf0c879, wireframe: true })
     );
-    collision.position.set(0, 1, 0);
+    collision.position.set(IMPACT.x, IMPACT.y, IMPACT.z);
     scene.add(collision);
+
+    impactBurst = new THREE.Group();
+    const burstCore = new THREE.Mesh(
+      new THREE.SphereGeometry(0.55, 16, 12),
+      new THREE.MeshBasicMaterial({ color: 0xff5a2a, transparent: true, opacity: 0.85 })
+    );
+    const burstRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.7, 1.35, 32),
+      new THREE.MeshBasicMaterial({ color: 0xff9a4a, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
+    );
+    burstRing.rotation.x = -Math.PI / 2;
+    impactBurst.add(burstCore);
+    impactBurst.add(burstRing);
+    impactBurst.position.set(IMPACT.x, IMPACT.y, IMPACT.z);
+    impactBurst.visible = false;
+    scene.add(impactBurst);
 
     const sepGeo = new THREE.BufferGeometry();
     sepGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
@@ -840,6 +1116,7 @@ async function init3D() {
     scene.add(cpaMarker);
 
     setCfVisibility(false);
+    applyOrbit();
 
     const resize = () => {
       const w = stage.clientWidth, h = stage.clientHeight;
@@ -849,10 +1126,56 @@ async function init3D() {
     };
     resize();
     addEventListener('resize', resize);
+
+    // Drag to orbit
+    canvas.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      dragLast = { x: e.clientX, y: e.clientY };
+      canvas.classList.add('dragging');
+      canvas.setPointerCapture?.(e.pointerId);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!dragging || !dragLast) return;
+      const dx = e.clientX - dragLast.x;
+      const dy = e.clientY - dragLast.y;
+      dragLast = { x: e.clientX, y: e.clientY };
+      orbit.theta -= dx * 0.007;
+      orbit.phi = Math.min(1.35, Math.max(0.25, orbit.phi + dy * 0.007));
+      applyOrbit();
+    });
+    const endDrag = (e) => {
+      dragging = false;
+      dragLast = null;
+      canvas.classList.remove('dragging');
+      try { canvas.releasePointerCapture?.(e.pointerId); } catch (_) {}
+    };
+    canvas.addEventListener('pointerup', endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      orbit.radius = Math.min(42, Math.max(12, orbit.radius + e.deltaY * 0.02));
+      applyOrbit();
+    }, { passive: false });
+
     let tt = 0;
     const render = () => {
       tt += 0.01;
-      if (collision.visible) collision.scale.setScalar(1 + 0.12 * Math.sin(tt * 3));
+      if (collision && collision.visible && mode === 'history') {
+        const base = collision.material.wireframe ? 1.1 : 2.6;
+        collision.scale.setScalar(base + 0.1 * Math.sin(tt * 4));
+      }
+      if (impactBurst && impactBurst.visible) {
+        impactBurst.rotation.y += 0.04;
+        impactBurst.scale.setScalar(1 + 0.08 * Math.sin(tt * 5));
+      }
+      // keep radar sweeping even when scene is idle
+      if (lastRadar) drawRadar(lastRadar.pa, lastRadar.pb, lastRadar.pca, lastRadar.pcb);
+      else if (craftA && craftB) drawRadar(craftA.position, craftB.position);
+      // refresh tags after camera moves
+      if (craftA && craftB && mode === 'history' && craftA.visible) {
+        placeCraftTag($('#tagPat'), craftA.position, $('#tagPatMeta')?.textContent);
+        placeCraftTag($('#tagCrj'), craftB.position, $('#tagCrjMeta')?.textContent);
+      }
       renderer.render(scene, camera);
       requestAnimationFrame(render);
     };
@@ -861,6 +1184,17 @@ async function init3D() {
     console.warn('Three.js unavailable, using 2D fallback', e);
     startFallback();
   }
+}
+
+function applyOrbit() {
+  if (!camera) return;
+  const { theta, phi, radius, targetY } = orbit;
+  camera.position.set(
+    radius * Math.sin(phi) * Math.sin(theta),
+    radius * Math.cos(phi) + targetY,
+    radius * Math.sin(phi) * Math.cos(theta)
+  );
+  camera.lookAt(0, targetY, 0);
 }
 
 await init3D();
@@ -900,11 +1234,12 @@ $('#playBtn').addEventListener('click', () => {
 $('#viewBtn').addEventListener('click', () => {
   if (!camera) return;
   view = (view + 1) % 3;
-  if (view === 0) camera.position.set(13, 13, 18);
-  if (view === 1) camera.position.set(0, 23, 1);
-  if (view === 2) camera.position.set(-15, 7, 11);
-  camera.lookAt(0, 0, 0);
+  if (view === 0) { orbit = { theta: 0.95, phi: 0.92, radius: 25.5, targetY: 0.6 }; }
+  if (view === 1) { orbit = { theta: 0.0, phi: 0.18, radius: 28, targetY: 0.4 }; }
+  if (view === 2) { orbit = { theta: -0.85, phi: 1.05, radius: 22, targetY: 0.8 }; }
+  applyOrbit();
 });
+$('#viewBtn').title = 'Preset views · drag stage to orbit · scroll to zoom';
 
 document.querySelectorAll('.c2-tab').forEach((b) => b.addEventListener('click', () => {
   document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x === b));
@@ -920,9 +1255,12 @@ function selectHyp(h) {
   fbHyp = h;
   document.querySelectorAll('.hyp').forEach((x) => x.classList.toggle('active', x.dataset.h === h));
   const d = defs[h];
+  const n = Number($('#trialN')?.value || 1000);
   $('#expTitle').textContent = d.title;
   $('#expDesc').textContent = d.desc;
   $('#expResult').classList.remove('show');
+  $('#rankBox').style.display = 'none';
+  $('#nHud').textContent = '—';
   $('#baseSepHud').textContent = '—';
   $('#cfSepHud').textContent = '—';
   $('#deltaHud').textContent = '—';
@@ -935,37 +1273,57 @@ document.querySelectorAll('.hyp').forEach((b) => b.addEventListener('click', () 
   selectHyp(b.dataset.h);
 }));
 
+function renderRankBars(ranked) {
+  const max = ranked[0]?.meanAbs || 1;
+  $('#rankBars').innerHTML = ranked.map((r, i) => {
+    const pct = Math.round((r.meanAbs / max) * 100);
+    return `<div class="rank-row${i === 0 ? ' winner' : ''}"><b>${r.label}</b><div class="rank-track"><div class="rank-fill" style="width:${pct}%"></div></div><span>+${r.meanAbs.toFixed(2)}</span></div>`;
+  }).join('');
+  $('#rankBox').style.display = 'block';
+}
+
 $('#runExp').addEventListener('click', () => {
+  const n = Number($('#trialN')?.value || 1000);
   const d = defs[sel];
-  $('#baseOut').textContent = d.base;
-  $('#cfOut').textContent = d.cf;
-  $('#deltaOut').textContent = d.delta;
-  $('#claimOut').textContent = d.claim;
   if (expAnim) cancelAnimationFrame(expAnim);
-  $('#runExp').textContent = 'Running…';
+  $('#runExp').textContent = `Running ${n}…`;
   $('#runExp').disabled = true;
-  const start = performance.now();
-  const step = (now) => {
-    const q = Math.min(1, (now - start) / 2800);
-    placeExp(q);
-    // interpolate HUD toward final numbers
-    const b = (d.baseN * (0.35 + 0.65 * q)).toFixed(2);
-    const c = (d.cfN * (0.35 + 0.65 * q)).toFixed(2);
-    $('#baseSepHud').textContent = b + ' nm';
-    $('#cfSepHud').textContent = c + ' nm';
-    $('#deltaHud').textContent = '+' + (d.cfN - d.baseN).toFixed(2) + ' nm';
-    if (q < 1) expAnim = requestAnimationFrame(step);
-    else {
-      $('#baseSepHud').textContent = d.base;
-      $('#cfSepHud').textContent = d.cf;
-      $('#deltaHud').textContent = d.delta;
-      $('#expResult').classList.add('show');
-      $('#runExp').textContent = 'Replay matched test';
-      $('#runExp').disabled = false;
-      expAnim = null;
-    }
-  };
-  expAnim = requestAnimationFrame(step);
+  $('#expResult').classList.remove('show');
+
+  // Yield so UI updates, then run CPU batch (fast for thousands)
+  requestAnimationFrame(() => {
+    const t0 = performance.now();
+    const primary = runMatchedBatch(sel, n);
+    const ranked = rankHypotheses(n);
+    const ms = Math.round(performance.now() - t0);
+
+    $('#nHud').textContent = String(n);
+    $('#baseSepHud').textContent = primary.meanB.toFixed(2) + ' nm';
+    $('#cfSepHud').textContent = primary.meanC.toFixed(2) + ' nm';
+    $('#deltaHud').textContent = (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(2) + ' nm';
+    $('#baseOut').textContent = primary.meanB.toFixed(3) + ' nm';
+    $('#cfOut').textContent = primary.meanC.toFixed(3) + ' nm';
+    $('#deltaOut').textContent = (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(3) + ' nm';
+    $('#pPosOut').textContent = `P(Δ>0) = ${(primary.pPos * 100).toFixed(1)}% · 95% CI ±${primary.ci95.toFixed(3)} nm · ${ms} ms`;
+    const winner = ranked[0];
+    $('#claimOut').textContent = `${d.claim} Across ${n} matched trials, strongest mean |Δ| is ${winner.label} (+${winner.meanAbs.toFixed(2)} nm).`;
+    renderRankBars(ranked);
+    $('#expResult').classList.add('show');
+
+    // Animate one representative dual-path playback while results show
+    const start = performance.now();
+    const step = (now) => {
+      const q = Math.min(1, (now - start) / 2400);
+      placeExp(q);
+      if (q < 1) expAnim = requestAnimationFrame(step);
+      else {
+        $('#runExp').textContent = 'Re-run matched trials';
+        $('#runExp').disabled = false;
+        expAnim = null;
+      }
+    };
+    expAnim = requestAnimationFrame(step);
+  });
 });
 </script>
 </body>
