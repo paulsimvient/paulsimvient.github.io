@@ -366,3 +366,16 @@ td{border-color:var(--line)}
 @media (hover:none){
   #site-tip{max-width:min(320px,92vw)}
 }
+
+
+/* Economics homepage flagship */
+.economics-spotlight{background:#eef2f6}
+.econ-home-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
+.econ-home-grid h2{max-width:780px}
+.econ-mini{background:#0f172a;color:#e8eef6;border:1px solid #334155;border-radius:16px;padding:18px;box-shadow:0 18px 50px rgba(15,23,42,.16)}
+.econ-mini-top,.econ-mini-row,.econ-mini-result{display:flex;justify-content:space-between;gap:16px;align-items:center}
+.econ-mini-top{font:700 .68rem/1 ui-monospace,monospace;letter-spacing:.09em;color:#93c5fd;padding-bottom:12px;border-bottom:1px solid #334155}
+.econ-mini-row{padding:10px 0;border-bottom:1px solid #1e293b;font-size:.88rem}.econ-mini-row span{color:#94a3b8}.econ-mini-row strong{color:#f8fafc}
+.econ-mini-bars{height:112px;display:grid;grid-template-columns:repeat(6,1fr);gap:8px;align-items:end;padding:18px 0}.econ-mini-bars i{display:block;background:#3b82a8;border-radius:4px 4px 2px 2px;animation:econPulse 3.2s ease-in-out infinite}.econ-mini-bars i:nth-child(2n){animation-delay:.35s}.econ-mini-bars i:nth-child(3n){animation-delay:.7s}@keyframes econPulse{0%,100%{transform:scaleY(.82);opacity:.7}50%{transform:scaleY(1);opacity:1}}
+.econ-mini-result{border-top:1px solid #334155;padding-top:12px;flex-wrap:wrap}.econ-mini-result span{font:700 .64rem/1 ui-monospace,monospace;letter-spacing:.08em;color:#94a3b8}.econ-mini-result strong{color:#f8fafc}.econ-mini-result em{width:100%;font-style:normal;color:#93c5fd;font-size:.76rem;margin-top:3px}
+@media(max-width:850px){.econ-home-grid{grid-template-columns:1fr}.hero-tech .actions{align-items:flex-start}}
