@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CoAgentics C2 Sandbox | DCA Night Crossing</title>
 <meta name="description" content="A browser-based CoAgentics command-and-control sandbox separating historical NTSB data, reconstruction, and counterfactual experiments.">
-<link rel="stylesheet" href="styles.css?v=58">
+<link rel="stylesheet" href="styles.css?v=59">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -23,12 +23,34 @@
 .c2-overlay{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;z-index:2}
 .c2-titlebox,.c2-modebox{background:rgba(7,13,19,.77);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;color:#edf4f8}
 .c2-titlebox small,.c2-modebox small{display:block;color:#91a3b2;font:600 .67rem ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
-.c2-bottom{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;pointer-events:none;z-index:2}
+.c2-radar-wrap{position:absolute;right:14px;top:78px;width:168px;height:168px;pointer-events:none;z-index:2}
+#radarCanvas{width:100%;height:100%;display:block;border-radius:50%;background:rgba(4,10,16,.82);border:1px solid rgba(125,180,210,.35);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.c2-radar-cap{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);font:600 .58rem ui-monospace,monospace;letter-spacing:.1em;color:#8fb0c4;white-space:nowrap}
+.c2-live{position:absolute;left:14px;right:14px;bottom:14px;display:grid;gap:8px;pointer-events:none;z-index:2}
+.c2-live-row{display:grid;grid-template-columns:1.1fr 1.1fr .9fr;gap:8px}
+.c2-track{background:rgba(7,13,19,.82);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 12px;color:#edf4f8}
+.c2-track.pat{border-color:rgba(180,210,230,.35)}
+.c2-track.crj{border-color:rgba(120,160,185,.4)}
+.c2-track header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.c2-track header b{font:700 .72rem ui-monospace,monospace;letter-spacing:.08em}
+.c2-track header span{font:600 .58rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.06em}
+.c2-kv{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+.c2-kv div{min-width:0}
+.c2-kv em{display:block;font:600 .55rem ui-monospace,monospace;color:#7f96a8;letter-spacing:.08em;font-style:normal;text-transform:uppercase}
+.c2-kv strong{display:block;font:700 .88rem ui-monospace,monospace;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c2-contact{background:rgba(7,13,19,.82);backdrop-filter:blur(9px);border:1px solid rgba(240,200,121,.35);border-radius:10px;padding:10px 12px;color:#edf4f8}
+.c2-contact .clock{font:700 1.15rem ui-monospace,monospace;color:#f0c879}
+.c2-contact .sub{font:600 .62rem ui-monospace,monospace;color:#9bb0c0;margin-top:2px;letter-spacing:.06em}
+.c2-bottom{display:none}
 .c2-metric{background:rgba(7,13,19,.78);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.11);border-radius:9px;padding:10px;color:#fff}
 .c2-metric span{display:block;color:#92a4b4;font:600 .63rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
 .c2-metric strong{display:block;font-size:1.02rem;margin-top:3px}
 .c2-metric.sim-metric{border-color:rgba(196,184,217,.45)}
 .c2-metric.sim-metric span{color:#c9b8e0}
+.c2-exp-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.c2-event{cursor:pointer}
+.c2-event:hover{opacity:.9;background:#f7fafc}
+.side-hint{font-size:.78rem;color:var(--muted);margin:0 0 10px}
 .c2-side{border:1px solid var(--line);border-radius:14px;background:#fff;padding:18px;box-shadow:0 10px 34px rgba(21,32,51,.06);max-height:590px;overflow:auto}
 .c2-side h3{font-size:1.12rem;margin:0 0 8px}.c2-side p{color:var(--muted);font-size:.9rem}
 .c2-event{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:72px 1fr;gap:10px;margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:8px;transition:background .2s,box-shadow .2s,opacity .2s;opacity:.55}
@@ -37,7 +59,7 @@
 .c2-event.past{opacity:.78}
 .c2-event time{font:700 .73rem ui-monospace,monospace;color:var(--teal)}
 .c2-event b{font-size:.88rem}.c2-event span{display:block;color:var(--muted);font-size:.79rem;margin-top:2px}
-.t-point{transition:background .2s,border-color .2s,opacity .2s;opacity:.55}
+.t-point{transition:background .2s,border-color .2s,opacity .2s;opacity:.55;cursor:pointer}
 .t-point.active{opacity:1;background:#f0f6fa;border-color:var(--teal)}.t-point.past{opacity:.78}
 .c2-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .c2-legend span{font:600 .67rem ui-monospace,monospace;border-radius:999px;padding:5px 8px;border:1px solid var(--line)}
@@ -68,8 +90,8 @@
 .notice{border-left:3px solid var(--teal);padding:10px 12px;background:#f0f6fa;color:#304256;font-size:.86rem;margin-top:12px}
 .hide{display:none!important}
 .side-hist.hide,.side-exp.hide,.hist-panels.hide{display:none!important}
-@media(max-width:1050px){.c2-grid{grid-template-columns:1fr}.c2-stage,.c2-side{max-height:none;min-height:520px}.c2-data-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.c2-shell{padding:0 14px 60px}.c2-stage{min-height:460px}.c2-bottom{grid-template-columns:1fr 1fr}.c2-data-grid{grid-template-columns:1fr}.c2-overlay{flex-direction:column;align-items:flex-start}.c2-modebox{display:none}}
+@media(max-width:1050px){.c2-grid{grid-template-columns:1fr}.c2-stage,.c2-side{max-height:none;min-height:520px}.c2-data-grid{grid-template-columns:1fr 1fr}.c2-live-row{grid-template-columns:1fr 1fr}.c2-contact{grid-column:1/-1}.c2-radar-wrap{width:140px;height:140px;top:70px}}
+@media(max-width:720px){.c2-shell{padding:0 14px 60px}.c2-stage{min-height:520px}.c2-live-row{grid-template-columns:1fr}.c2-data-grid{grid-template-columns:1fr}.c2-overlay{flex-direction:column;align-items:flex-start}.c2-modebox{display:none}.c2-radar-wrap{right:10px;top:64px;width:112px;height:112px}.c2-kv strong{font-size:.78rem}}
 </style>
 </head>
 <body>
@@ -99,17 +121,51 @@
       <div class="c2-titlebox"><small id="stageLabel">Historical reconstruction</small><strong id="stageTitle">DCA · Night Crossing</strong></div>
       <div class="c2-modebox"><small>Data layer</small><strong id="modeLabel">Recorded + derived</strong></div>
     </div>
-    <div class="c2-bottom" id="histMetrics">
-      <div class="c2-metric"><span>Time</span><strong id="timeMetric">20:46:02</strong></div>
-      <div class="c2-metric"><span>Separation</span><strong id="sepMetric">6.5 nm</strong></div>
-      <div class="c2-metric"><span>Flight 5342</span><strong id="crjMetric">~1,200 ft advisory</strong></div>
-      <div class="c2-metric"><span>State</span><strong id="stateMetric">Traffic advisory</strong></div>
+    <div class="c2-radar-wrap" id="radarWrap" aria-hidden="true">
+      <canvas id="radarCanvas" width="336" height="336"></canvas>
+      <div class="c2-radar-cap">RADAR · DERIVED</div>
     </div>
-    <div class="c2-bottom hide" id="expMetrics">
-      <div class="c2-metric"><span>Seed</span><strong>1842</strong></div>
-      <div class="c2-metric"><span>Baseline sep</span><strong id="baseSepHud">—</strong></div>
-      <div class="c2-metric sim-metric"><span>CF sep</span><strong id="cfSepHud">—</strong></div>
-      <div class="c2-metric sim-metric"><span>Δ</span><strong id="deltaHud">—</strong></div>
+    <div class="c2-live" id="histMetrics">
+      <div class="c2-live-row">
+        <div class="c2-track pat">
+          <header><b>PAT25</b><span id="patTag">HELI · H60</span></header>
+          <div class="c2-kv">
+            <div><em>Alt MSL</em><strong id="patAlt">—</strong></div>
+            <div><em>GS</em><strong id="patGs">—</strong></div>
+            <div><em>Lat</em><strong id="patLat">—</strong></div>
+            <div><em>Lon</em><strong id="patLon">—</strong></div>
+            <div><em>Hdg</em><strong id="patHdg">—</strong></div>
+            <div><em>Baro bias</em><strong id="patBias">~−100 ft</strong></div>
+          </div>
+        </div>
+        <div class="c2-track crj">
+          <header><b>CRJ 5342</b><span id="crjTag">PSA · RWY 33</span></header>
+          <div class="c2-kv">
+            <div><em>Alt RA / MSL</em><strong id="crjAlt">—</strong></div>
+            <div><em>GS</em><strong id="crjGs">—</strong></div>
+            <div><em>Lat</em><strong id="crjLat">—</strong></div>
+            <div><em>Lon</em><strong id="crjLon">—</strong></div>
+            <div><em>Hdg</em><strong id="crjHdg">—</strong></div>
+            <div><em>VS</em><strong id="crjVs">—</strong></div>
+          </div>
+        </div>
+        <div class="c2-contact">
+          <div class="clock" id="timeMetric">20:46:02</div>
+          <div class="sub" id="stateMetric">Traffic advisory</div>
+          <div class="c2-kv" style="margin-top:8px">
+            <div><em>Range</em><strong id="sepMetric">6.5 nm</strong></div>
+            <div><em>Bearing</em><strong id="brgMetric">—</strong></div>
+            <div><em>ΔAlt</em><strong id="dAltMetric">—</strong></div>
+            <div><em>CPA clock</em><strong id="cpaMetric">~118 s</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="c2-exp-strip hide" id="expMetrics">
+        <div class="c2-metric"><span>Seed</span><strong>1842</strong></div>
+        <div class="c2-metric"><span>Baseline sep</span><strong id="baseSepHud">—</strong></div>
+        <div class="c2-metric sim-metric"><span>CF sep</span><strong id="cfSepHud">—</strong></div>
+        <div class="c2-metric sim-metric"><span>Δ</span><strong id="deltaHud">—</strong></div>
+      </div>
     </div>
   </div>
 
@@ -118,6 +174,7 @@
       <div class="eyebrow">Recorded sequence</div>
       <h3 id="eventTitle">Traffic advisory</h3>
       <p id="eventText">Tower advises PAT25 of a CRJ at 1,200 ft circling to Runway 33. The helicopter CVR does not contain the word “circling.”</p>
+      <p class="side-hint">Click any event — the stage, radar, and live tracks jump to that moment.</p>
       <div class="c2-event active" data-step="0"><time>20:46:02</time><div><b>Traffic advisory</b><span>CRJ at 1,200 ft, circling to Runway 33.</span></div></div>
       <div class="c2-event" data-step="1"><time>20:46:08</time><div><b>Visual separation accepted</b><span>Aircraft about 6.5 nm apart.</span></div></div>
       <div class="c2-event" data-step="2"><time>20:47:28</time><div><b>CRJ turns to final</b><span>516 ft radio altitude · 133 kt.</span></div></div>
@@ -195,11 +252,13 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">C2 Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=58"></script>
-<script src="script.js?v=58"></script>
+<script src="tip.js?v=59"></script>
+<script src="script.js?v=59"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
+const radarCanvas = document.getElementById('radarCanvas');
+const radarCtx = radarCanvas.getContext('2d');
 const $ = (s) => document.querySelector(s);
 
 let THREE, scene, camera, renderer;
@@ -213,6 +272,10 @@ let fbCtx = null;
 let fbProgress = 0.05;
 let fbExpProgress = 0;
 let fbHyp = 'alt';
+let lastIdx = 0;
+
+/** Schematic world → approx DCA corridor (derived, not FDR-sampled). */
+const GEO = { lat0: 38.8482, lon0: -77.0348, nmPerUnit: 0.46 };
 
 const defs = {
   alt: {
@@ -239,14 +302,22 @@ const defs = {
 };
 let sel = 'alt';
 
+/** Anchors mix recorded NTSB values with derived interpolations between them. */
 const events = [
-  { t: '20:46:02', sep: '6.5 nm', crj: '~1,200 ft advisory', state: 'Traffic advisory', title: 'Traffic advisory', text: 'Tower advises PAT25 of a CRJ at 1,200 ft circling to Runway 33. The helicopter CVR does not contain the word “circling”.', p: .05 },
-  { t: '20:46:08', sep: '6.5 nm', crj: 'inbound', state: 'Visual separation', title: 'Visual separation accepted', text: 'PAT25 reports the traffic in sight and requests visual separation. The controller approves the request.', p: .13 },
-  { t: '20:47:28', sep: 'closing', crj: '516 ft · 133 kt', state: 'Turn to final', title: 'Flight 5342 turns toward final', text: 'The airplane begins a left roll toward Runway 33 final at 516 ft radio altitude and 133 kt.', p: .55 },
-  { t: '20:47:40', sep: '0.95 nm', crj: 'TCAS active', state: 'Conflict', title: 'TCAS traffic advisory', text: 'Flight 5342 receives “Traffic, Traffic.” The aircraft are about 0.95 nm apart.', p: .72 },
-  { t: '20:47:42', sep: '<0.95 nm', crj: 'final turn', state: 'Pass behind', title: 'Pass-behind instruction', text: 'Tower directs PAT25 to pass behind the CRJ. Part of the transmission may not have been received by the helicopter crew.', p: .77 },
-  { t: '20:47:52', sep: 'rapid closure', crj: '344 ft · 143 kt', state: 'Final', title: 'Flight 5342 rolls out on final', text: 'The airplane is at 344 ft radio altitude and 143 kt seven seconds before impact.', p: .9 },
-  { t: '20:48:00', sep: '0', crj: '278 ft MSL', state: 'Collision', title: 'Collision', text: 'The NTSB final report places the collision at 278 ft mean sea level.', p: 1 }
+  { t: '20:46:02', sec: 0, sepNm: 6.5, state: 'Traffic advisory', title: 'Traffic advisory', text: 'Tower advises PAT25 of a CRJ at 1,200 ft circling to Runway 33. The helicopter CVR does not contain the word “circling”.', p: .05,
+    pat: { alt: 320, gs: 105 }, crj: { altRa: 1200, altMsl: 1250, gs: 145, vs: -200 } },
+  { t: '20:46:08', sec: 6, sepNm: 6.5, state: 'Visual separation', title: 'Visual separation accepted', text: 'PAT25 reports the traffic in sight and requests visual separation. The controller approves the request.', p: .13,
+    pat: { alt: 310, gs: 108 }, crj: { altRa: 1100, altMsl: 1150, gs: 142, vs: -250 } },
+  { t: '20:47:28', sec: 86, sepNm: 2.4, state: 'Turn to final', title: 'Flight 5342 turns toward final', text: 'The airplane begins a left roll toward Runway 33 final at 516 ft radio altitude and 133 kt.', p: .55,
+    pat: { alt: 300, gs: 112 }, crj: { altRa: 516, altMsl: 560, gs: 133, vs: -450 } },
+  { t: '20:47:40', sec: 98, sepNm: 0.95, state: 'TCAS TA', title: 'TCAS traffic advisory', text: 'Flight 5342 receives “Traffic, Traffic.” The aircraft are about 0.95 nm apart.', p: .72,
+    pat: { alt: 295, gs: 115 }, crj: { altRa: 420, altMsl: 460, gs: 138, vs: -500 } },
+  { t: '20:47:42', sec: 100, sepNm: 0.78, state: 'Pass behind', title: 'Pass-behind instruction', text: 'Tower directs PAT25 to pass behind the CRJ. Part of the transmission may not have been received by the helicopter crew.', p: .77,
+    pat: { alt: 290, gs: 116 }, crj: { altRa: 400, altMsl: 440, gs: 140, vs: -520 } },
+  { t: '20:47:52', sec: 110, sepNm: 0.28, state: 'Final', title: 'Flight 5342 rolls out on final', text: 'The airplane is at 344 ft radio altitude and 143 kt seven seconds before impact.', p: .9,
+    pat: { alt: 285, gs: 118 }, crj: { altRa: 344, altMsl: 380, gs: 143, vs: -600 } },
+  { t: '20:48:00', sec: 118, sepNm: 0, state: 'Collision', title: 'Collision', text: 'The NTSB final report places the collision at 278 ft mean sea level.', p: 1,
+    pat: { alt: 278, gs: 0 }, crj: { altRa: 278, altMsl: 278, gs: 0, vs: 0 } }
 ];
 
 const eventEls = document.querySelectorAll('.c2-event[data-step]');
@@ -259,14 +330,169 @@ function highlight(idx) {
   if (cur) cur.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function sampleAt(p) {
+  let i0 = 0;
+  for (let i = 0; i < events.length; i++) if (p >= events[i].p) i0 = i;
+  const i1 = Math.min(events.length - 1, i0 + 1);
+  const a = events[i0], b = events[i1];
+  const span = Math.max(1e-6, b.p - a.p);
+  const u = i0 === i1 ? 0 : (p - a.p) / span;
+  return {
+    idx: i0,
+    u,
+    t: a.t,
+    state: a.state,
+    title: a.title,
+    text: a.text,
+    sec: lerp(a.sec, b.sec, u),
+    sepNm: lerp(a.sepNm, b.sepNm, u),
+    pat: {
+      alt: lerp(a.pat.alt, b.pat.alt, u),
+      gs: lerp(a.pat.gs, b.pat.gs, u)
+    },
+    crj: {
+      altRa: lerp(a.crj.altRa, b.crj.altRa, u),
+      altMsl: lerp(a.crj.altMsl, b.crj.altMsl, u),
+      gs: lerp(a.crj.gs, b.crj.gs, u),
+      vs: lerp(a.crj.vs, b.crj.vs, u)
+    }
+  };
+}
+
+function worldToGeo(x, z) {
+  const dN = z * GEO.nmPerUnit;
+  const dE = x * GEO.nmPerUnit;
+  const cos = Math.cos(GEO.lat0 * Math.PI / 180);
+  return {
+    lat: GEO.lat0 + dN / 60,
+    lon: GEO.lon0 + dE / (60 * Math.max(0.2, cos))
+  };
+}
+
+function hdgFromPoints(from, to) {
+  const dx = to.x - from.x;
+  const dz = to.z - from.z;
+  let deg = Math.atan2(dx, dz) * 180 / Math.PI;
+  if (deg < 0) deg += 360;
+  return deg;
+}
+
+function fmtLat(v) { return (v >= 0 ? 'N' : 'S') + ' ' + Math.abs(v).toFixed(4) + '°'; }
+function fmtLon(v) { return (v >= 0 ? 'E' : 'W') + ' ' + Math.abs(v).toFixed(4) + '°'; }
+function fmtClock(sec) {
+  const base = 20 * 3600 + 46 * 60 + 2;
+  const s = Math.round(base + sec);
+  const hh = Math.floor(s / 3600) % 24;
+  const mm = Math.floor((s % 3600) / 60);
+  const ss = s % 60;
+  return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0');
+}
+
+function bearingNm(ax, az, bx, bz) {
+  const dx = (bx - ax) * GEO.nmPerUnit;
+  const dz = (bz - az) * GEO.nmPerUnit;
+  const rng = Math.hypot(dx, dz);
+  let brg = Math.atan2(dx, dz) * 180 / Math.PI;
+  if (brg < 0) brg += 360;
+  return { rng, brg };
+}
+
+function drawRadar(pa, pb, pca, pcb) {
+  const w = radarCanvas.width, h = radarCanvas.height;
+  const cx = w / 2, cy = h / 2;
+  const R = Math.min(cx, cy) - 8;
+  radarCtx.clearRect(0, 0, w, h);
+  radarCtx.fillStyle = 'rgba(4,12,18,0.92)';
+  radarCtx.beginPath(); radarCtx.arc(cx, cy, R + 4, 0, Math.PI * 2); radarCtx.fill();
+  radarCtx.strokeStyle = 'rgba(90,140,170,0.35)';
+  radarCtx.lineWidth = 1.5;
+  for (let i = 1; i <= 3; i++) {
+    radarCtx.beginPath(); radarCtx.arc(cx, cy, R * i / 3, 0, Math.PI * 2); radarCtx.stroke();
+  }
+  radarCtx.beginPath(); radarCtx.moveTo(cx - R, cy); radarCtx.lineTo(cx + R, cy); radarCtx.stroke();
+  radarCtx.beginPath(); radarCtx.moveTo(cx, cy - R); radarCtx.lineTo(cx, cy + R); radarCtx.stroke();
+  radarCtx.fillStyle = '#7ea8bf';
+  radarCtx.font = '18px ui-monospace,monospace';
+  radarCtx.fillText('N', cx - 6, cy - R + 22);
+
+  const pts = [{ p: pa, c: '#e8eef2', r: 7 }, { p: pb, c: '#7d99aa', r: 7 }];
+  if (mode === 'experiment' && pca && pcb) {
+    pts.push({ p: pca, c: '#d4b8f5', r: 6 }, { p: pcb, c: '#a888d0', r: 5 });
+  }
+  const scale = R / 8; // world units visible radius
+  // center on midpoint of baseline pair
+  const ox = (pa.x + pb.x) / 2;
+  const oz = (pa.z + pb.z) / 2;
+  pts.forEach(({ p, c, r }) => {
+    const x = cx + (p.x - ox) * scale;
+    const y = cy - (p.z - oz) * scale;
+    radarCtx.fillStyle = c;
+    radarCtx.beginPath(); radarCtx.arc(x, y, r * 2, 0, Math.PI * 2); radarCtx.fill();
+  });
+  // range line baseline
+  radarCtx.strokeStyle = 'rgba(240,200,121,0.75)';
+  radarCtx.lineWidth = 2;
+  radarCtx.beginPath();
+  radarCtx.moveTo(cx + (pa.x - ox) * scale, cy - (pa.z - oz) * scale);
+  radarCtx.lineTo(cx + (pb.x - ox) * scale, cy - (pb.z - oz) * scale);
+  radarCtx.stroke();
+}
+
+function updateLiveHud(p, pa, pb, lookA, lookB, pca, pcb) {
+  const s = sampleAt(p);
+  const ga = worldToGeo(pa.x, pa.z);
+  const gb = worldToGeo(pb.x, pb.z);
+  const br = bearingNm(pa.x, pa.z, pb.x, pb.z);
+  const hdgA = hdgFromPoints(pa, lookA || { x: pa.x, z: pa.z - 1 });
+  const hdgB = hdgFromPoints(pb, lookB || { x: pb.x, z: pb.z - 1 });
+  const dAlt = s.pat.alt - s.crj.altMsl;
+
+  $('#timeMetric').textContent = fmtClock(s.sec);
+  $('#stateMetric').textContent = s.state;
+  $('#sepMetric').textContent = s.sepNm.toFixed(2) + ' nm';
+  $('#brgMetric').textContent = Math.round(br.brg).toString().padStart(3, '0') + '° · ' + br.rng.toFixed(2) + ' nm geom';
+  $('#dAltMetric').textContent = (dAlt >= 0 ? '+' : '') + Math.round(dAlt) + ' ft';
+  $('#cpaMetric').textContent = Math.max(0, Math.round(118 - s.sec)) + ' s';
+
+  $('#patAlt').textContent = Math.round(s.pat.alt) + ' ft';
+  $('#patGs').textContent = Math.round(s.pat.gs) + ' kt';
+  $('#patLat').textContent = fmtLat(ga.lat);
+  $('#patLon').textContent = fmtLon(ga.lon);
+  $('#patHdg').textContent = Math.round(hdgA).toString().padStart(3, '0') + '°';
+  $('#patBias').textContent = '~−100 ft';
+
+  $('#crjAlt').textContent = Math.round(s.crj.altRa) + ' / ' + Math.round(s.crj.altMsl);
+  $('#crjGs').textContent = Math.round(s.crj.gs) + ' kt';
+  $('#crjLat').textContent = fmtLat(gb.lat);
+  $('#crjLon').textContent = fmtLon(gb.lon);
+  $('#crjHdg').textContent = Math.round(hdgB).toString().padStart(3, '0') + '°';
+  $('#crjVs').textContent = Math.round(s.crj.vs) + ' fpm';
+
+  if (s.idx !== lastIdx) {
+    lastIdx = s.idx;
+    $('#eventTitle').textContent = s.title;
+    $('#eventText').textContent = s.text;
+    highlight(s.idx);
+  }
+
+  drawRadar(pa, pb, pca, pcb);
+}
+
 function metric(e, idx) {
-  $('#timeMetric').textContent = e.t;
-  $('#sepMetric').textContent = e.sep;
-  $('#crjMetric').textContent = e.crj;
-  $('#stateMetric').textContent = e.state;
+  lastIdx = -1; // force sidebar refresh
   $('#eventTitle').textContent = e.title;
   $('#eventText').textContent = e.text;
   highlight(idx);
+  lastIdx = idx;
+}
+
+function scrubTo(p, idx) {
+  if (anim) { cancelAnimationFrame(anim); anim = null; $('#playBtn').textContent = 'Play reconstruction'; }
+  placeHist(p);
+  metric(events[idx], idx);
+  lastIdx = idx;
 }
 
 function setMode(exp) {
@@ -275,7 +501,6 @@ function setMode(exp) {
   $('#sideHist').classList.toggle('hide', exp);
   $('#sideExp').classList.toggle('hide', !exp);
   $('#histPanels').classList.toggle('hide', exp);
-  $('#histMetrics').classList.toggle('hide', exp);
   $('#expMetrics').classList.toggle('hide', !exp);
   $('#playBtn').classList.toggle('hide', exp);
   $('#runExp').classList.toggle('hide', !exp);
@@ -283,11 +508,11 @@ function setMode(exp) {
   $('#sourceBadge').classList.toggle('sim', exp);
   $('#stageLabel').textContent = exp ? 'Matched counterfactual' : 'Historical reconstruction';
   $('#stageTitle').textContent = exp ? 'Same seed · one change' : 'DCA · Night Crossing';
-  $('#modeLabel').textContent = exp ? 'Simulated intervention' : 'Recorded + derived';
+  $('#modeLabel').textContent = exp ? 'Simulated · derived tracks' : 'Live tracks · derived geo';
   setCfVisibility(exp);
   if (exp) applyHyp(sel);
   else {
-    placeHist(0.05);
+    placeHist(fbProgress || 0.05);
     if (useFallback) drawFallback();
   }
 }
@@ -462,34 +687,79 @@ function applyHyp(hyp) {
 
 function placeHist(p) {
   fbProgress = p;
-  if (useFallback || !craftA) { drawFallback(); return; }
+  if (useFallback || !craftA) {
+    drawFallback();
+    // approximate positions for HUD in fallback
+    const pts = makePathPoints(fbHyp);
+    const along = (arr, t) => {
+      const n = arr.length - 1;
+      const u = Math.min(1, Math.max(0, t)) * n;
+      const i = Math.min(n - 1, Math.floor(u));
+      const f = u - i;
+      return {
+        x: arr[i].x + (arr[i + 1].x - arr[i].x) * f,
+        y: arr[i].y + (arr[i + 1].y - arr[i].y) * f,
+        z: arr[i].z + (arr[i + 1].z - arr[i].z) * f
+      };
+    };
+    const pa = along(pts.baseA, p);
+    const pb = along(pts.baseB, Math.min(1, p * 0.985));
+    const la = along(pts.baseA, Math.min(1, p + 0.02));
+    const lb = along(pts.baseB, Math.min(1, p * 0.985 + 0.02));
+    updateLiveHud(p, pa, pb, la, lb);
+    return;
+  }
   const pa = routeA.getPoint(Math.min(1, p));
   const pb = routeB.getPoint(Math.min(1, p * 0.985));
+  const la = routeA.getPoint(Math.min(1, p + 0.02));
+  const lb = routeB.getPoint(Math.min(1, p + 0.02));
   craftA.position.copy(pa);
   craftB.position.copy(pb);
-  craftA.lookAt(routeA.getPoint(Math.min(1, p + 0.02)));
-  craftB.lookAt(routeB.getPoint(Math.min(1, p + 0.02)));
+  craftA.lookAt(la);
+  craftB.lookAt(lb);
+  updateLiveHud(p, pa, pb, la, lb);
 }
 
 function placeExp(t) {
   fbExpProgress = t;
-  if (useFallback || !craftA) { drawFallback(); return; }
   const lag = sel === 'timing' ? 0.12 : 0;
   const tb = Math.min(1, Math.max(0, t));
   const tc = Math.min(1, Math.max(0, t - lag));
+  if (useFallback || !craftA) {
+    drawFallback();
+    const pts = makePathPoints(fbHyp);
+    const along = (arr, u) => {
+      const n = arr.length - 1;
+      const q = Math.min(1, Math.max(0, u)) * n;
+      const i = Math.min(n - 1, Math.floor(q));
+      const f = q - i;
+      return {
+        x: arr[i].x + (arr[i + 1].x - arr[i].x) * f,
+        y: arr[i].y + (arr[i + 1].y - arr[i].y) * f,
+        z: arr[i].z + (arr[i + 1].z - arr[i].z) * f
+      };
+    };
+    const pa = along(pts.baseA, tb);
+    const pb = along(pts.baseB, Math.min(1, tb * 0.985));
+    const pca = along(pts.cfA, tc);
+    const pcb = along(pts.cfB, Math.min(1, tc * 0.985));
+    updateLiveHud(0.05 + 0.95 * tb, pa, pb, pa, pb, pca, pcb);
+    return;
+  }
   const pa = routeA.getPoint(tb);
   const pb = routeB.getPoint(Math.min(1, tb * 0.985));
   const pca = routeAcf.getPoint(tc);
   const pcb = routeBcf.getPoint(Math.min(1, tc * 0.985));
+  const la = routeA.getPoint(Math.min(1, tb + 0.02));
+  const lb = routeB.getPoint(Math.min(1, tb + 0.02));
   craftA.position.copy(pa);
   craftB.position.copy(pb);
   craftAcf.position.copy(pca);
   craftBcf.position.copy(pcb);
-  craftA.lookAt(routeA.getPoint(Math.min(1, tb + 0.02)));
-  craftB.lookAt(routeB.getPoint(Math.min(1, tb + 0.02)));
+  craftA.lookAt(la);
+  craftB.lookAt(lb);
   craftAcf.lookAt(routeAcf.getPoint(Math.min(1, tc + 0.02)));
   craftBcf.lookAt(routeBcf.getPoint(Math.min(1, tc + 0.02)));
-  // separation helper between baseline PAT25 and CF PAT25
   if (sepLine) {
     const pos = sepLine.geometry.attributes.position;
     pos.setXYZ(0, pa.x, pa.y, pa.z);
@@ -501,6 +771,7 @@ function placeExp(t) {
     cpaMarker.position.lerpVectors(pa, pca, 0.5);
     cpaMarker.visible = true;
   }
+  updateLiveHud(0.05 + 0.95 * tb, pa, pb, la, lb, pca, pcb);
 }
 
 async function init3D() {
@@ -596,17 +867,30 @@ await init3D();
 placeHist(0.05);
 metric(events[0], 0);
 
+eventEls.forEach((el) => el.addEventListener('click', () => {
+  if (mode !== 'history') return;
+  const idx = Number(el.dataset.step);
+  scrubTo(events[idx].p, idx);
+}));
+pointEls.forEach((el) => el.addEventListener('click', () => {
+  if (mode !== 'history') return;
+  const idx = Number(el.dataset.step);
+  scrubTo(events[idx].p, idx);
+}));
+
 $('#playBtn').addEventListener('click', () => {
   if (mode !== 'history') return;
   if (anim) cancelAnimationFrame(anim);
   const start = performance.now();
   $('#playBtn').textContent = 'Playing…';
+  lastIdx = -1;
   const step = (now) => {
     const q = Math.min(1, (now - start) / 11500);
-    placeHist(0.05 + 0.95 * q);
+    const p = 0.05 + 0.95 * q;
+    placeHist(p);
     let idx = 0;
-    for (let i = 0; i < events.length; i++) if (q >= events[i].p) idx = i;
-    metric(events[idx], idx);
+    for (let i = 0; i < events.length; i++) if (p >= events[i].p) idx = i;
+    if (idx !== lastIdx) metric(events[idx], idx);
     if (q < 1) anim = requestAnimationFrame(step);
     else $('#playBtn').textContent = 'Replay reconstruction';
   };
