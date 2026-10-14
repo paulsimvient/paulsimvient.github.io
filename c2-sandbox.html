@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sandbox | DCA Night Crossing | Paul Cummings</title>
 <meta name="description" content="CoAgentics sandbox: reconstruct the DCA Night Crossing record, then run matched counterfactual trials and see what each change creates.">
-<link rel="stylesheet" href="styles.css?v=69">
+<link rel="stylesheet" href="styles.css?v=70">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -94,14 +94,19 @@
 .rate-card span{display:block;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .rate-card strong{display:block;font-size:1.35rem;margin-top:2px}
 .rate-card em{display:block;font-size:.75rem;color:var(--muted);font-style:normal;margin-top:2px}
-.mc-charts{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
-.mc-charts .lbl{font:600 .65rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
-.mc-charts svg{width:100%;height:auto;display:block;background:#f7fafc;border:1px solid var(--line);border-radius:8px}
-.mc-legend{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 12px;font:600 .68rem ui-monospace,monospace;color:var(--muted)}
+.mc-panel{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:18px 20px;box-shadow:0 10px 34px rgba(21,32,51,.06)}
+.mc-panel h3{margin:0 0 4px;font-size:1.15rem}
+.mc-panel .sub{margin:0 0 14px;color:var(--muted);font-size:.88rem}
+.mc-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px}
+.mc-chart-card{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg-soft)}
+.mc-chart-card .lbl{font:600 .65rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.mc-chart-card svg{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:8px}
+.mc-legend{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 8px;font:600 .68rem ui-monospace,monospace;color:var(--muted)}
 .mc-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
 .mc-legend .base i{background:#c45c45}
 .mc-legend .cf i{background:#3b82a8}
 .mc-legend .thr{border-left:2px dashed #b45309;padding-left:6px}
+@media(max-width:1050px){.mc-grid{grid-template-columns:1fr}}
 .c2-side{border:1px solid var(--line);border-radius:14px;background:#fff;padding:18px;box-shadow:0 10px 34px rgba(21,32,51,.06);max-height:590px;overflow:auto}
 .c2-side h3{font-size:1.12rem;margin:0 0 8px}.c2-side p{color:var(--muted);font-size:.9rem}
 .c2-event{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:72px 1fr;gap:10px;margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:8px;transition:background .2s,box-shadow .2s,opacity .2s;opacity:.55}
@@ -286,20 +291,6 @@
             <p id="pPosOut" style="margin:4px 0 0;font-size:.86rem;color:var(--muted)"></p>
             <p id="claimOut" style="margin:8px 0 0;font-size:.86rem;color:var(--muted)"></p>
           </div>
-          <div class="mc-charts" id="mcCharts" style="display:none">
-            <div class="lbl">Min-separation distribution (nm)</div>
-            <div class="mc-legend">
-              <span class="base"><i></i>Baseline</span>
-              <span class="cf"><i></i>Counterfactual</span>
-              <span class="thr">Impact &lt; 0.12 nm</span>
-            </div>
-            <svg id="histSvg" viewBox="0 0 320 140" role="img" aria-label="Overlapping baseline and counterfactual separation histograms"></svg>
-            <div class="lbl" style="margin-top:12px">Impact rate before → after</div>
-            <svg id="impactSvg" viewBox="0 0 320 88" role="img" aria-label="Impact rate baseline versus counterfactual"></svg>
-            <div class="lbl" style="margin-top:12px">Rescued collisions by hypothesis</div>
-            <svg id="rescueSvg" viewBox="0 0 320 110" role="img" aria-label="Rescued collision rate per hypothesis"></svg>
-            <p style="margin:8px 0 0;font-size:.72rem;color:var(--muted)">Model distributions from matched Monte Carlo — not NTSB measured densities.</p>
-          </div>
           <div id="rankBox" style="margin-top:14px;display:none">
             <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">What mattered (mean |Δ| across hyps)</span>
             <div id="rankBars" style="margin-top:8px"></div>
@@ -308,6 +299,31 @@
       </div>
     </div>
   </aside>
+</div>
+
+<div class="mc-panel hide" id="mcPanel">
+  <h3>Matched trial outcomes</h3>
+  <p class="sub">Baseline vs counterfactual from the current Monte Carlo batch. Scroll is not required — these update each auto cycle.</p>
+  <div class="mc-grid">
+    <div class="mc-chart-card">
+      <div class="lbl">Min-separation distribution (nm)</div>
+      <div class="mc-legend">
+        <span class="base"><i></i>Baseline</span>
+        <span class="cf"><i></i>Counterfactual</span>
+        <span class="thr">Impact &lt; 0.12 nm</span>
+      </div>
+      <svg id="histSvg" viewBox="0 0 420 160" role="img" aria-label="Overlapping baseline and counterfactual separation histograms"></svg>
+    </div>
+    <div class="mc-chart-card">
+      <div class="lbl">Impact rate before → after</div>
+      <svg id="impactSvg" viewBox="0 0 320 100" role="img" aria-label="Impact rate baseline versus counterfactual"></svg>
+    </div>
+    <div class="mc-chart-card">
+      <div class="lbl">Rescued collisions by hypothesis</div>
+      <svg id="rescueSvg" viewBox="0 0 320 120" role="img" aria-label="Rescued collision rate per hypothesis"></svg>
+    </div>
+  </div>
+  <p style="margin:12px 0 0;font-size:.78rem;color:var(--muted)">Model distributions from matched Monte Carlo — not NTSB measured densities.</p>
 </div>
 
 <div class="hist-panels" id="histPanels">
@@ -351,8 +367,8 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=69"></script>
-<script src="script.js?v=69"></script>
+<script src="tip.js?v=70"></script>
+<script src="script.js?v=70"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -812,6 +828,7 @@ function setMode(exp) {
   $('#sideHist').classList.toggle('hide', exp);
   $('#sideExp').classList.toggle('hide', !exp);
   $('#histPanels').classList.toggle('hide', exp);
+  $('#mcPanel')?.classList.toggle('hide', !exp);
   $('#expMetrics').classList.toggle('hide', !exp);
   $('#playBtn').classList.toggle('hide', exp);
   $('#runExp').classList.toggle('hide', !exp);
@@ -1467,75 +1484,76 @@ function renderOutcomeCharts(primary, ranked) {
   const histSvg = $('#histSvg');
   const impactSvg = $('#impactSvg');
   const rescueSvg = $('#rescueSvg');
-  const charts = $('#mcCharts');
-  if (!histSvg || !impactSvg || !rescueSvg || !charts) return;
-  charts.style.display = 'block';
+  const panel = $('#mcPanel');
+  if (!histSvg || !impactSvg || !rescueSvg || !panel) return;
+  panel.classList.remove('hide');
 
   // --- overlapping histograms ---
   const { min, max, bins, base, cf } = primary.hist;
   const peak = Math.max(1, ...base, ...cf);
-  const padL = 28, padR = 10, padT = 10, padB = 28;
-  const W = 320, H = 140;
+  const padL = 28, padR = 12, padT = 12, padB = 30;
+  const W = 420, H = 160;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const bw = plotW / bins;
   let hist = '';
-  // impact threshold line
   const thrX = padL + ((IMPACT_NM - min) / (max - min)) * plotW;
   hist += `<line x1="${thrX}" y1="${padT}" x2="${thrX}" y2="${padT + plotH}" stroke="#b45309" stroke-width="1.5" stroke-dasharray="3 3"/>`;
-  hist += `<text x="${Math.min(W - 8, thrX + 4)}" y="${padT + 10}" fill="#b45309" font-size="8" font-family="ui-monospace,monospace">impact</text>`;
+  hist += `<text x="${Math.min(W - 36, thrX + 4)}" y="${padT + 11}" fill="#b45309" font-size="9" font-family="ui-monospace,monospace">impact</text>`;
   for (let i = 0; i < bins; i++) {
     const x = padL + i * bw;
     const hB = (base[i] / peak) * plotH;
     const hC = (cf[i] / peak) * plotH;
-    hist += `<rect x="${x + 1}" y="${padT + plotH - hB}" width="${bw * 0.42}" height="${hB}" fill="#c45c45" opacity="0.85"/>`;
-    hist += `<rect x="${x + bw * 0.45}" y="${padT + plotH - hC}" width="${bw * 0.42}" height="${hC}" fill="#3b82a8" opacity="0.85"/>`;
+    hist += `<rect x="${x + 1}" y="${padT + plotH - hB}" width="${bw * 0.42}" height="${Math.max(0, hB)}" fill="#c45c45" opacity="0.85"/>`;
+    hist += `<rect x="${x + bw * 0.45}" y="${padT + plotH - hC}" width="${bw * 0.42}" height="${Math.max(0, hC)}" fill="#3b82a8" opacity="0.85"/>`;
   }
   hist += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="#94a3b8" stroke-width="1"/>`;
-  hist += `<text x="${padL}" y="${H - 8}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">0</text>`;
-  hist += `<text x="${padL + plotW - 18}" y="${H - 8}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">${max.toFixed(2)}</text>`;
-  hist += `<text x="${padL + plotW / 2 - 24}" y="${H - 8}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">min sep (nm)</text>`;
+  hist += `<text x="${padL}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">0</text>`;
+  hist += `<text x="${padL + plotW - 24}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">${max.toFixed(2)}</text>`;
+  hist += `<text x="${padL + plotW / 2 - 30}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">min sep (nm)</text>`;
   histSvg.innerHTML = hist;
 
   // --- impact before → after ---
   const bPct = primary.baseHitRate * 100;
   const cPct = primary.cfHitRate * 100;
-  const barMax = 100;
-  const iPadL = 70, iPadR = 36, iPadT = 16, iPadB = 20;
-  const iW = 320 - iPadL - iPadR;
-  const rowH = 22;
+  const iPadL = 72, iW = 320 - iPadL - 40;
+  const rowH = 24;
   let imp = '';
   const drawRow = (y, label, pct, color) => {
-    const w = (pct / barMax) * iW;
-    imp += `<text x="8" y="${y + 14}" fill="#334155" font-size="10" font-family="ui-monospace,monospace">${label}</text>`;
+    const w = (pct / 100) * iW;
+    imp += `<text x="8" y="${y + 16}" fill="#334155" font-size="11" font-family="ui-monospace,monospace">${label}</text>`;
     imp += `<rect x="${iPadL}" y="${y}" width="${iW}" height="${rowH}" rx="4" fill="#e8eef2"/>`;
     imp += `<rect x="${iPadL}" y="${y}" width="${Math.max(2, w)}" height="${rowH}" rx="4" fill="${color}"/>`;
-    imp += `<text x="${iPadL + iW + 6}" y="${y + 14}" fill="#0f172a" font-size="11" font-family="ui-monospace,monospace" font-weight="700">${pct.toFixed(0)}%</text>`;
+    imp += `<text x="${iPadL + iW + 6}" y="${y + 16}" fill="#0f172a" font-size="12" font-family="ui-monospace,monospace" font-weight="700">${pct.toFixed(0)}%</text>`;
   };
-  drawRow(iPadT, 'Before', bPct, '#c45c45');
-  drawRow(iPadT + rowH + 12, 'After', cPct, '#1a7a4c');
-  imp += `<text x="${iPadL}" y="${88 - 6}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">impact rate · threshold ${IMPACT_NM} nm</text>`;
+  drawRow(18, 'Before', bPct, '#c45c45');
+  drawRow(18 + rowH + 14, 'After', cPct, '#1a7a4c');
+  imp += `<text x="${iPadL}" y="${96}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">impact rate · threshold ${IMPACT_NM} nm</text>`;
   impactSvg.innerHTML = imp;
 
   // --- rescued by hypothesis ---
   const byRescue = [...ranked].sort((a, b) => b.rescuedRate - a.rescuedRate);
   const rMax = Math.max(0.01, ...byRescue.map((r) => r.rescuedRate));
-  const rPadL = 58, rPadR = 40, rPadT = 12, rPadB = 18;
-  const rPlotW = 320 - rPadL - rPadR;
-  const rPlotH = 110 - rPadT - rPadB;
+  const rPadL = 62, rPlotW = 320 - rPadL - 42;
+  const rPlotH = 88;
   const rh = rPlotH / byRescue.length;
   let res = '';
   byRescue.forEach((r, i) => {
-    const y = rPadT + i * rh;
+    const y = 12 + i * rh;
     const w = (r.rescuedRate / rMax) * rPlotW;
     const pct = Math.round(r.rescuedRate * 100);
     const winner = i === 0;
-    res += `<text x="6" y="${y + rh * 0.62}" fill="#334155" font-size="10" font-family="ui-monospace,monospace">${r.label}</text>`;
-    res += `<rect x="${rPadL}" y="${y + 4}" width="${rPlotW}" height="${rh - 8}" rx="4" fill="#e8eef2"/>`;
-    res += `<rect x="${rPadL}" y="${y + 4}" width="${Math.max(2, w)}" height="${rh - 8}" rx="4" fill="${winner ? '#1a7a4c' : '#3b82a8'}"/>`;
-    res += `<text x="${rPadL + rPlotW + 6}" y="${y + rh * 0.62}" fill="#0f172a" font-size="11" font-family="ui-monospace,monospace" font-weight="700">${pct}%</text>`;
+    res += `<text x="6" y="${y + rh * 0.65}" fill="#334155" font-size="11" font-family="ui-monospace,monospace">${r.label}</text>`;
+    res += `<rect x="${rPadL}" y="${y + 3}" width="${rPlotW}" height="${rh - 8}" rx="4" fill="#e8eef2"/>`;
+    res += `<rect x="${rPadL}" y="${y + 3}" width="${Math.max(2, w)}" height="${rh - 8}" rx="4" fill="${winner ? '#1a7a4c' : '#3b82a8'}"/>`;
+    res += `<text x="${rPadL + rPlotW + 6}" y="${y + rh * 0.65}" fill="#0f172a" font-size="12" font-family="ui-monospace,monospace" font-weight="700">${pct}%</text>`;
   });
   rescueSvg.innerHTML = res;
+
+  // Keep panel in view when results refresh
+  if (mode === 'experiment') {
+    panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
 }
 
 function animateExpPlayback(gen, outcome) {
