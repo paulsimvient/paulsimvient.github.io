@@ -11,3 +11,6 @@ Primary pages:
 - `system-demo.html` — interactive CoAgentics demonstration
 - `economics-demo.html` — animated economics demonstration
 - `book.html` — Thinking Together
+
+## C2 Sandbox
+`c2-sandbox.html` is a GitHub Pages-ready browser C2 sandbox. It uses Three.js from jsDelivr, historical NTSB DCA25MA108/AIR-26-02 values, and a clearly separated simulated counterfactual layer.
