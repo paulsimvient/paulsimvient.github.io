@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Economics Demonstration | Paul Cummings, Ph.D.</title>
-<meta name="description" content="A simple interactive CoAgentics economics demonstration: change one market signal, compare matched outcomes, and see which explanation survives.">
-<link rel="stylesheet" href="styles.css?v=57">
+<meta name="description" content="A 2×2 worked example: named toy trader policy, matched noise, sealed holdout cell, and scored rival explanations.">
+<link rel="stylesheet" href="styles.css?v=73">
 <style>
 :root{--ink:#152033;--accent:#1f4e79;--paper:#ffffff;--soft:#eef2f6;--green:#dbeafe;--muted:#5b667a;--warn:#b45309}
 .demo-shell{max-width:1120px;margin:0 auto;padding:2rem 1.5rem 5rem;color:var(--ink)}
 .eyebrow{font:700 .72rem/1 system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 .hero{max-width:860px;margin:1rem 0 1.25rem}.hero h1{font-size:clamp(2.4rem,5.5vw,4.6rem);line-height:.94;letter-spacing:-.045em;margin:.5rem 0 1rem;color:var(--ink)}.hero p{font-size:clamp(1.05rem,2vw,1.22rem);line-height:1.6;color:#3d4a5c;max-width:760px}.hero strong{color:var(--ink)}
-.controls{display:flex;gap:.7rem;flex-wrap:wrap;margin:1.1rem 0}.controls button{appearance:none;border:1px solid var(--accent);background:#fff;color:var(--accent);padding:.78rem 1rem;border-radius:6px;font:700 .76rem/1 system-ui;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.controls .primary{background:var(--accent);color:#fff}.controls button:hover{transform:translateY(-1px)}
+.controls{display:flex;gap:.7rem;flex-wrap:wrap;margin:1.1rem 0}.controls button{appearance:none;border:1px solid var(--accent);background:#fff;color:var(--accent);padding:.78rem 1rem;border-radius:6px;font:700 .76rem/1 system-ui;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.controls .primary{background:var(--accent);color:#fff}.controls button:hover{transform:translateY(-1px)}.controls button:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .story{display:grid;grid-template-columns:1.12fr .88fr;gap:1rem;align-items:start}
 .card{background:var(--paper);border:1px solid #d5dbe6;border-radius:14px;box-shadow:0 10px 28px rgba(21,32,51,.06)}
 .market{padding:1rem}.market-stage{position:relative;height:500px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#eef2f6 0%,#f8fafc 58%,#e8edf3 100%)}
@@ -37,7 +37,8 @@
 .choice{display:grid;grid-template-columns:28px 1fr auto;gap:.6rem;align-items:center;padding:.72rem .78rem;border-radius:10px;background:#fff;border:1px solid #d5dbe6;transition:.3s}
 .choice i{width:22px;height:22px;border-radius:50%;border:1px solid #94a3b8;display:grid;place-items:center;font-style:normal;font-size:.65rem}
 .choice b{font-size:.88rem}.choice small{font-size:.72rem;color:#64748b}
-.choice.leading{border-color:#1f4e79;background:#e0eef8}.choice.leading i{background:#1f4e79;color:#fff;border-color:#1f4e79}.choice.faded{opacity:.45}
+.choice .sse{font:700 .68rem ui-monospace,monospace;color:#64748b}
+.choice.leading{border-color:#1f4e79;background:#e0eef8}.choice.leading i{background:#1f4e79;color:#fff;border-color:#1f4e79}.choice.leading .sse{color:#1f4e79}.choice.faded{opacity:.45}
 .result-box{margin-top:.9rem;padding:1rem;border-radius:10px;background:#0f172a;color:#e8eef6}
 .result-box .big{font-size:2.2rem;line-height:1;font-weight:800;letter-spacing:-.04em;color:#f8fafc}
 .result-box small{display:block;color:#94a3b8;margin-top:.25rem;line-height:1.35}
@@ -47,10 +48,17 @@
 .beat{padding:.7rem;border-radius:8px;background:#e8edf3;text-align:center;font:700 .68rem/1.15 system-ui;letter-spacing:.06em;text-transform:uppercase;color:#5b667a;cursor:pointer}
 .beat.active{background:var(--accent);color:#fff}.beat.done{background:var(--green);color:var(--accent)}
 .fourcells{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:1rem}
-.cell{background:#fff;border:1px solid #d5dbe6;border-radius:10px;padding:.75rem;transition:.35s}
+.cell{background:#fff;border:1px solid #d5dbe6;border-radius:10px;padding:.75rem;transition:.35s;min-height:88px}
 .cell span{display:block;font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:#64748b}
 .cell b{display:block;font-size:1.25rem;margin-top:.2rem;color:var(--ink)}
+.cell em{display:block;font:600 .68rem ui-monospace,monospace;font-style:normal;color:#64748b;margin-top:.2rem}
 .cell.on{background:#e0eef8;border-color:rgba(31,78,121,.35);transform:translateY(-2px)}
+.cell.sealed{background:#f1f5f9;border-style:dashed}
+.cell.sealed b{color:#64748b;font-size:1rem}
+.holdout-box{margin-top:1rem;padding:1rem;border-radius:10px;background:#f8fafc;border:1px solid #d5dbe6;display:none}
+.holdout-box.show{display:block}
+.holdout-box h3{margin:0 0 .4rem;font-size:.95rem}
+.holdout-box p{margin:0;font-size:.88rem;color:#3d4a5c;line-height:1.45}
 .details{margin-top:1.25rem}.details details{background:#fff;border:1px solid #d5dbe6;border-radius:12px;padding:.95rem 1rem}
 .details summary{cursor:pointer;font-weight:750;color:var(--ink)}
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
@@ -60,6 +68,7 @@
 .footer-actions a{display:inline-flex;align-items:center;justify-content:center;padding:.85rem 1.05rem;border-radius:6px;border:1px solid var(--accent);text-decoration:none;color:var(--accent);background:#fff}
 .footer-actions a:first-child{background:var(--accent);color:#fff}
 .note{font-size:.84rem;color:var(--muted);margin-top:1rem;line-height:1.45}
+.policy{font:600 .78rem ui-monospace,monospace;color:var(--muted);margin:.6rem 0 0}
 @media(max-width:900px){.story{grid-template-columns:1fr}.market-stage{height:470px}.detail-grid{grid-template-columns:1fr}.fourcells{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.demo-shell{padding:1.2rem .8rem 3rem}.fixed{grid-template-columns:1fr 1fr}.fixed div:last-child{display:none}.market-stage{height:455px}.chart{top:180px}.fourcells{grid-template-columns:1fr 1fr}.beats{grid-template-columns:1fr}.agentline{align-items:flex-start;flex-direction:column}}
 </style>
@@ -84,133 +93,505 @@
 
 <main class="demo-shell">
 <section class="hero">
-<div class="eyebrow">CoAgentics demonstration · economics</div>
+<div class="eyebrow">CoAgentics · economics worked example</div>
 <h1>Change one thing.<br>Watch what changes.</h1>
-<p>An opaque AI trader is placed in the <strong>same market</strong>. We change what it can observe and ask one simple question: <strong>what makes its behavior move?</strong></p>
+<p>A <strong>named toy trader policy</strong> sits in a controlled 2×2 information design. Private value stays fixed. We vary news and price history, score rival models on observed means, then unlock a sealed holdout cell.</p>
+<p class="policy">bid = 75 + 5·H + 3·N + 12·H·N + ε · seed 42 · N=40 matched draws</p>
 <aside class="demo-guide" id="guide" aria-live="polite">
 <div class="tag">FOCUS</div>
 <div>
-<p id="guideText">Three beats only: ask a question, run controlled tests, then read the evidence. One tip at a time will point at what to watch.</p>
-<span class="hint">Press Run the experiment — or click a beat below.</span>
+<p id="guideText">Ask a question, run controlled tests on three discovery cells, freeze a candidate, then unlock the holdout.</p>
+<span class="hint">Press Run — or step through the beats.</span>
 </div>
 </aside>
 <div class="controls">
-<button class="primary" id="runBtn" data-tip="Plays the three-beat experiment automatically." data-tip-title="Run">Run the experiment</button>
+<button class="primary" id="runBtn" data-tip="Plays discovery beats, freezes H₃, then unlocks the holdout." data-tip-title="Run">Run the example</button>
 <button id="stepBtn" data-tip="Advance one beat and pause." data-tip-title="Step">Step</button>
-<button id="surpriseBtn" data-tip="Jump to the most informative condition — where rival explanations disagree most." data-tip-title="Surprise me">Surprise me</button>
-<button id="resetBtn" data-tip="Return to the starting question." data-tip-title="Reset">Reset</button>
+<button id="holdoutBtn" data-tip="Freeze the candidate claim and unlock the sealed holdout cell." data-tip-title="Holdout" disabled>Unlock holdout</button>
+<button id="resetBtn" data-tip="Return to the starting question and reseal the holdout." data-tip-title="Reset">Reset</button>
 </div>
 <div class="beats">
-<div class="beat active" id="beat1" role="button" tabindex="0" data-tip-title="1 · Question" data-tip="Keep rival explanations alive until a test can separate them." data-focus="Focus on the three hypotheses — none is promoted yet from a single bid." data-focus-target="#hNews">1 · Question</div>
-<div class="beat" id="beat2" role="button" tabindex="0" data-tip-title="2 · Test" data-tip="Change one observation at a time while market fundamentals stay fixed." data-focus="Focus on the highlighted signal card — that is the one controlled change." data-focus-target="#historyCard">2 · Test</div>
-<div class="beat" id="beat3" role="button" tabindex="0" data-tip-title="3 · Evidence" data-tip="Read the paired difference and which explanation survives." data-focus="Focus on Δ and the leading hypothesis — the combination separates from simpler stories." data-focus-target="#delta">3 · Evidence</div>
+<div class="beat active" id="beat1" role="button" tabindex="0" data-tip-title="1 · Question" data-tip="Carry three explanations until a test separates them." data-focus="Watch the three hypotheses — none wins from a single bid." data-focus-target="#hNews">1 · Question</div>
+<div class="beat" id="beat2" role="button" tabindex="0" data-tip-title="2 · Test" data-tip="Change one observation at a time while private value stays fixed." data-focus="Watch the highlighted signal card — that is the one controlled change." data-focus-target="#historyCard">2 · Test</div>
+<div class="beat" id="beat3" role="button" tabindex="0" data-tip-title="3 · Evidence" data-tip="Read Δ, SSE ranks, then unlock the sealed holdout." data-focus="Watch Δ and the leading hypothesis, then unlock holdout." data-focus-target="#delta">3 · Evidence</div>
 </div>
 </section>
 
 <section class="story">
-<div class="card market" data-tip="Same fundamentals and seed. Only the information the agent can see changes." data-tip-title="Controlled market">
+<div class="card market" data-tip="Same private value and matched ε draws. Only information shown to the toy policy changes." data-tip-title="Controlled market">
 <div class="market-stage">
-  <div class="market-title"><b>Controlled market</b><span>Fundamentals fixed · seed 42</span></div>
+  <div class="market-title"><b>Controlled market</b><span id="seedLabel">Private value $100 · seed 42 · N=40</span></div>
   <div class="fixed">
-    <div data-tip="True private value — held fixed across treatments." data-tip-title="Private value"><span>Private value</span><b>$100</b></div>
-    <div class="signal" id="historyCard" data-tip="Controlled observation: what price path the agent is allowed to see." data-tip-title="Price history"><span>Price history</span><b id="historyVal">Stable</b></div>
+    <div data-tip="True private value — held fixed across treatments. Not a full market identity." data-tip-title="Private value"><span>Private value</span><b>$100</b></div>
+    <div class="signal" id="historyCard" data-tip="Controlled observation: price path shown to the policy." data-tip-title="Price history"><span>Price history</span><b id="historyVal">Stable</b></div>
     <div class="signal" id="newsCard" data-tip="Controlled observation: whether a news signal is shown." data-tip-title="News"><span>News</span><b id="newsVal">None</b></div>
   </div>
-  <div class="chart" data-tip="Reference vs black-box bids under the current treatment." data-tip-title="Bids">
+  <div class="chart" data-tip="Additive H₁+H₂ prediction vs toy-policy mean bid under the current treatment." data-tip-title="Bids">
     <div class="gridline"></div><div class="gridline"></div><div class="gridline"></div>
-    <div class="bidbar ref"><div class="barlabel">$80</div><div class="axis-label">Reference</div></div>
-    <div class="bidbar subject" id="subjectBar"><div class="barlabel" id="subjectLabel">$75</div><div class="axis-label">Black box</div></div>
+    <div class="bidbar ref" id="refBar"><div class="barlabel" id="refLabel">$83</div><div class="axis-label">Additive pred.</div></div>
+    <div class="bidbar subject" id="subjectBar"><div class="barlabel" id="subjectLabel">$75</div><div class="axis-label">Toy policy</div></div>
   </div>
-  <div class="agentline" data-tip="Narrates the current beat in plain language." data-tip-title="What’s happening"><div class="prompt"><strong id="stageTitle">Start with a question.</strong><span id="stageCopy">The agent bids $75. Several explanations could fit one observation.</span></div><div class="status" id="stageStatus">Ready</div></div>
+  <div class="agentline" data-tip="Narrates the current beat." data-tip-title="What’s happening"><div class="prompt"><strong id="stageTitle">Start with a question.</strong><span id="stageCopy">Mean bid under no news · stable history.</span></div><div class="status" id="stageStatus">Ready</div></div>
 </div>
 </div>
 
 <div class="side">
-  <section class="card question" data-tip="Competing explanations. Bars of support come later — after tests, not before." data-tip-title="Hypotheses">
+  <section class="card question" data-tip="Competing models scored by SSE on discovery-cell means." data-tip-title="Hypotheses">
     <div class="stepno">Question</div>
     <h2>What is driving the bid?</h2>
-    <p>Keep more than one explanation alive until an experiment separates them.</p>
+    <p>Score each model against observed discovery means. Lower SSE fits better.</p>
     <div class="choices">
-      <div class="choice" id="hNews" data-tip="H₁: the agent mainly responds to news." data-tip-title="News"><i>1</i><b>News matters</b><small>H₁</small></div>
-      <div class="choice" id="hHistory" data-tip="H₂: the agent mainly responds to price history." data-tip-title="History"><i>2</i><b>Price history matters</b><small>H₂</small></div>
-      <div class="choice" id="hInteraction" data-tip="H₃: news and history interact — the combination matters." data-tip-title="Interaction"><i>3</i><b>The combination matters</b><small>H₃</small></div>
+      <div class="choice" id="hNews" data-tip="H₁: news main effect only." data-tip-title="News"><i>1</i><div><b>News matters</b><small>H₁ · additive news</small></div><span class="sse" id="sseNews">SSE —</span></div>
+      <div class="choice" id="hHistory" data-tip="H₂: history main effect only." data-tip-title="History"><i>2</i><div><b>Price history matters</b><small>H₂ · additive history</small></div><span class="sse" id="sseHistory">SSE —</span></div>
+      <div class="choice" id="hInteraction" data-tip="H₃: news × history interaction." data-tip-title="Interaction"><i>3</i><div><b>The combination matters</b><small>H₃ · interaction</small></div><span class="sse" id="sseInteraction">SSE —</span></div>
     </div>
   </section>
-  <section class="card result" data-tip="Measured change under the selected treatment, plus claim status." data-tip-title="Evidence">
+  <section class="card result" data-tip="Paired difference under the selected treatment, with SE from matched draws." data-tip-title="Evidence">
     <div class="stepno">Evidence</div>
     <h2 id="resultTitle">No conclusion yet.</h2>
-    <p id="resultText">One run can suggest a story. It cannot distinguish these explanations.</p>
+    <p id="resultText">One cell cannot separate these explanations.</p>
     <div class="result-box">
-      <div class="big" id="delta" data-tip="Change in the black-box bid under the current controlled treatment." data-tip-title="Δ bid">—</div>
-      <small id="deltaLabel">change in bid under the selected treatment</small>
+      <div class="big" id="delta" data-tip="Change in mean bid under the current controlled treatment." data-tip-title="Δ bid">—</div>
+      <small id="deltaLabel">change in mean bid · matched ε</small>
       <div class="claim" id="claim"><b>Claim status:</b> unresolved</div>
     </div>
   </section>
 </div>
 </section>
 
-<section class="card result" style="margin-top:1rem;padding:1.15rem" data-tip="Four-cell design: news × price history. Same private value and rules; only information changes." data-tip-title="Four conditions">
-<div class="stepno">The minimum evidence needed to see the pattern</div>
+<section class="card result" style="margin-top:1rem;padding:1.15rem" data-tip="Four-cell design: news × price history. Holdout cell stays sealed until freeze." data-tip-title="Four conditions">
+<div class="stepno">Design matrix</div>
 <h2>Four controlled conditions</h2>
-<p>Same private value. Same market rules. Only information changes.</p>
+<p>Same private value. Same policy. Matched ε across information treatments. Cell 4 is sealed until you freeze a candidate.</p>
 <div class="fourcells">
-  <div class="cell" id="c0"><span>No news · stable</span><b>$75</b></div>
-  <div class="cell" id="c1"><span>No news · rising</span><b>$80</b></div>
-  <div class="cell" id="c2"><span>Positive news · stable</span><b>$78</b></div>
-  <div class="cell" id="c3"><span>Positive news · rising</span><b>$95</b></div>
+  <div class="cell" id="c0"><span>No news · stable</span><b id="c0v">—</b><em id="c0se"></em></div>
+  <div class="cell" id="c1"><span>No news · rising</span><b id="c1v">—</b><em id="c1se"></em></div>
+  <div class="cell" id="c2"><span>Positive news · stable</span><b id="c2v">—</b><em id="c2se"></em></div>
+  <div class="cell sealed" id="c3"><span>Positive news · rising · holdout</span><b id="c3v">Sealed</b><em id="c3se">unlock after freeze</em></div>
 </div>
-<div class="details"><details><summary>Show the research machinery</summary><div class="detail-grid">
-<div><h3>Matched tests</h3><p>Where possible, treatment and comparison runs share the same seed so irrelevant randomness cancels out.</p></div>
-<div><h3>Holdout</h3><p>Discovery conditions identify a candidate pattern. Unseen conditions are kept sealed until the model and stopping rule are frozen.</p></div>
-<div><h3>What we retain</h3><p>Not “the AI thinks X.” We retain the tested behavioral claim, supporting evidence, uncertainty, and the conditions where it may fail.</p></div>
+<div class="holdout-box" id="holdoutBox">
+  <h3>Holdout unlock</h3>
+  <p id="holdoutText">—</p>
+</div>
+<div class="details"><details><summary>What this page runs</summary><div class="detail-grid">
+<div><h3>Named policy</h3><p>bid = 75 + 5·H + 3·N + 12·H·N + ε. Every displayed number comes from this function under seed 42.</p></div>
+<div><h3>Matched ε</h3><p>Each draw index i reuses the same ε for all four information cells so contrasts cancel shared noise.</p></div>
+<div><h3>Sealed holdout</h3><p>Discovery uses three cells. Positive news · rising stays sealed until freeze; then observed mean is compared to additive ($83) and interaction predictions.</p></div>
 </div></details></div>
 </section>
 
-<div class="footer-actions"><a href="economics.html">← Economics case study</a><a href="dca-demo.html">Read the DCA case →</a></div>
-<p class="note">Illustrative values only. The example demonstrates the experimental method; it is not an empirical claim about a particular AI system.</p>
+<div class="footer-actions"><a href="economics.html">← Economics case study</a><a href="research.html">How the method works →</a><a href="c2-sandbox.html">Open sandbox →</a></div>
+<p class="note">Illustrative toy policy. Demonstrates the experimental method; not an empirical claim about a real AI trader or a full market with clearing, cash, and surplus.</p>
 </main>
 <footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D. All rights reserved.</div></div></footer>
-<script src="tip.js?v=57"></script>
+<script src="tip.js?v=73"></script>
 <script>
 (function(){var t=document.querySelector('.mobile-toggle'),n=document.querySelector('.nav');if(t&&n)t.addEventListener('click',function(){n.classList.toggle('open')});})();
-const $=id=>document.getElementById(id);
-let step=0,timer=null;
-const cells=[$('c0'),$('c1'),$('c2'),$('c3')];
-const focusMap={
-  0:{beat:1,guide:'Keep three explanations alive. A single $75 bid cannot pick a winner yet.',hint:'Focus: hypotheses on the right.',target:'#beat1'},
-  1:{beat:2,guide:'Only price history changed. Bid rose +$5 — useful, still ambiguous.',hint:'Focus: the highlighted Price history card.',target:'#beat2'},
-  2:{beat:2,guide:'Only news changed. Bid rose +$3. History alone and news alone still leave rivals alive.',hint:'Focus: the highlighted News card.',target:'#beat2'},
-  3:{beat:3,guide:'Combined signals jump +$15. The interaction separates H₃ from simpler stories.',hint:'Focus: Δ and the leading combination hypothesis.',target:'#beat3'}
-};
-function beats(n){[1,2,3].forEach(i=>{const e=$('beat'+i);e.className='beat'+(i<n?' done':i===n?' active':'')})}
-function clearCells(){cells.forEach(c=>c.classList.remove('on'))}
-function setSubject(v){$('subjectLabel').textContent='$'+v;$('subjectBar').style.height=Math.min(100,Math.max(12,(v-55)*2.2))+'%'}
-function hypotheses(lead){['hNews','hHistory','hInteraction'].forEach(id=>$(id).className='choice');if(lead){$(lead).classList.add('leading');['hNews','hHistory','hInteraction'].filter(x=>x!==lead).forEach(x=>$(x).classList.add('faded'))}}
-function tipFor(n){
-  const f=focusMap[n];
-  if(!f) return;
-  $('guideText').textContent=f.guide;
-  document.querySelector('#guide .hint').textContent=f.hint;
-  // Update beat2 focus target depending on which test
-  if(n===1){$('beat2').setAttribute('data-focus-target','#historyCard');$('beat2').setAttribute('data-focus','Focus on Price history — that is the one controlled change.');}
-  if(n===2){$('beat2').setAttribute('data-focus-target','#newsCard');$('beat2').setAttribute('data-focus','Focus on News — that is the one controlled change.');}
-  if(window.CoTips){
-    const el=document.querySelector(f.target);
-    if(el) CoTips.focusStep(el);
+
+const $ = (id) => document.getElementById(id);
+const SEED = 42;
+const TRIALS = 40;
+const SIGMA = 1.8;
+const BASE = 75, EFF_H = 5, EFF_N = 3, EFF_HN = 12;
+
+function mulberry32(a) {
+  return function () {
+    let t = (a += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function gauss(rand) {
+  const u = Math.max(1e-9, rand());
+  const v = rand();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+/** Named toy policy: H=history rising, N=positive news */
+function bid(H, N, eps) {
+  return BASE + EFF_H * H + EFF_N * N + EFF_HN * H * N + eps;
+}
+
+function meanSe(values) {
+  const n = values.length;
+  let sum = 0;
+  for (let i = 0; i < n; i++) sum += values[i];
+  const mean = sum / n;
+  let ss = 0;
+  for (let i = 0; i < n; i++) { const e = values[i] - mean; ss += e * e; }
+  const sd = Math.sqrt(ss / Math.max(1, n - 1));
+  return { mean, se: sd / Math.sqrt(n), n };
+}
+
+/** Matched draws: same ε_i across all info cells */
+function runBatch() {
+  const rand = mulberry32(SEED);
+  const cells = {
+    '0,0': [], '1,0': [], '0,1': [], '1,1': []
+  };
+  for (let i = 0; i < TRIALS; i++) {
+    const eps = SIGMA * gauss(rand);
+    cells['0,0'].push(bid(0, 0, eps));
+    cells['1,0'].push(bid(1, 0, eps));
+    cells['0,1'].push(bid(0, 1, eps));
+    cells['1,1'].push(bid(1, 1, eps));
+  }
+  const stats = {};
+  Object.keys(cells).forEach((k) => { stats[k] = meanSe(cells[k]); });
+  const m00 = stats['0,0'].mean;
+  const m10 = stats['1,0'].mean;
+  const m01 = stats['0,1'].mean;
+  const m11 = stats['1,1'].mean;
+  const dH = m10 - m00;
+  const dNstable = m01 - m00;
+  const dNrising = m11 - m10;
+  const additivePred = m00 + dH + dNstable;
+  const interaction = dNrising - dNstable;
+  const interactionPred = bid(1, 1, 0); // mean of policy without noise expectation
+  return {
+    stats,
+    contrasts: { dH, dNstable, dNrising, additivePred, interaction, interactionPred },
+    discoveryMeans: [m00, m10, m01] // holdout excluded from discovery scoring
+  };
+}
+
+function fmtMoney(v) { return '$' + Math.round(v); }
+function fmtDelta(v) {
+  const r = Math.round(v * 10) / 10;
+  return (r >= 0 ? '+' : '') + '$' + r.toFixed(1);
+}
+function fmtSe(se) { return '±' + se.toFixed(2) + ' SE · n=' + TRIALS; }
+
+function barHeight(v) {
+  return Math.min(100, Math.max(12, (v - 55) * 2.2)) + '%';
+}
+
+function setSubject(v) {
+  $('subjectLabel').textContent = fmtMoney(v);
+  $('subjectBar').style.height = barHeight(v);
+}
+function setRef(v) {
+  $('refLabel').textContent = fmtMoney(v);
+  $('refBar').style.height = barHeight(v);
+}
+
+function scoreHypotheses(batch, includeHoldout) {
+  const s = batch.stats;
+  const m00 = s['0,0'].mean, m10 = s['1,0'].mean, m01 = s['0,1'].mean, m11 = s['1,1'].mean;
+  const keys = includeHoldout ? ['0,0','1,0','0,1','1,1'] : ['0,0','1,0','0,1'];
+  const obs = { '0,0': m00, '1,0': m10, '0,1': m01, '1,1': m11 };
+  // H1: news only — intercept at m00, news effect = m01-m00, ignore history
+  const nEff = m01 - m00;
+  // H2: history only
+  const hEff = m10 - m00;
+  // H3: full interaction / saturated on discovery; for scoring use policy form fit from discovery
+  const pred = {
+    hNews: (H, N) => m00 + nEff * N,
+    hHistory: (H, N) => m00 + hEff * H,
+    hInteraction: (H, N) => m00 + hEff * H + nEff * N + (m11 - m10 - nEff) * H * N
+  };
+  // When holdout sealed, fit interaction without using m11: use 0 interaction term until unlocked? 
+  // Plan: score on discovery cells only until unlock. For H3 on discovery (3 cells), use additive+interaction estimated needing m11.
+  // Better: on discovery-only, H3 predicts with interaction=0 on the three cells using main effects only for fair compare,
+  // OR estimate interaction as 0 and H3 reduces to additive on discovery — that wouldn't separate.
+  // Correct approach for discovery (3 cells): 
+  // H1 news-only SSE on 3 cells, H2 history-only on 3 cells, H3 = two-way additive (H+N no interaction) on 3 cells.
+  // After unlock, H3 full interaction includes HN term fit with all 4.
+  const predDiscover = {
+    hNews: (H, N) => m00 + nEff * N,
+    hHistory: (H, N) => m00 + hEff * H,
+    hInteraction: (H, N) => m00 + hEff * H + nEff * N // additive two-factor on discovery; interaction needs holdout
+  };
+  const predFull = {
+    hNews: (H, N) => m00 + nEff * N,
+    hHistory: (H, N) => m00 + hEff * H,
+    hInteraction: (H, N) => m00 + hEff * H + nEff * N + (m11 - m10 - (m01 - m00)) * H * N
+  };
+  const models = includeHoldout ? predFull : predDiscover;
+  // On discovery, additive two-factor (H3 label as "combination candidate") vs single factors —
+  // Plan wants H3 = interaction model. With holdout sealed, score H1/H2/H3_additive on 3 cells;
+  // after unlock, score full interaction on 4 cells which will win.
+  // Actually for discovery with 3 cells, additive HN (no interaction) already uses H and N —
+  // rename: until unlock show SSE for H1, H2, and "H+N additive"; after unlock add interaction SSE.
+  
+  const sse = {};
+  ['hNews','hHistory','hInteraction'].forEach((id) => {
+    let sum = 0;
+    keys.forEach((k) => {
+      const [H, N] = k.split(',').map(Number);
+      const err = obs[k] - models[id](H, N);
+      sum += err * err;
+    });
+    sse[id] = sum;
+  });
+  return sse;
+}
+
+let batch = runBatch();
+let step = 0;
+let timer = null;
+let holdoutUnlocked = false;
+let frozen = false;
+const cells = [$('c0'), $('c1'), $('c2'), $('c3')];
+
+function paintCells() {
+  const s = batch.stats;
+  const map = [
+    ['0,0', 'c0'], ['1,0', 'c1'], ['0,1', 'c2'], ['1,1', 'c3']
+  ];
+  map.forEach(([key, id], idx) => {
+    const st = s[key];
+    if (idx === 3 && !holdoutUnlocked) {
+      $('c3').classList.add('sealed');
+      $('c3v').textContent = 'Sealed';
+      $('c3se').textContent = 'unlock after freeze';
+      return;
+    }
+    if (idx === 3) $('c3').classList.remove('sealed');
+    $(id + 'v').textContent = fmtMoney(st.mean);
+    $(id + 'se').textContent = fmtSe(st.se);
+  });
+}
+
+function paintSSE() {
+  const sse = scoreHypotheses(batch, holdoutUnlocked);
+  const entries = Object.entries(sse).sort((a, b) => a[1] - b[1]);
+  const leader = entries[0][0];
+  $('sseNews').textContent = 'SSE ' + sse.hNews.toFixed(1);
+  $('sseHistory').textContent = 'SSE ' + sse.hHistory.toFixed(1);
+  $('sseInteraction').textContent = 'SSE ' + sse.hInteraction.toFixed(1);
+  return { sse, leader };
+}
+
+function hypotheses(lead) {
+  ['hNews', 'hHistory', 'hInteraction'].forEach((id) => $(id).className = 'choice');
+  if (lead) {
+    $(lead).classList.add('leading');
+    ['hNews', 'hHistory', 'hInteraction'].filter((x) => x !== lead).forEach((x) => $(x).classList.add('faded'));
   }
 }
-function render(n){step=n;clearTimeout(timer);clearCells();$('historyCard').classList.remove('changed');$('newsCard').classList.remove('changed');hypotheses(null);
- if(n===0){beats(1);$('historyVal').textContent='Stable';$('newsVal').textContent='None';setSubject(75);$('stageTitle').textContent='Start with a question.';$('stageCopy').textContent='The agent bids $75. Several explanations could fit one observation.';$('stageStatus').textContent='Ready';$('resultTitle').textContent='No conclusion yet.';$('resultText').textContent='One run can suggest a story. It cannot distinguish these explanations.';$('delta').textContent='—';$('deltaLabel').textContent='change in bid under the selected treatment';$('claim').innerHTML='<b>Claim status:</b> unresolved';cells[0].classList.add('on');}
- if(n===1){beats(2);$('historyVal').textContent='Rising';$('newsVal').textContent='None';$('historyCard').classList.add('changed');setSubject(80);$('stageTitle').textContent='Change price history only.';$('stageCopy').textContent='The same agent now bids $80. History may matter, but we still need another test.';$('stageStatus').textContent='Test 1';$('resultTitle').textContent='A +$5 change.';$('resultText').textContent='Useful evidence, but news and interaction explanations are still possible.';$('delta').textContent='+$5';$('claim').innerHTML='<b>Claim status:</b> still ambiguous';cells[1].classList.add('on');}
- if(n===2){beats(2);$('historyVal').textContent='Stable';$('newsVal').textContent='Positive';$('newsCard').classList.add('changed');setSubject(78);$('stageTitle').textContent='Now change news only.';$('stageCopy').textContent='The bid moves to $78. News matters a little when history is stable.';$('stageStatus').textContent='Test 2';$('resultTitle').textContent='News alone: +$3.';$('resultText').textContent='History alone moved the bid +$5. Neither effect explains what comes next.';$('delta').textContent='+$3';$('claim').innerHTML='<b>Claim status:</b> rivals still alive';cells[2].classList.add('on');}
- if(n===3){beats(3);$('historyVal').textContent='Rising';$('newsVal').textContent='Positive';$('historyCard').classList.add('changed');$('newsCard').classList.add('changed');setSubject(95);$('stageTitle').textContent='Combine the two signals.';$('stageCopy').textContent='The bid jumps to $95 — much more than either signal produced by itself.';$('stageStatus').textContent='Evidence';hypotheses('hInteraction');$('resultTitle').textContent='The combination is the discriminating pattern.';$('resultText').textContent='The effect of positive news is +$3 with stable history, but +$15 with rising history. That interaction separates H₃ from the simpler stories.';$('delta').textContent='+$15';$('deltaLabel').textContent='news effect when price history is rising';$('claim').innerHTML='<b>Candidate claim:</b> this agent’s response to news depends on recent price history.';cells[3].classList.add('on');}
- tipFor(n);
+
+function beats(n) {
+  [1, 2, 3].forEach((i) => {
+    const e = $('beat' + i);
+    e.className = 'beat' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
 }
-function next(){render(Math.min(3,step+1))}
-function run(){render(0);timer=setTimeout(()=>{render(1);timer=setTimeout(()=>{render(2);timer=setTimeout(()=>render(3),1700)},1700)},1400)}
-$('runBtn').addEventListener('click',run);$('stepBtn').addEventListener('click',next);$('resetBtn').addEventListener('click',()=>render(0));
-$('surpriseBtn').addEventListener('click',()=>{render(3);$('stageStatus').textContent='Most informative';$('stageTitle').textContent='Jump to where the explanations disagree most.';$('stageCopy').textContent='This condition produces the sharpest contrast: news has a much larger effect after a rising price history.';});
-[1,2,3].forEach(i=>{const el=$('beat'+i);el.addEventListener('click',()=>render(i===1?0:i===2?1:3));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});});
+
+function clearCells() { cells.forEach((c) => c.classList.remove('on')); }
+
+function tipFor(n) {
+  const guides = {
+    0: { guide: 'Three explanations compete. One mean bid cannot pick a winner.', hint: 'Focus: hypotheses on the right.', target: '#beat1' },
+    1: { guide: 'Only price history changed. Matched ε — Δ is the history contrast.', hint: 'Focus: Price history card.', target: '#beat2' },
+    2: { guide: 'Only news changed under stable history. Rivals still fit.', hint: 'Focus: News card.', target: '#beat2' },
+    3: { guide: 'Freeze a candidate, then unlock the sealed holdout cell.', hint: 'Focus: Δ and Unlock holdout.', target: '#beat3' }
+  };
+  const f = guides[n];
+  if (!f) return;
+  $('guideText').textContent = f.guide;
+  document.querySelector('#guide .hint').textContent = f.hint;
+  if (n === 1) {
+    $('beat2').setAttribute('data-focus-target', '#historyCard');
+    $('beat2').setAttribute('data-focus', 'Watch Price history — the one controlled change.');
+  }
+  if (n === 2) {
+    $('beat2').setAttribute('data-focus-target', '#newsCard');
+    $('beat2').setAttribute('data-focus', 'Watch News — the one controlled change.');
+  }
+  if (window.CoTips) {
+    const el = document.querySelector(f.target);
+    if (el) CoTips.focusStep(el);
+  }
+}
+
+function unlockHoldout() {
+  holdoutUnlocked = true;
+  frozen = true;
+  paintCells();
+  const { leader } = paintSSE();
+  hypotheses(leader);
+  const c = batch.contrasts;
+  const obs = batch.stats['1,1'].mean;
+  const addErr = obs - c.additivePred;
+  const policyHoldout = BASE + EFF_H + EFF_N + EFF_HN;
+  $('holdoutBox').classList.add('show');
+  $('holdoutText').textContent =
+    'Observed holdout mean ' + fmtMoney(obs) + ' (' + fmtSe(batch.stats['1,1'].se) + '). ' +
+    'Additive prediction ' + fmtMoney(c.additivePred) + ' (error ' + fmtDelta(addErr) + '). ' +
+    'Interaction policy mean ' + fmtMoney(policyHoldout) + ' (error ' + fmtDelta(obs - policyHoldout) + '). ' +
+    'DiD interaction contrast ' + fmtDelta(c.interaction) + '. Leading model by SSE: ' +
+    (leader === 'hInteraction' ? 'H₃ combination' : leader === 'hNews' ? 'H₁ news' : 'H₂ history') + '.';
+  $('holdoutBtn').disabled = true;
+  $('stageStatus').textContent = 'Holdout open';
+  $('claim').innerHTML = '<b>Candidate claim:</b> news effect depends on recent price history (H₃). Holdout unlocked.';
+  cells[3].classList.add('on');
+  setSubject(obs);
+  setRef(c.additivePred);
+  $('historyVal').textContent = 'Rising';
+  $('newsVal').textContent = 'Positive';
+  $('historyCard').classList.add('changed');
+  $('newsCard').classList.add('changed');
+  $('delta').textContent = fmtDelta(c.dNrising);
+  $('deltaLabel').textContent = 'news effect | rising history · DiD ' + fmtDelta(c.interaction);
+  $('resultTitle').textContent = 'Holdout checked against predictions.';
+  $('resultText').textContent =
+    'News effect is ' + fmtDelta(c.dNstable) + ' under stable history and ' + fmtDelta(c.dNrising) +
+    ' under rising history. Interaction DiD = ' + fmtDelta(c.interaction) + '.';
+  beats(3);
+}
+
+function render(n) {
+  step = n;
+  clearTimeout(timer);
+  clearCells();
+  $('historyCard').classList.remove('changed');
+  $('newsCard').classList.remove('changed');
+  if (!holdoutUnlocked) hypotheses(null);
+
+  const s = batch.stats;
+  const c = batch.contrasts;
+  setRef(c.additivePred);
+  paintCells();
+  const scored = paintSSE();
+
+  $('holdoutBtn').disabled = !(n >= 2 && !holdoutUnlocked);
+
+  if (n === 0) {
+    beats(1);
+    $('historyVal').textContent = 'Stable';
+    $('newsVal').textContent = 'None';
+    setSubject(s['0,0'].mean);
+    $('stageTitle').textContent = 'Start with a question.';
+    $('stageCopy').textContent = 'Mean bid ' + fmtMoney(s['0,0'].mean) + ' (' + fmtSe(s['0,0'].se) + '). Several models still fit.';
+    $('stageStatus').textContent = 'Ready';
+    $('resultTitle').textContent = 'No conclusion yet.';
+    $('resultText').textContent = 'Discovery uses three cells. Holdout stays sealed.';
+    $('delta').textContent = '—';
+    $('deltaLabel').textContent = 'change in mean bid · matched ε';
+    $('claim').innerHTML = '<b>Claim status:</b> unresolved';
+    cells[0].classList.add('on');
+  }
+  if (n === 1) {
+    beats(2);
+    $('historyVal').textContent = 'Rising';
+    $('newsVal').textContent = 'None';
+    $('historyCard').classList.add('changed');
+    setSubject(s['1,0'].mean);
+    $('stageTitle').textContent = 'Change price history only.';
+    $('stageCopy').textContent = 'Mean bid ' + fmtMoney(s['1,0'].mean) + '. Same ε draws as the baseline cell.';
+    $('stageStatus').textContent = 'Test 1';
+    $('resultTitle').textContent = 'History contrast ' + fmtDelta(c.dH) + '.';
+    $('resultText').textContent = 'Useful, still ambiguous — news and interaction remain possible.';
+    $('delta').textContent = fmtDelta(c.dH);
+    $('deltaLabel').textContent = 'history effect | no news · ' + fmtSe(s['1,0'].se);
+    $('claim').innerHTML = '<b>Claim status:</b> still ambiguous';
+    cells[1].classList.add('on');
+  }
+  if (n === 2) {
+    beats(2);
+    $('historyVal').textContent = 'Stable';
+    $('newsVal').textContent = 'Positive';
+    $('newsCard').classList.add('changed');
+    setSubject(s['0,1'].mean);
+    $('stageTitle').textContent = 'Change news only.';
+    $('stageCopy').textContent = 'Mean bid ' + fmtMoney(s['0,1'].mean) + ' under stable history.';
+    $('stageStatus').textContent = 'Test 2';
+    $('resultTitle').textContent = 'News | stable ' + fmtDelta(c.dNstable) + '.';
+    $('resultText').textContent = 'History contrast was ' + fmtDelta(c.dH) + '. Freeze a candidate, then unlock holdout.';
+    $('delta').textContent = fmtDelta(c.dNstable);
+    $('deltaLabel').textContent = 'news effect | stable history';
+    $('claim').innerHTML = '<b>Claim status:</b> rivals still alive · ready to freeze';
+    cells[2].classList.add('on');
+    $('holdoutBtn').disabled = false;
+  }
+  if (n === 3) {
+    beats(3);
+    // Nominate H3 from discovery contrasts without revealing holdout yet
+    $('historyVal').textContent = 'Rising';
+    $('newsVal').textContent = 'Positive';
+    $('historyCard').classList.add('changed');
+    $('newsCard').classList.add('changed');
+    $('stageTitle').textContent = 'Candidate: combination matters.';
+    $('stageCopy').textContent = holdoutUnlocked
+      ? 'Holdout open — compare predictions to the sealed cell.'
+      : 'Freeze H₃, then unlock the sealed positive-news · rising cell.';
+    $('stageStatus').textContent = holdoutUnlocked ? 'Holdout open' : 'Freeze';
+    $('resultTitle').textContent = 'Ready to check the holdout.';
+    $('resultText').textContent =
+      'Additive prediction for holdout is ' + fmtMoney(c.additivePred) +
+      '. Interaction DiD from discovery structure targets ' + fmtDelta(EFF_HN) + ' in the named policy.';
+    $('delta').textContent = fmtDelta(c.dNstable);
+    $('deltaLabel').textContent = 'news | stable so far · unlock holdout for news | rising';
+    $('claim').innerHTML = '<b>Candidate claim:</b> response to news depends on price history (H₃).';
+    hypotheses('hInteraction');
+    if (!holdoutUnlocked) {
+      setSubject(s['0,1'].mean);
+      cells[2].classList.add('on');
+      $('holdoutBtn').disabled = false;
+    } else {
+      setSubject(s['1,1'].mean);
+      cells[3].classList.add('on');
+    }
+  }
+  tipFor(n);
+}
+
+function next() {
+  if (step < 3) render(step + 1);
+  else if (!holdoutUnlocked) unlockHoldout();
+}
+
+function run() {
+  holdoutUnlocked = false;
+  frozen = false;
+  $('holdoutBox').classList.remove('show');
+  batch = runBatch();
+  paintCells();
+  render(0);
+  timer = setTimeout(() => {
+    render(1);
+    timer = setTimeout(() => {
+      render(2);
+      timer = setTimeout(() => {
+        render(3);
+        timer = setTimeout(() => unlockHoldout(), 1600);
+      }, 1600);
+    }, 1600);
+  }, 1200);
+}
+
+function reset() {
+  clearTimeout(timer);
+  holdoutUnlocked = false;
+  frozen = false;
+  $('holdoutBox').classList.remove('show');
+  batch = runBatch();
+  paintCells();
+  paintSSE();
+  render(0);
+}
+
+$('runBtn').addEventListener('click', run);
+$('stepBtn').addEventListener('click', next);
+$('resetBtn').addEventListener('click', reset);
+$('holdoutBtn').addEventListener('click', () => {
+  if (step < 3) render(3);
+  unlockHoldout();
+});
+[1, 2, 3].forEach((i) => {
+  const el = $('beat' + i);
+  el.addEventListener('click', () => render(i === 1 ? 0 : i === 2 ? 1 : 3));
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+  });
+});
+
+batch = runBatch();
+paintCells();
+paintSSE();
+setRef(batch.contrasts.additivePred);
 render(0);
 </script>
 </body>

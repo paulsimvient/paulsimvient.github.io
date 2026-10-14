@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Economics case study | Paul Cummings</title>
-<meta name="description" content="Can we tell how an opaque trading agent is behaving? A controlled market for comparing explanations.">
-<link rel="stylesheet" href="styles.css?v=57">
+<meta name="description" content="A controlled 2×2 information design for comparing rival explanations of a toy trader policy.">
+<link rel="stylesheet" href="styles.css?v=73">
 </head>
 <body>
 <header class="site-header">
@@ -28,53 +28,53 @@
 <section class="page-hero">
 <div class="shell">
 <div class="eyebrow">Case study · economics</div>
-<h1>Can we tell how an opaque agent is trading?</h1>
-<p>Use a controlled market as a laboratory. Keep what the agent knows under experimental control, compare competing behavioral explanations, and check which ones survive.</p>
-<div class="actions"><a class="btn rust" href="economics-demo.html">Watch the animated experiment →</a></div>
+<h1>Can we tell what moves a trader’s bid?</h1>
+<p>Use a controlled 2×2 information design. Hold private value fixed, vary news and price history, score rival models, and check a sealed holdout cell.</p>
+<div class="actions"><a class="btn rust" href="economics-demo.html">Run the worked example →</a></div>
 </div>
 </section>
 
 <section class="section">
 <div class="shell case-layout">
 <aside class="case-nav">
-<a href="#qualify">1. Trust the lab</a>
+<a href="#policy">1. Name the policy</a>
 <a href="#see">2. Control what is seen</a>
-<a href="#rivals">3. Keep rival stories</a>
-<a href="#choose">4. Choose a separating test</a>
-<a href="#confirm">5. Confirm or stop</a>
+<a href="#rivals">3. Score rival stories</a>
+<a href="#holdout">4. Seal a holdout</a>
+<a href="#confirm">5. Unlock and compare</a>
 <a href="#keep">6. Keep the record</a>
 </aside>
 <div class="case-main">
-<section id="qualify">
-<h2>1. Trust the laboratory first</h2>
-<p>Before studying an unfamiliar agent, verify the market itself: values, costs, cash, inventory, trades, and surplus. If the accounting is wrong, every later conclusion is suspect.</p>
+<section id="policy">
+<h2>1. Name the policy first</h2>
+<p>The worked example uses an explicit toy rule: bid = 75 + 5·H + 3·N + 12·H·N + ε under seed 42. Every number on the page comes from that function — not from a hidden AI.</p>
 </section>
 <section id="see">
-<h2>2. Control what the agent can see</h2>
-<p>The true economic state can stay fixed while the information shown to the agent changes — news, price history, peer activity. That turns “context” into an experimental factor.</p>
+<h2>2. Control what the policy can see</h2>
+<p>Private value stays fixed at $100. Information factors change on purpose: price history (stable vs rising) and news (none vs positive).</p>
 <table class="data-table">
 <tr><th>Held constant</th><th>Varied on purpose</th></tr>
-<tr><td>fundamentals, accounts, quantity limits</td><td>news, history, peer observations</td></tr>
+<tr><td>private value, named policy, matched ε</td><td>news, price history</td></tr>
 </table>
 </section>
 <section id="rivals">
-<h2>3. Keep rival behavioral stories</h2>
-<p>Do not invent a hidden psychology. Compare observable explanations: reacts to news, follows recent prices, copies peers, or some interaction among them.</p>
+<h2>3. Score rival behavioral stories</h2>
+<p>Compare observable models: news only, history only, or an interaction. Rank them by SSE on discovery-cell means — computed, not scripted.</p>
 </section>
-<section id="choose">
-<h2>4. Choose the test that separates them</h2>
-<p>Spend queries where the current explanations disagree most. A persuasive story is not enough; a discriminating comparison is.</p>
+<section id="holdout">
+<h2>4. Seal one cell until freeze</h2>
+<p>Three discovery cells identify a candidate. Positive news · rising stays sealed until you freeze the claim.</p>
 </section>
 <section id="confirm">
-<h2>5. Confirm — or admit non-identifiability</h2>
-<p>After exploration, lock the rules. Confirm on reserved conditions. If two explanations still look the same, the honest result is that they cannot yet be told apart.</p>
+<h2>5. Unlock and compare predictions</h2>
+<p>Reveal the holdout mean. Compare it to the additive prediction and the interaction prediction. If rivals still look the same, say so.</p>
 </section>
 <section id="keep">
 <h2>6. Keep the full evidence record</h2>
-<p>Each trial retains what was shown, what was done, what traded, and whether the run belonged to exploration or confirmation.</p>
+<p>Retain the policy, seed, trial count, contrasts, SSE ranks, and holdout errors with the candidate claim.</p>
 <div class="actions">
-<a class="btn primary" href="economics-demo.html">Watch the process run →</a>
-<a class="btn" href="c2-sandbox.html">Run Sandbox →</a>
+<a class="btn primary" href="economics-demo.html">Run the worked example →</a>
+<a class="btn" href="c2-sandbox.html">Open sandbox →</a>
 </div>
 </section>
 </div>
@@ -92,6 +92,6 @@
 <div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
 </div>
 </footer>
-<script src="script.js?v=57"></script>
+<script src="script.js?v=73"></script>
 </body>
 </html>

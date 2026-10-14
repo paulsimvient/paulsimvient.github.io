@@ -7,43 +7,48 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Paul Cummings, Ph.D. | Thinking Together</title>
 <meta name="description" content="Making AI behavior testable: competing explanations, controlled comparisons, and evidence people can inspect.">
-<link rel="stylesheet" href="styles.css?v=68">
+<link rel="stylesheet" href="styles.css?v=73">
 <style>
-/* Full-bleed sandbox preview — show entire graphic (no slice crop) */
 .hero-tech{align-items:start;overflow:visible}
-.instrument.sb-card{
+.method-panel{
+  display:flex;flex-direction:column;min-height:0;height:auto;
+  background:linear-gradient(180deg,#0d1317,#10171c);border:1px solid #26343d;border-radius:14px;
+  box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden;padding:0;
+}
+.method-panel-top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;border-bottom:1px solid #26343d;
+}
+.method-panel-top .go{font:700 1.05rem ui-sans-serif,system-ui;color:#7dd3fc;letter-spacing:-.02em;text-decoration:none}
+.method-panel-top .go:hover{color:#fff}
+.method-panel-top .tag{font:600 .68rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.1em}
+.method-steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px 20px}
+.method-step{
+  border:1px solid #26343d;border-radius:10px;padding:14px 14px 12px;background:rgba(255,255,255,.02);
+}
+.method-step b{display:block;font:700 .78rem ui-monospace,monospace;letter-spacing:.08em;color:#7dd3fc;margin-bottom:6px}
+.method-step span{display:block;font-size:.92rem;color:#edf4f8;line-height:1.35}
+.method-step em{display:block;margin-top:6px;font:600 .72rem/1.35 ui-sans-serif,system-ui;font-style:normal;color:#8aa0b2}
+.sb-card{
   display:block;min-height:0;height:auto;padding:0;overflow:visible;
   text-decoration:none;color:inherit;
-}
-.instrument.sb-card .instrument-top,
-.instrument.sb-card .layers,
-.instrument.sb-card .trace,
-.instrument.sb-card .console-head{display:none!important}
-.instrument-body.sandbox-preview{
-  display:flex!important;flex-direction:column;grid-template-columns:1fr!important;
-  min-height:0;height:auto;flex:none;
+  background:linear-gradient(180deg,#0d1317,#10171c);border:1px solid #26343d;border-radius:14px;
+  box-shadow:0 18px 50px rgba(0,0,0,.28);
 }
 .sb-observe{
   display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;
   padding:14px 18px;background:#0b1218;border-bottom:1px solid #26343d;border-radius:14px 14px 0 0;
 }
-.sb-observe .go{
-  font:700 1.05rem ui-sans-serif,system-ui;color:#7dd3fc;letter-spacing:-.02em;
-}
-.instrument.sb-card:hover .sb-observe .go{color:#fff}
-.sb-observe .tag{
-  font:600 .68rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.1em;
-}
+.sb-observe .go{font:700 1.05rem ui-sans-serif,system-ui;color:#7dd3fc;letter-spacing:-.02em}
+.sb-card:hover .sb-observe .go{color:#fff}
+.sb-observe .tag{font:600 .68rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.1em}
 .sb-stage{
   position:relative;flex:0 0 auto;width:100%;
-  aspect-ratio:16 / 11;
-  min-height:360px;
+  aspect-ratio:16 / 11;min-height:280px;
   background:radial-gradient(ellipse at 55% 35%,rgba(30,80,110,.28),transparent 55%),#081018;
   border-radius:0 0 14px 14px;overflow:hidden;
 }
-.sb-stage svg{
-  position:absolute;inset:0;width:100%;height:100%;display:block;
-}
+.sb-stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sb-hud{
   position:absolute;left:14px;right:14px;bottom:14px;z-index:2;
   display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;pointer-events:none;
@@ -63,12 +68,16 @@
   transform-origin:left center;animation:sbSweep 2.2s linear infinite;
 }
 @keyframes sbSweep{to{transform:rotate(360deg)}}
+.cases-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start;margin-top:22px}
 @media(max-width:980px){
   .hero-tech{align-items:stretch}
-  .sb-stage{min-height:320px}
+  .method-steps{grid-template-columns:1fr 1fr}
+  .cases-grid{grid-template-columns:1fr}
+  .sb-stage{min-height:260px}
 }
 @media(max-width:720px){
-  .sb-stage{min-height:280px;aspect-ratio:4 / 3}
+  .method-steps{grid-template-columns:1fr}
+  .sb-stage{min-height:240px;aspect-ratio:4 / 3}
   .sb-hud{grid-template-columns:1fr}
 }
 </style>
@@ -95,113 +104,131 @@
 <div class="hero-copy">
 <div class="eyebrow">CoAgentics · controlled experiments · measurable evidence</div>
 <h1>Don't just trust AI.<br><span>Test it.</span></h1>
-<p class="lead">Start with the DCA Night Crossing case, then run the sandbox: reconstruct the record, keep rival explanations alive, and watch matched counterfactuals create different outcomes.</p>
+<p class="lead">Keep competing explanations visible. Change one factor under matched conditions. Retain what the evidence supports — and where it stops.</p>
 <div class="actions">
-<a class="btn primary" href="c2-sandbox.html">Observe example →</a>
-<a class="btn" href="dca.html">Read the DCA case →</a>
-<a class="btn rust" href="economics-demo.html">Open the economics instrument →</a>
+<a class="btn primary" href="research.html">How the method works →</a>
 <a class="btn" href="book.html">About the book →</a>
+<a class="btn rust" href="#cases">See teaching cases →</a>
 </div>
-<p class="micro">Click the preview — or Observe example — to enter the sandbox.</p>
+<p class="micro">Introduction first. Teaching cases follow.</p>
 </div>
-<a class="instrument sb-card" href="c2-sandbox.html" aria-label="Observe example: open the DCA Night Crossing sandbox">
-<div class="instrument-body sandbox-preview">
-<div class="sb-observe">
-  <span class="go">Observe example →</span>
-  <span class="tag">DCA NIGHT CROSSING</span>
-</div>
-<div class="sb-stage" aria-hidden="true">
-<svg viewBox="0 0 640 440" preserveAspectRatio="xMidYMid meet">
-<defs>
-<linearGradient id="sbGrid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1822"/><stop offset="1" stop-color="#081018"/></linearGradient>
-</defs>
-<rect width="640" height="440" fill="url(#sbGrid)"/>
-<g stroke="#1a2b38" stroke-width="1">
-<line x1="40" y1="280" x2="600" y2="200"/><line x1="80" y1="300" x2="620" y2="210"/>
-<line x1="20" y1="240" x2="580" y2="170"/><line x1="60" y1="320" x2="560" y2="250"/>
-</g>
-<path d="M70 90 C180 130,260 165,340 210 S480 270,560 300" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
-<path d="M560 80 C460 135,380 175,300 210 S160 255,90 295" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
-<circle cx="320" cy="210" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
-<circle cx="320" cy="210" r="3" fill="#f0c879"/>
-<circle cx="210" cy="155" r="5" fill="#e8eef2"/>
-<circle cx="430" cy="150" r="5" fill="#7895a8"/>
-<text x="198" y="142" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
-<text x="400" y="136" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
-<text x="18" y="36" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
-<text x="18" y="58" fill="#edf4f8" font-size="20" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
-</svg>
-<div class="sb-radar" title="Derived radar"></div>
-<div class="sb-hud">
-<div class="sb-chip"><span>PAT25</span><strong>320 ft · 105 kt</strong></div>
-<div class="sb-chip"><span>CRJ 5342</span><strong>1200 ft RA · 145 kt</strong></div>
-<div class="sb-chip"><span>Range · CPA</span><strong>6.50 nm · 118 s</strong></div>
-</div>
-</div>
-</div>
-</a>
-</section>
-
-
-<section class="section economics-spotlight">
-<div class="shell">
-<div class="eyebrow">Flagship demonstration · economics</div>
-<div class="econ-home-grid">
-  <div>
-    <h2>Put a black-box AI agent in a market. Then make its explanations compete.</h2>
-    <p class="intro">The economics instrument turns CoAgentics into a behavioral laboratory: hold market fundamentals fixed, vary what the agent can observe, run matched counterfactuals, freeze the discovery result, and challenge it on held-out conditions.</p>
-    <div class="actions"><a class="btn rust" href="economics-demo.html">Run the economics experiment →</a><a class="btn" href="economics.html">Why economics →</a></div>
+<div class="method-panel" aria-label="Investigation method overview">
+  <div class="method-panel-top">
+    <a class="go" href="research.html">How it works →</a>
+    <span class="tag">SIX JOBS · ONE TRAIL</span>
   </div>
-  <div class="econ-mini" aria-label="Economics experiment preview">
-    <div class="econ-mini-top"><span>CONTROLLED MARKET</span><b>SEED 42</b></div>
-    <div class="econ-mini-row"><span>Private value</span><strong>$100</strong></div>
-    <div class="econ-mini-row"><span>Price history</span><strong>Rising</strong></div>
-    <div class="econ-mini-row"><span>News</span><strong>Positive</strong></div>
-    <div class="econ-mini-bars"><i style="height:24%"></i><i style="height:38%"></i><i style="height:84%"></i><i style="height:46%"></i><i style="height:92%"></i><i style="height:76%"></i></div>
-    <div class="econ-mini-result"><span>LEADING EXPLANATION</span><strong>NEWS × HISTORY</strong><em>holdout still locked</em></div>
+  <div class="method-steps">
+    <div class="method-step"><b>01 · WORLD</b><span>Fix what matters</span><em>Observations, actions, constraints, outcomes</em></div>
+    <div class="method-step"><b>02 · ALTERNATIVES</b><span>Carry rival stories</span><em>Do not collapse to one explanation early</em></div>
+    <div class="method-step"><b>03 · TEST</b><span>Compare under control</span><em>Same setup, one intentional change</em></div>
+    <div class="method-step"><b>04 · CHECK</b><span>Ask what survives</span><em>Separate exploration from confirmation</em></div>
+    <div class="method-step"><b>05 · MEMORY</b><span>Keep the limits</span><em>Evidence, uncertainty, boundaries</em></div>
+    <div class="method-step"><b>06 · REVIEW</b><span>People decide</span><em>Inspect, approve, or reject</em></div>
   </div>
 </div>
-</div>
 </section>
+
 <section class="section">
 <div class="shell">
 <div class="eyebrow">How an investigation stays inspectable</div>
 <h2>Six jobs. One evidence trail.</h2>
-<p class="intro">Instead of accepting a fluent answer, keep each part of the investigation separate enough that a person can see what was assumed, what was tested, and what remains open.</p>
+<p class="intro">Separate each part of the investigation so a person can see what was assumed, what was tested, and what remains open.</p>
 <div class="tech-grid">
 <div class="tech-card"><div class="num">01 / WORLD</div><h3>Fix what matters</h3><p>Say what is in the situation: observations, actions, constraints, and outcomes.</p></div>
-<div class="tech-card"><div class="num">02 / ALTERNATIVES</div><h3>Keep rivals alive</h3><p>Do not collapse early to one story. Carry competing explanations long enough to test them.</p></div>
+<div class="tech-card"><div class="num">02 / ALTERNATIVES</div><h3>Carry rival stories</h3><p>Hold competing explanations long enough to test them against each other.</p></div>
 <div class="tech-card"><div class="num">03 / TEST</div><h3>Compare under control</h3><p>Change one thing at a time. Run a matched comparison so the difference means something.</p></div>
 <div class="tech-card"><div class="num">04 / CHECK</div><h3>Ask what survives</h3><p>Separate exploration from confirmation. Reserve a final check the first pass never saw.</p></div>
 <div class="tech-card"><div class="num">05 / MEMORY</div><h3>Keep the limits</h3><p>Store the claim with its evidence, contradictions, uncertainty, and boundaries.</p></div>
-<div class="tech-card"><div class="num">06 / HUMAN REVIEW</div><h3>People stay in charge</h3><p>Inspect, challenge, approve, or reject. Fluency never becomes authority by itself.</p></div>
+<div class="tech-card"><div class="num">06 / HUMAN REVIEW</div><h3>People decide</h3><p>Inspect, challenge, approve, or reject. Fluency does not grant authority.</p></div>
+</div>
+<div class="actions" style="margin-top:28px">
+<a class="btn primary" href="research.html">Read the full method →</a>
 </div>
 </div>
 </section>
 
-<section class="section">
+<section class="section" id="cases">
 <div class="shell">
-<div class="eyebrow">See the method</div>
-<h2>Don’t ask the model why. Test what changes.</h2>
-<p class="intro">The strongest demo is not six architecture boxes. It is one matched experiment you can watch: same world, same seed, one controlled change.</p>
-<div class="demo-band" style="grid-template-columns:repeat(3,1fr)">
-<a class="demo-card" href="c2-sandbox.html">
-<div class="status">● SANDBOX</div>
-<h3>Run the Night Crossing sandbox</h3>
-<p>3D reconstruction, live tracks, green radar, then auto-cycled matched trials that show what each counterfactual creates.</p>
-</a>
-<a class="demo-card" href="dca.html">
-<div class="status">● DCA CASE</div>
-<h3>Read the case study</h3>
-<p>Why this encounter is the teaching case — then Run Sandbox when you are ready to change one factor under a matched seed.</p>
-</a>
-<a class="demo-card" href="economics-demo.html">
-<div class="status">● MARKET INSTRUMENT</div>
-<h3>Black-box agents in a market</h3>
-<p>Control what an opaque trading agent can see, compare behavioral explanations, and check what survives.</p>
-</a>
+<div class="eyebrow">Teaching cases</div>
+<h2>After the method: try it on a case.</h2>
+<p class="intro">Two worked examples of the same loop — a market 2×2, then the Night Crossing sandbox.</p>
+<div class="cases-grid">
+  <a class="sb-card" href="c2-sandbox.html" aria-label="Open the DCA Night Crossing sandbox">
+    <div class="sb-observe">
+      <span class="go">Open sandbox →</span>
+      <span class="tag">DCA NIGHT CROSSING</span>
+    </div>
+    <div class="sb-stage" aria-hidden="true">
+      <svg viewBox="0 0 640 440" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="sbGrid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1822"/><stop offset="1" stop-color="#081018"/></linearGradient>
+        </defs>
+        <rect width="640" height="440" fill="url(#sbGrid)"/>
+        <g stroke="#1a2b38" stroke-width="1">
+          <line x1="40" y1="280" x2="600" y2="200"/><line x1="80" y1="300" x2="620" y2="210"/>
+          <line x1="20" y1="240" x2="580" y2="170"/><line x1="60" y1="320" x2="560" y2="250"/>
+        </g>
+        <path d="M70 90 C180 130,260 165,340 210 S480 270,560 300" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
+        <path d="M560 80 C460 135,380 175,300 210 S160 255,90 295" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
+        <circle cx="320" cy="210" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
+        <circle cx="320" cy="210" r="3" fill="#f0c879"/>
+        <circle cx="210" cy="155" r="5" fill="#e8eef2"/>
+        <circle cx="430" cy="150" r="5" fill="#7895a8"/>
+        <text x="198" y="142" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
+        <text x="400" y="136" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
+        <text x="18" y="36" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">TEACHING CASE</text>
+        <text x="18" y="58" fill="#edf4f8" font-size="20" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
+      </svg>
+      <div class="sb-radar" title="Derived radar"></div>
+      <div class="sb-hud">
+        <div class="sb-chip"><span>PAT25</span><strong>320 ft · 105 kt</strong></div>
+        <div class="sb-chip"><span>CRJ 5342</span><strong>1200 ft RA · 145 kt</strong></div>
+        <div class="sb-chip"><span>Range · CPA</span><strong>6.50 nm · 118 s</strong></div>
+      </div>
+    </div>
+  </a>
+  <div>
+    <div class="tech-card" style="margin:0">
+      <div class="num">MARKET · 2×2</div>
+      <h3>Economics worked example</h3>
+      <p>A named toy trader policy under controlled information. Compute main effects, seal one cell, then unlock the holdout.</p>
+      <div class="actions" style="margin-top:14px">
+        <a class="btn rust" href="economics-demo.html">Run economics example →</a>
+        <a class="btn" href="economics.html">Case study →</a>
+      </div>
+    </div>
+    <div class="tech-card" style="margin-top:14px">
+      <div class="num">DCA · CASE</div>
+      <h3>Night Crossing briefing</h3>
+      <p>Read the teaching case, then enter the sandbox to reconstruct the record and run matched counterfactual trials.</p>
+      <div class="actions" style="margin-top:14px">
+        <a class="btn" href="dca.html">Read the DCA case →</a>
+        <a class="btn primary" href="c2-sandbox.html">Open sandbox →</a>
+      </div>
+    </div>
+  </div>
 </div>
-<p style="margin-top:18px"><a href="c2-sandbox.html" style="color:#1f4e79">Run Sandbox →</a></p>
+</div>
+</section>
+
+<section class="section economics-spotlight">
+<div class="shell">
+<div class="eyebrow">Economics · worked example</div>
+<div class="econ-home-grid">
+  <div>
+    <h2>A 2×2 information design that separates rival stories.</h2>
+    <p class="intro">Hold private value fixed. Vary news and price history. Score additive vs interaction models on observed means, then unlock a sealed holdout cell.</p>
+    <div class="actions"><a class="btn rust" href="economics-demo.html">Run the economics example →</a><a class="btn" href="economics.html">Why economics →</a></div>
+  </div>
+  <div class="econ-mini" aria-label="Economics experiment preview">
+    <div class="econ-mini-top"><span>TOY POLICY · SEED 42</span><b>2×2</b></div>
+    <div class="econ-mini-row"><span>Private value</span><strong>$100</strong></div>
+    <div class="econ-mini-row"><span>Price history</span><strong>Rising</strong></div>
+    <div class="econ-mini-row"><span>News</span><strong>Positive</strong></div>
+    <div class="econ-mini-bars"><i style="height:24%"></i><i style="height:38%"></i><i style="height:84%"></i><i style="height:46%"></i><i style="height:92%"></i><i style="height:76%"></i></div>
+    <div class="econ-mini-result"><span>CANDIDATE</span><strong>NEWS × HISTORY</strong><em>holdout sealed until freeze</em></div>
+  </div>
+</div>
 </div>
 </section>
 
@@ -243,7 +270,7 @@
 <div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
 </div>
 </footer>
-<script src="tip.js?v=68"></script>
-<script src="script.js?v=68"></script>
+<script src="tip.js?v=73"></script>
+<script src="script.js?v=73"></script>
 </body>
 </html>
