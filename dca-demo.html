@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DCA Night Crossing · Instrument | Paul Cummings</title>
 <meta name="description" content="Interactive teaching instrument: same world, same seed, one controlled change. Compare what happens.">
-<link rel="stylesheet" href="styles.css?v=53">
+<link rel="stylesheet" href="styles.css?v=54">
 <style>
 :root{
   --ink:#152033; --navy:#1f4e79; --steel:#3b82a8; --line:#d5dbe6; --paper:#fff;
@@ -201,14 +201,14 @@
 
 <div class="side">
 <div class="phase-bar" id="phases">
-  <button data-phase="observe" class="active" data-tip="Lock the shared world: paths, timing, corridor, and partial views." data-tip-title="Observe">Observe</button>
-  <button data-phase="frame" data-tip="Freeze the critical encounter and list competing explanatory factors." data-tip-title="Frame">Frame</button>
-  <button data-phase="test" data-tip="Run baseline and matched counterfactual together under the same seed." data-tip-title="Test">Test</button>
-  <button data-phase="validate" data-tip="Read Δ outcome, confidence signals, and what still remains open." data-tip-title="Validate">Validate</button>
-  <button data-phase="learn" data-tip="Record whether a claim survived — with limits — into memory." data-tip-title="Learn">Learn</button>
+  <button data-phase="observe" class="active" data-tip-title="Observe" data-tip="Lock the shared world: paths, timing, corridor, and partial views." data-focus="Focus on the map — lock paths, corridor, and timing before changing anything." data-focus-target="#map">Observe</button>
+  <button data-phase="frame" data-tip-title="Frame" data-tip="Freeze the critical encounter and list competing explanatory factors." data-focus="Focus on closest approach + factor buttons — keep several explanations alive." data-focus-target=".tests">Frame</button>
+  <button data-phase="test" data-tip-title="Test" data-tip="Run baseline and matched counterfactual together under the same seed." data-focus="Focus on Baseline vs Matched counterfactual — same seed, one controlled change." data-focus-target=".split">Test</button>
+  <button data-phase="validate" data-tip-title="Validate" data-tip="Read Δ outcome, confidence signals, and what still remains open." data-focus="Focus on Δ (paired difference) and evidence rows — what strengthened, what is still open." data-focus-target="#deltaVal">Validate</button>
+  <button data-phase="learn" data-tip-title="Learn" data-tip="Record whether a claim survived — with limits — into memory." data-focus="Focus on the method loop note — a claim survives only with its limits attached." data-focus-target="#loopNote">Learn</button>
 </div>
 
-<div class="tests">
+<div class="tests" data-tip="Choose exactly one factor to change. Everything else stays matched under seed 1842." data-tip-title="Controlled change">
   <div class="label">Choose one controlled change <span class="tip-mark" data-tip="Pick exactly one factor. Everything else stays matched so the difference can be attributed to that change." data-tip-title="Controlled change">?</span></div>
   <div class="row">
     <button class="factor-btn active" data-factor="altitude" data-tip="Counterfactual raises altitude by +200 ft while keeping seed, timing, and visibility matched." data-tip-title="Test altitude">Test altitude</button>
@@ -265,7 +265,7 @@
 </div>
 </main>
 
-<script src="tip.js?v=53"></script>
+<script src="tip.js?v=54"></script>
 <script>
 (function () {
   const factors = {
@@ -348,6 +348,10 @@
       b.classList.toggle('active', b.dataset.phase === p);
       b.classList.toggle('done', i < idx);
     });
+    if (window.CoTips) {
+      const pe = phaseBtns.find((b) => b.dataset.phase === p) || phaseBtns[idx];
+      CoTips.focusStep(pe);
+    }
     $('cpa').setAttribute('opacity', p === 'observe' ? '0' : '1');
     $('predA').setAttribute('opacity', (p === 'frame' || p === 'test') ? '0.8' : '0');
     $('predB').setAttribute('opacity', (p === 'frame' || p === 'test') ? '0.8' : '0');

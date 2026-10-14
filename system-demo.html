@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Worked example | Paul Cummings</title>
 <meta name="description" content="A plain-language walkthrough of one investigation: competing explanations, one controlled test, and a checked result.">
-<link rel="stylesheet" href="styles.css?v=53">
+<link rel="stylesheet" href="styles.css?v=54">
 <style>
 .demo-shell{max-width:1500px;margin:auto;padding:22px}
 .demo-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap}
@@ -166,7 +166,7 @@
 <p style="margin:22px 0 0;max-width:760px;color:#3d4a5c">Want the market version of the same idea? <a class="text-link" href="economics.html" style="color:#1f4e79">See the economics case study →</a> · <a href="dca-demo.html" style="color:#1f4e79">Open the DCA instrument →</a></p>
 </main>
 
-<script src="tip.js?v=53"></script>
+<script src="tip.js?v=54"></script>
 <script>
 const steps = [
   {
@@ -273,6 +273,13 @@ function run() {
   setCallout(s, i);
   nodes.forEach(n => n.classList.toggle('active', n.dataset.layer === s.layer));
   focusPanes(s.panes);
+  if (window.CoTips) {
+    const node = nodes.find(n => n.dataset.layer === s.layer);
+    if (node) {
+      node.setAttribute('data-focus', s.look.replace(/^Look at:\s*/i, 'Focus on: '));
+      CoTips.focusStep(node, { target: s.panes && s.panes[0] ? '#' + s.panes[0] : null });
+    }
+  }
 
   const row = document.createElement('div');
   row.className = 'event';
