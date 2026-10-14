@@ -339,12 +339,19 @@ td{border-color:var(--line)}
 
 [data-tip]{position:relative}
 [data-tip].tip-anchor{cursor:help}
+.tip-current{
+  outline:2px solid rgba(59,130,168,.85);
+  outline-offset:3px;
+  box-shadow:0 0 0 4px rgba(59,130,168,.12);
+  position:relative;
+  z-index:2;
+}
 
 #site-tip{
   position:fixed;z-index:9999;max-width:280px;padding:10px 12px;
   background:#0f172a;color:#e8eef6;border:1px solid #334155;border-radius:8px;
   font-size:.8rem;line-height:1.4;box-shadow:0 12px 32px rgba(15,23,42,.28);
-  pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;
+  pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;
 }
 #site-tip.show{opacity:1;transform:translateY(0)}
 #site-tip strong{display:block;margin-bottom:4px;color:#93c5fd;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
