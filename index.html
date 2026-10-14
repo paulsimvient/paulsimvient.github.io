@@ -5,7 +5,32 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Paul Cummings, Ph.D. | Thinking Together</title>
 <meta name="description" content="Making AI behavior testable: competing explanations, controlled comparisons, and evidence people can inspect.">
-<link rel="stylesheet" href="styles.css?v=57">
+<link rel="stylesheet" href="styles.css?v=62">
+<style>
+.sandbox-preview{display:flex;flex-direction:column;min-height:0;flex:1}
+.sandbox-preview .console{display:flex;flex-direction:column;flex:1;min-height:0;padding:0!important}
+.sb-stage{
+  position:relative;flex:1;min-height:340px;margin:12px;border-radius:10px;overflow:hidden;
+  background:radial-gradient(ellipse at 60% 40%,rgba(30,80,110,.25),transparent 50%),#081018;
+  border:1px solid #223243;
+}
+.sb-stage svg{width:100%;height:100%;display:block}
+.sb-hud{position:absolute;left:10px;right:10px;bottom:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;pointer-events:none}
+.sb-chip{background:rgba(7,13,19,.88);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 9px;color:#edf4f8;font:600 .58rem ui-monospace,monospace}
+.sb-chip span{display:block;color:#8aa0b2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.sb-chip strong{font-size:.78rem;color:#f8fafc}
+.sb-radar{
+  position:absolute;right:12px;top:12px;width:78px;height:78px;border-radius:50%;
+  border:2px solid #1f8f3a;background:#031408;box-shadow:0 0 16px rgba(30,180,70,.35);
+}
+.sb-radar:after{
+  content:'';position:absolute;left:50%;top:50%;width:46%;height:2px;background:rgba(90,255,120,.85);
+  transform-origin:left center;animation:sbSweep 2.4s linear infinite;
+}
+@keyframes sbSweep{to{transform:rotate(360deg)}}
+.sb-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px}
+.sb-actions a{font-size:.86rem}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -15,8 +40,8 @@
 <nav class="nav">
 <a class="active" href="index.html">Home</a>
 <a href="research.html">How it works</a>
-<a href="c2-sandbox.html">C2 Sandbox</a>
-<a href="dca-demo.html">DCA</a>
+<a href="c2-sandbox.html">Sandbox</a>
+<a href="dca.html">DCA</a>
 <a href="economics.html">Economics</a>
 <a href="book.html">Book</a>
 <a href="about.html">About</a>
@@ -29,45 +54,66 @@
 <div class="hero-copy">
 <div class="eyebrow">CoAgentics · controlled experiments · measurable evidence</div>
 <h1>Don't just trust AI.<br><span>Test it.</span></h1>
-<p class="lead">CoAgentics reveals how AI systems behave, why they succeed or fail, and when their results can be trusted—through controlled experiments and measurable evidence.</p>
+<p class="lead">Start with the DCA Night Crossing case, then run the sandbox: reconstruct the record, keep rival explanations alive, and watch matched counterfactuals create different outcomes.</p>
 <div class="actions">
-<a class="btn primary" href="c2-sandbox.html">Enter the C2 sandbox →</a>
-<a class="btn" href="dca-demo.html">Open the DCA instrument →</a>
+<a class="btn primary" href="c2-sandbox.html">Run Sandbox →</a>
+<a class="btn" href="dca.html">Read the DCA case →</a>
 <a class="btn rust" href="economics-demo.html">Open the economics instrument →</a>
 <a class="btn" href="book.html">About the book →</a>
 </div>
-<p class="micro">Historical reconstruction, then matched experiments — and the same method in a controlled market.</p>
+<p class="micro">Historical reconstruction → matched trials → what the counterfactual creates.</p>
 </div>
 <div class="instrument">
-<div class="instrument-top"><span class="dot live"></span><span>EXAMPLE PREVIEW · COMPARING EXPLANATIONS</span></div>
-<div class="instrument-body">
+<div class="instrument-top"><span class="dot live"></span><span>SANDBOX PREVIEW · DCA NIGHT CROSSING</span></div>
+<div class="instrument-body sandbox-preview">
 <div class="layers">
-<div class="layer active"><b>World</b><span>what is fixed</span></div>
-<div class="layer"><b>Alternatives</b><span>rival explanations</span></div>
-<div class="layer"><b>Test</b><span>controlled comparison</span></div>
-<div class="layer"><b>Check</b><span>does it hold?</span></div>
-<div class="layer"><b>Memory</b><span>claim + limits</span></div>
-<div class="layer"><b>Human review</b><span>people decide</span></div>
+<div class="layer active"><b>Record</b><span>NTSB-linked sequence</span></div>
+<div class="layer"><b>Stage</b><span>tracks · radar · live HUD</span></div>
+<div class="layer"><b>Change</b><span>one factor · matched seed</span></div>
+<div class="layer"><b>Creates</b><span>counterfactual geometry</span></div>
+<div class="layer"><b>Trials</b><span>1000s · rank what mattered</span></div>
+<div class="layer"><b>Limits</b><span>model · not a finding</span></div>
 </div>
 <div class="console">
 <div class="console-head">
-<div class="metric"><span>open questions</span><strong data-query>3</strong></div>
-<div class="metric"><span>claim strength</span><strong data-claim>candidate</strong></div>
-<div class="metric"><span>shared setup</span><strong>locked</strong></div>
+<div class="metric"><span>case</span><strong>DCA25MA108</strong></div>
+<div class="metric"><span>mode</span><strong data-claim>record</strong></div>
+<div class="metric"><span>seed family</span><strong>1842</strong></div>
 </div>
-<div class="plot">
-<svg viewBox="0 0 640 330" preserveAspectRatio="none">
-<path d="M40 250 C130 230,150 110,240 120 S350 280,430 170 S520 90,600 118" fill="none" stroke="#3b82a8" stroke-width="3"/>
-<path d="M40 270 C130 245,160 205,240 210 S360 195,430 215 S520 235,600 205" fill="none" stroke="#93c5fd" stroke-width="3"/>
-<line x1="40" y1="280" x2="600" y2="280" stroke="#6a7f86"/>
-<line x1="40" y1="50" x2="40" y2="280" stroke="#6a7f86"/>
-<text x="50" y="43" fill="#e8f0ee" font-size="13">Do two explanations still disagree after the same test?</text>
-<text x="485" y="108" fill="#7dd3fc" font-size="12">A</text>
-<text x="485" y="229" fill="#93c5fd" font-size="12">B</text>
+<div class="sb-stage" aria-hidden="true">
+<svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="sbGrid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1822"/><stop offset="1" stop-color="#081018"/></linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#sbGrid)"/>
+<g stroke="#1a2b38" stroke-width="1">
+<line x1="40" y1="280" x2="600" y2="200"/><line x1="80" y1="300" x2="620" y2="210"/>
+<line x1="20" y1="240" x2="580" y2="170"/><line x1="60" y1="320" x2="560" y2="250"/>
+</g>
+<path d="M70 90 C180 130,260 170,340 210 S480 270,560 300" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
+<path d="M560 80 C460 140,380 180,300 210 S160 260,90 300" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
+<circle cx="320" cy="210" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
+<circle cx="320" cy="210" r="3" fill="#f0c879"/>
+<circle cx="210" cy="160" r="5" fill="#e8eef2"/>
+<circle cx="430" cy="155" r="5" fill="#7895a8"/>
+<text x="198" y="148" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
+<text x="400" y="142" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
+<text x="18" y="28" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
+<text x="18" y="46" fill="#edf4f8" font-size="16" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
 </svg>
+<div class="sb-radar" title="Derived radar"></div>
+<div class="sb-hud">
+<div class="sb-chip"><span>PAT25</span><strong>320 ft · 105 kt</strong></div>
+<div class="sb-chip"><span>CRJ 5342</span><strong>1200 ft RA · 145 kt</strong></div>
+<div class="sb-chip"><span>Range · CPA</span><strong>6.50 nm · 118 s</strong></div>
+</div>
 </div>
 <div class="trace"></div>
-<p class="micro" style="margin:8px 2px 0;color:#94a3b8">Illustration only: two explanations under the same conditions. See the worked example for the full walkthrough.</p>
+<div class="sb-actions">
+<a class="btn primary" href="c2-sandbox.html">Run Sandbox →</a>
+<a class="btn" href="dca.html">DCA case study →</a>
+</div>
+<p class="micro" style="margin:0 14px 14px;color:#94a3b8">Preview of the sandbox stage. Read the DCA case, then run matched counterfactuals on the live instrument.</p>
 </div>
 </div>
 </div>
@@ -117,14 +163,14 @@
 <p class="intro">The strongest demo is not six architecture boxes. It is one matched experiment you can watch: same world, same seed, one controlled change.</p>
 <div class="demo-band" style="grid-template-columns:repeat(3,1fr)">
 <a class="demo-card" href="c2-sandbox.html">
-<div class="status">● C2 SANDBOX</div>
-<h3>Historical data → experiment</h3>
-<p>Explore a 3D operational reconstruction built around NTSB case data, then cross into clearly labeled counterfactual experiments.</p>
+<div class="status">● SANDBOX</div>
+<h3>Run the Night Crossing sandbox</h3>
+<p>3D reconstruction, live tracks, green radar, then auto-cycled matched trials that show what each counterfactual creates.</p>
 </a>
-<a class="demo-card" href="dca-demo.html">
-<div class="status">● DCA INSTRUMENT</div>
-<h3>Night Crossing</h3>
-<p>Abstract encounter geometry. Competing explanations. Baseline vs matched counterfactual — altitude, timing, or visibility.</p>
+<a class="demo-card" href="dca.html">
+<div class="status">● DCA CASE</div>
+<h3>Read the case study</h3>
+<p>Why this encounter is the teaching case — then Run Sandbox when you are ready to change one factor under a matched seed.</p>
 </a>
 <a class="demo-card" href="economics-demo.html">
 <div class="status">● MARKET INSTRUMENT</div>
@@ -132,7 +178,7 @@
 <p>Control what an opaque trading agent can see, compare behavioral explanations, and check what survives.</p>
 </a>
 </div>
-<p style="margin-top:18px"><a href="c2-sandbox.html" style="color:#1f4e79">Open the C2 sandbox →</a></p>
+<p style="margin-top:18px"><a href="c2-sandbox.html" style="color:#1f4e79">Run Sandbox →</a></p>
 </div>
 </section>
 
@@ -174,7 +220,7 @@
 <div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
 </div>
 </footer>
-<script src="tip.js?v=57"></script>
-<script src="script.js?v=57"></script>
+<script src="tip.js?v=62"></script>
+<script src="script.js?v=62"></script>
 </body>
 </html>

@@ -5,14 +5,14 @@ if (toggle && nav) {
 }
 
 const traces = [
-  'Keep competing explanations visible',
-  'Choose a test where they disagree',
-  'Run control and change under the same setup',
-  'Record the measured difference',
-  'Lock the rules before the final check',
-  'Confirm on a reserved case',
-  'Keep the claim with its limits',
-  'Human review before operational use'
+  'DCA case: reconstruct the recorded encounter',
+  'Sandbox: keep rival explanations visible',
+  'Change one factor under a matched seed',
+  'Watch what the counterfactual creates',
+  'Re-run thousands of matched trials',
+  'Rank which intervention mattered most',
+  'Keep the claim with its model limits',
+  'Human review before treating it as a finding'
 ];
 let ti = 0;
 const tr = document.querySelector('.trace');
@@ -30,16 +30,14 @@ if (tr) {
   }, 1600);
 }
 
-const q = document.querySelector('[data-query]');
 const claim = document.querySelector('[data-claim]');
 const layerEls = [...document.querySelectorAll('.layer')];
 let layerAnimStep = 0;
-if (q) {
+if (layerEls.length) {
   setInterval(() => {
-    layerAnimStep = (layerAnimStep + 1) % 6;
-    q.textContent = ['3', '3', '2', '2', '1', '1'][layerAnimStep];
+    layerAnimStep = (layerAnimStep + 1) % layerEls.length;
     if (claim) {
-      claim.textContent = ['candidate', 'candidate', 'provisional', 'provisional', 'supported', 'supported'][layerAnimStep];
+      claim.textContent = ['record', 'stage', 'change', 'creates', 'trials', 'limits'][layerAnimStep] || 'record';
     }
     layerEls.forEach((x, i) => x.classList.toggle('active', i === layerAnimStep));
   }, 1800);
