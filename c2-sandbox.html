@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sandbox | DCA Night Crossing | Paul Cummings</title>
 <meta name="description" content="CoAgentics sandbox: reconstruct the DCA Night Crossing record, then run matched counterfactual trials and see what each change creates.">
-<link rel="stylesheet" href="styles.css?v=65">
+<link rel="stylesheet" href="styles.css?v=66">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -74,13 +74,26 @@
 .auto-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
 .auto-row label{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:6px}
 .speed-pill{font:700 .68rem ui-monospace,monospace;letter-spacing:.08em;padding:4px 8px;border-radius:999px;background:#e8f6ef;color:#1a7a4c;border:1px solid #b7e0c8}
-.cf-banner{position:absolute;left:14px;top:72px;right:auto;width:min(280px,46%);z-index:5;pointer-events:none;display:none;gap:8px;grid-template-columns:1fr}
+.cf-banner{position:absolute;left:14px;top:72px;right:auto;width:min(300px,48%);z-index:5;pointer-events:none;display:none;gap:8px;grid-template-columns:1fr}
 .cf-banner.show{display:grid}
 .c2-stage.sim-mode .impact-banner{display:none!important}
 .cf-banner .cf-card{background:rgba(28,16,42,.88);backdrop-filter:blur(10px);border:1px solid rgba(196,163,232,.45);border-radius:10px;padding:10px 12px;color:#f3e9ff}
 .cf-banner .cf-card small{display:block;font:700 .58rem ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#c4a3e8;margin-bottom:3px}
-.cf-banner .cf-card strong{display:block;font-size:.95rem;line-height:1.25}
-.cf-banner .cf-card em{display:block;margin-top:4px;font:600 .72rem ui-monospace,monospace;font-style:normal;color:#d4b8f5}
+.cf-banner .cf-card strong{display:block;font-size:.92rem;line-height:1.25}
+.cf-banner .cf-card em{display:block;margin-top:4px;font:600 .7rem ui-monospace,monospace;font-style:normal;color:#d4b8f5}
+.outcome-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.out-pill{border-radius:8px;padding:8px 10px;font:700 .72rem ui-monospace,monospace;letter-spacing:.04em}
+.out-pill small{display:block;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;opacity:.85;margin-bottom:2px}
+.out-pill.hit{background:rgba(120,30,18,.92);border:1px solid #ff7a45;color:#ffd0b8}
+.out-pill.miss{background:rgba(12,60,40,.92);border:1px solid #3dcf5a;color:#b8f5d0}
+.out-pill.change{grid-column:1/-1;background:rgba(28,16,42,.92);border:1px solid rgba(196,163,232,.5);color:#f3e9ff}
+.rate-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.rate-card{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff}
+.rate-card.hit{border-color:#e8a090;background:#fff6f3}
+.rate-card.miss{border-color:#9fd4b5;background:#f3fbf6}
+.rate-card span{display:block;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.rate-card strong{display:block;font-size:1.35rem;margin-top:2px}
+.rate-card em{display:block;font-size:.75rem;color:var(--muted);font-style:normal;margin-top:2px}
 .c2-side{border:1px solid var(--line);border-radius:14px;background:#fff;padding:18px;box-shadow:0 10px 34px rgba(21,32,51,.06);max-height:590px;overflow:auto}
 .c2-side h3{font-size:1.12rem;margin:0 0 8px}.c2-side p{color:var(--muted);font-size:.9rem}
 .c2-event{border-top:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:72px 1fr;gap:10px;margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:8px;transition:background .2s,box-shadow .2s,opacity .2s;opacity:.55}
@@ -155,8 +168,12 @@
     <div class="craft-tag" id="tagCrj"><b>CRJ 5342</b><span id="tagCrjMeta">—</span></div>
     <div class="impact-banner" id="impactBanner">IMPACT<small>278 ft MSL · recorded collision</small></div>
     <div class="cf-banner" id="cfBanner">
-      <div class="cf-card"><small>Now changing</small><strong id="bannerChange">—</strong><em id="bannerHyp">—</em></div>
-      <div class="cf-card"><small>Counterfactual creates</small><strong id="bannerCreates">—</strong><em id="bannerSpeed">AUTO · 10× · matched trials</em></div>
+      <div class="outcome-row">
+        <div class="out-pill hit" id="outBasePill"><small>Baseline</small><span id="outBaseLabel">—</span></div>
+        <div class="out-pill miss" id="outCfPill"><small>Counterfactual</small><span id="outCfLabel">—</span></div>
+      </div>
+      <div class="out-pill change"><small>What changed</small><strong id="bannerChange">—</strong><em id="bannerCreates">—</em></div>
+      <div class="cf-card"><small id="bannerHyp">—</small><em id="bannerSpeed">AUTO · 10× · matched trials</em></div>
     </div>
     <div class="c2-radar-wrap" id="radarWrap" aria-hidden="true">
       <canvas id="radarCanvas" width="336" height="336"></canvas>
@@ -199,9 +216,9 @@
       </div>
       <div class="c2-exp-strip hide" id="expMetrics">
         <div class="c2-metric"><span>Trials</span><strong id="nHud">—</strong></div>
-        <div class="c2-metric"><span>Mean base</span><strong id="baseSepHud">—</strong></div>
-        <div class="c2-metric sim-metric"><span>Mean CF</span><strong id="cfSepHud">—</strong></div>
-        <div class="c2-metric sim-metric"><span>Mean Δ</span><strong id="deltaHud">—</strong></div>
+        <div class="c2-metric"><span>Base impact</span><strong id="baseHitHud">—</strong></div>
+        <div class="c2-metric sim-metric"><span>CF impact</span><strong id="cfHitHud">—</strong></div>
+        <div class="c2-metric sim-metric"><span>Rescued</span><strong id="deltaHud">—</strong></div>
       </div>
     </div>
   </div>
@@ -251,12 +268,12 @@
         <h3 id="expTitle" style="margin-top:12px;font-size:1.05rem">Altitude perception test</h3>
         <p id="expDesc" style="margin:6px 0 0;font-size:.88rem">Matched pairs from seed family 1842. Only the selected factor changes.</p>
         <div class="exp-result" id="expResult">
-          <div class="exp-result-grid">
-            <div class="c2-datum"><span>Mean baseline</span><strong id="baseOut">—</strong><em>min sep (nm)</em></div>
-            <div class="c2-datum"><span>Mean CF creates</span><strong id="cfOut">—</strong><em>min sep (nm)</em></div>
+          <div class="rate-row">
+            <div class="rate-card hit"><span>Baseline impact rate</span><strong id="baseHitOut">—</strong><em id="baseOut">mean sep —</em></div>
+            <div class="rate-card miss"><span>CF impact rate</span><strong id="cfHitOut">—</strong><em id="cfOut">mean sep —</em></div>
           </div>
           <div style="margin-top:12px">
-            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Mean paired Δ · P(Δ&gt;0)</span>
+            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">Collisions avoided (rescued) · mean Δ sep</span>
             <strong id="deltaOut" style="display:block;font-size:1.8rem">—</strong>
             <p id="pPosOut" style="margin:4px 0 0;font-size:.86rem;color:var(--muted)"></p>
             <p id="claimOut" style="margin:8px 0 0;font-size:.86rem;color:var(--muted)"></p>
@@ -312,8 +329,8 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=65"></script>
-<script src="script.js?v=65"></script>
+<script src="tip.js?v=66"></script>
+<script src="script.js?v=66"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -404,30 +421,34 @@ function gauss(rand) {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
 
+/** Min separation below this (nm) counts as IMPACT in the sandbox model. */
+const IMPACT_NM = 0.12;
+
 /**
  * Schematic encounter model: sample minimum separation (nm).
  * Matched pairs share the same noise draws; intervention adds a controlled miss component.
  */
 function sampleMinSep(rand, hyp, intervene) {
-  // Shared world noise (geometry / timing jitter / sensor)
-  const geo = 0.09 + 0.04 * gauss(rand);
-  const phase = 0.03 * gauss(rand);
-  const sensor = 0.02 * gauss(rand);
-  let sep = Math.max(0.01, 0.10 + geo + phase + sensor);
+  // Shared world noise — baseline often near/under impact threshold
+  const geo = 0.04 * gauss(rand);
+  const phase = 0.025 * gauss(rand);
+  const sensor = 0.015 * gauss(rand);
+  let sep = Math.max(0.01, 0.07 + geo + phase + sensor);
   if (intervene) {
     const d = defs[hyp];
     const lift = d.effect + d.noise * gauss(rand);
-    // soft saturation: large lifts still leave residual risk
     sep = Math.max(0.02, sep + Math.max(0.02, lift));
   }
   return sep;
 }
 
+function isImpact(sep) { return sep < IMPACT_NM; }
+
 function runMatchedBatch(hyp, n, baseSeed = MASTER_SEED) {
   const deltas = new Float64Array(n);
   let sumB = 0, sumC = 0, sumD = 0, pos = 0;
+  let baseHits = 0, cfHits = 0, rescued = 0;
   for (let i = 0; i < n; i++) {
-    // Matched pair: identical PRNG streams so only the intervene flag differs.
     const stream = (baseSeed * 10007 + i * 9973) >>> 0;
     const rBase = mulberry32(stream);
     const rCf = mulberry32(stream);
@@ -437,9 +458,13 @@ function runMatchedBatch(hyp, n, baseSeed = MASTER_SEED) {
     deltas[i] = d;
     sumB += b; sumC += c; sumD += d;
     if (d > 0) pos++;
+    const bHit = isImpact(b);
+    const cHit = isImpact(c);
+    if (bHit) baseHits++;
+    if (cHit) cfHits++;
+    if (bHit && !cHit) rescued++;
   }
   const meanB = sumB / n, meanC = sumC / n, meanD = sumD / n;
-  // sample std of delta
   let ss = 0;
   for (let i = 0; i < n; i++) { const e = deltas[i] - meanD; ss += e * e; }
   const sd = Math.sqrt(ss / Math.max(1, n - 1));
@@ -447,7 +472,11 @@ function runMatchedBatch(hyp, n, baseSeed = MASTER_SEED) {
   return {
     n, meanB, meanC, meanD, sd, se,
     pPos: pos / n,
-    ci95: 1.96 * se
+    ci95: 1.96 * se,
+    baseHitRate: baseHits / n,
+    cfHitRate: cfHits / n,
+    rescuedRate: rescued / n,
+    baseHits, cfHits, rescued
   };
 }
 
@@ -1321,16 +1350,30 @@ document.querySelectorAll('.c2-tab').forEach((b) => b.addEventListener('click', 
   if (window.CoTips) CoTips.focusStep(b);
 }));
 
+function setOutcomePills(baseHit, cfHit, change, creates, hypLabel) {
+  const basePill = $('#outBasePill');
+  const cfPill = $('#outCfPill');
+  if (basePill) {
+    basePill.className = 'out-pill ' + (baseHit ? 'hit' : 'miss');
+    $('#outBaseLabel').textContent = baseHit ? 'IMPACT' : 'MISS';
+  }
+  if (cfPill) {
+    cfPill.className = 'out-pill ' + (cfHit ? 'hit' : 'miss');
+    $('#outCfLabel').textContent = cfHit ? 'IMPACT' : 'CLEAR MISS';
+  }
+  $('#bannerChange').textContent = change;
+  $('#bannerCreates').textContent = creates;
+  $('#bannerHyp').textContent = hypLabel;
+}
+
 function showCreatePanel(h) {
   const d = defs[h];
   $('#changeOut').textContent = d.change;
   $('#createsOut').textContent = d.creates;
   $('#createsDetail').textContent = d.createsDetail;
   $('#stageTitle').textContent = d.creates;
-  $('#stageLabel').textContent = 'NOW CHANGING · ' + HYP_LABEL[h];
-  $('#bannerChange').textContent = d.change;
-  $('#bannerCreates').textContent = d.creates;
-  $('#bannerHyp').textContent = HYP_LABEL[h] + ' · round ' + (batchRound + 1);
+  $('#stageLabel').textContent = 'WHAT CHANGED · ' + HYP_LABEL[h];
+  setOutcomePills(true, false, d.change, d.creates, HYP_LABEL[h] + ' · round ' + (batchRound + 1));
   $('#bannerSpeed').textContent = 'AUTO · 10× · ' + Number($('#trialN')?.value || 1000) + ' matched trials';
   $('#cfBanner')?.classList.add('show');
   $('#sourceBadge').textContent = 'AUTO · 10× · ' + HYP_LABEL[h];
@@ -1372,14 +1415,29 @@ function renderRankBars(ranked) {
   $('#rankBox').style.display = 'block';
 }
 
-function animateExpPlayback(gen) {
+function animateExpPlayback(gen, outcome) {
   return new Promise((resolve) => {
     if (expAnim) cancelAnimationFrame(expAnim);
     const start = performance.now();
+    let flashed = false;
     const step = (now) => {
       if (gen !== runGeneration) { resolve(false); return; }
       const q = Math.min(1, (now - start) / PLAY_MS);
       placeExp(q);
+      if (!flashed && q >= 0.82 && outcome) {
+        flashed = true;
+        setOutcomePills(
+          outcome.baseHit,
+          outcome.cfHit,
+          outcome.change,
+          outcome.creates,
+          outcome.hypLabel
+        );
+        // Contact strip mirrors outcome
+        $('#stateMetric').textContent = outcome.cfHit ? 'CF still impacts' : 'CF avoids impact';
+        $('#timeMetric').textContent = outcome.cfHit ? 'IMPACT' : 'MISS';
+        $('#sepMetric').textContent = outcome.meanC.toFixed(2) + ' nm CF';
+      }
       if (q < 1) expAnim = requestAnimationFrame(step);
       else { expAnim = null; resolve(true); }
     };
@@ -1416,20 +1474,44 @@ async function runMatchedCycle() {
   const ranked = rankHypotheses(n);
   const ms = Math.round(performance.now() - t0);
 
+  const baseHitTypical = isImpact(primary.meanB);
+  const cfHitTypical = isImpact(primary.meanC);
+
   $('#nHud').textContent = n + ' · r' + batchRound;
-  $('#baseSepHud').textContent = primary.meanB.toFixed(2) + ' nm';
-  $('#cfSepHud').textContent = primary.meanC.toFixed(2) + ' nm';
-  $('#deltaHud').textContent = (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(2) + ' nm';
-  $('#baseOut').textContent = primary.meanB.toFixed(3) + ' nm';
-  $('#cfOut').textContent = primary.meanC.toFixed(3) + ' nm';
-  $('#deltaOut').textContent = (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(3) + ' nm';
-  $('#pPosOut').textContent = `P(Δ>0) = ${(primary.pPos * 100).toFixed(1)}% · 95% CI ±${primary.ci95.toFixed(3)} nm · ${ms} ms · 10×`;
+  $('#baseHitHud').textContent = Math.round(primary.baseHitRate * 100) + '%';
+  $('#cfHitHud').textContent = Math.round(primary.cfHitRate * 100) + '%';
+  $('#deltaHud').textContent = Math.round(primary.rescuedRate * 100) + '%';
+  $('#baseHitOut').textContent = Math.round(primary.baseHitRate * 100) + '%';
+  $('#cfHitOut').textContent = Math.round(primary.cfHitRate * 100) + '%';
+  $('#baseOut').textContent = 'mean sep ' + primary.meanB.toFixed(3) + ' nm';
+  $('#cfOut').textContent = 'mean sep ' + primary.meanC.toFixed(3) + ' nm';
+  $('#deltaOut').textContent = Math.round(primary.rescuedRate * 100) + '% rescued · Δ ' +
+    (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(3) + ' nm';
+  $('#pPosOut').textContent =
+    `Baseline impacts ${primary.baseHits}/${n} · CF impacts ${primary.cfHits}/${n} · avoided ${primary.rescued}/${n} · 10× · ${ms} ms`;
   const winner = ranked[0];
-  $('#claimOut').textContent = `Changing: ${d.change}. Creates: ${d.creates}. ${d.claim} Strongest |Δ|: ${winner.label} (+${winner.meanAbs.toFixed(2)} nm).`;
+  $('#claimOut').textContent =
+    `What changed: ${d.change}. That creates: ${d.creates}. ` +
+    `Impact rate ${Math.round(primary.baseHitRate * 100)}% → ${Math.round(primary.cfHitRate * 100)}%. ` +
+    `${d.claim} Strongest |Δ|: ${winner.label}.`;
+  setOutcomePills(
+    baseHitTypical,
+    cfHitTypical,
+    d.change,
+    d.creates,
+    HYP_LABEL[sel] + ' · ' + Math.round(primary.rescuedRate * 100) + '% rescued'
+  );
   renderRankBars(ranked);
   $('#expResult').classList.add('show');
 
-  const ok = await animateExpPlayback(gen);
+  const ok = await animateExpPlayback(gen, {
+    baseHit: baseHitTypical,
+    cfHit: cfHitTypical,
+    change: d.change,
+    creates: d.creates,
+    hypLabel: HYP_LABEL[sel] + ' · round ' + batchRound,
+    meanC: primary.meanC
+  });
   if (!ok || gen !== runGeneration) return;
 
   $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run matched trials';
