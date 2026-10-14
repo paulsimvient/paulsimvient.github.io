@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Economics Demonstration | Paul Cummings, Ph.D.</title>
 <meta name="description" content="A simple interactive CoAgentics economics demonstration: change one market signal, compare matched outcomes, and see which explanation survives.">
-<link rel="stylesheet" href="styles.css?v=55">
+<link rel="stylesheet" href="styles.css?v=56">
 <style>
 :root{--ink:#152033;--accent:#1f4e79;--paper:#ffffff;--soft:#eef2f6;--green:#dbeafe;--muted:#5b667a;--warn:#b45309}
 .demo-shell{max-width:1120px;margin:0 auto;padding:2rem 1.5rem 5rem;color:var(--ink)}
@@ -20,13 +20,13 @@
 .fixed div{background:rgba(255,255,255,.92);border:1px solid #d5dbe6;border-radius:10px;padding:.65rem}
 .fixed span{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.fixed b{display:block;margin-top:.12rem;font-size:.9rem;color:var(--ink)}
 .signal{transition:.35s}.signal.changed{background:#e0eef8!important;border-color:rgba(31,78,121,.35)!important;box-shadow:0 0 0 2px rgba(31,78,121,.08)}
-.chart{position:absolute;left:10%;right:10%;top:165px;height:170px;border-left:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1}
+.chart{position:absolute;left:10%;right:10%;top:155px;height:155px;border-left:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1}
 .gridline{position:absolute;left:0;right:0;height:1px;background:rgba(21,32,51,.06)}.gridline:nth-child(1){top:25%}.gridline:nth-child(2){top:50%}.gridline:nth-child(3){top:75%}
-.bidbar{position:absolute;bottom:0;width:28%;border-radius:8px 8px 0 0;transition:height .7s cubic-bezier(.2,.8,.2,1)}
+.bidbar{position:absolute;bottom:0;width:28%;border-radius:8px 8px 0 0;transition:height .7s cubic-bezier(.2,.8,.2,1);max-height:100%}
 .ref{left:18%;background:#94a3b8;height:55%}.subject{right:18%;background:var(--accent);height:45%}
-.barlabel{position:absolute;left:50%;transform:translateX(-50%);top:-28px;font:700 .9rem/1 system-ui;white-space:nowrap;color:var(--ink)}
-.axis-label{position:absolute;bottom:-28px;font:700 .69rem/1 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.ref .axis-label,.subject .axis-label{left:50%;transform:translateX(-50%)}
-.agentline{position:absolute;left:18px;right:18px;bottom:22px;padding:.85rem 1rem;border-radius:10px;background:#0f172a;color:#e8eef6;display:flex;justify-content:space-between;gap:1rem;align-items:center}
+.barlabel{position:absolute;left:50%;transform:translateX(-50%);top:-26px;font:700 .9rem/1 system-ui;white-space:nowrap;color:var(--ink)}
+.axis-label{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);font:700 .68rem/1.15 system-ui;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.agentline{position:absolute;left:18px;right:18px;bottom:18px;padding:.85rem 1rem;border-radius:10px;background:#0f172a;color:#e8eef6;display:flex;justify-content:space-between;gap:1rem;align-items:center}
 .agentline .prompt{font-size:.83rem;line-height:1.3}.agentline strong{display:block;font-size:1rem;margin-bottom:.16rem;color:#f8fafc}
 .agentline .status{font:700 .72rem/1 system-ui;letter-spacing:.08em;text-transform:uppercase;color:#93c5fd;white-space:nowrap}
 .side{display:grid;gap:1rem}.question,.result{padding:1.15rem}
@@ -119,7 +119,7 @@
   <div class="chart" data-tip="Reference vs black-box bids under the current treatment." data-tip-title="Bids">
     <div class="gridline"></div><div class="gridline"></div><div class="gridline"></div>
     <div class="bidbar ref"><div class="barlabel">$80</div><div class="axis-label">Reference</div></div>
-    <div class="bidbar subject" id="subjectBar"><div class="barlabel" id="subjectLabel">$75</div><div class="axis-label">Black-box agent</div></div>
+    <div class="bidbar subject" id="subjectBar"><div class="barlabel" id="subjectLabel">$75</div><div class="axis-label">Black box</div></div>
   </div>
   <div class="agentline" data-tip="Narrates the current beat in plain language." data-tip-title="What’s happening"><div class="prompt"><strong id="stageTitle">Start with a question.</strong><span id="stageCopy">The agent bids $75. Several explanations could fit one observation.</span></div><div class="status" id="stageStatus">Ready</div></div>
 </div>
@@ -170,7 +170,7 @@
 <p class="note">Illustrative values only. The example demonstrates the experimental method; it is not an empirical claim about a particular AI system.</p>
 </main>
 <footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D. All rights reserved.</div></div></footer>
-<script src="tip.js?v=55"></script>
+<script src="tip.js?v=56"></script>
 <script>
 (function(){var t=document.querySelector('.mobile-toggle'),n=document.querySelector('.nav');if(t&&n)t.addEventListener('click',function(){n.classList.toggle('open')});})();
 const $=id=>document.getElementById(id);
@@ -184,7 +184,7 @@ const focusMap={
 };
 function beats(n){[1,2,3].forEach(i=>{const e=$('beat'+i);e.className='beat'+(i<n?' done':i===n?' active':'')})}
 function clearCells(){cells.forEach(c=>c.classList.remove('on'))}
-function setSubject(v){$('subjectLabel').textContent='$'+v;$('subjectBar').style.height=(v-55)*2.25+'%'}
+function setSubject(v){$('subjectLabel').textContent='$'+v;$('subjectBar').style.height=Math.min(100,Math.max(12,(v-55)*2.2))+'%'}
 function hypotheses(lead){['hNews','hHistory','hInteraction'].forEach(id=>$(id).className='choice');if(lead){$(lead).classList.add('leading');['hNews','hHistory','hInteraction'].filter(x=>x!==lead).forEach(x=>$(x).classList.add('faded'))}}
 function tipFor(n){
   const f=focusMap[n];
