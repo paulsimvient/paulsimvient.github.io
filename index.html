@@ -2,47 +2,64 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Paul Cummings, Ph.D. | Thinking Together</title>
 <meta name="description" content="Making AI behavior testable: competing explanations, controlled comparisons, and evidence people can inspect.">
-<link rel="stylesheet" href="styles.css?v=66">
+<link rel="stylesheet" href="styles.css?v=67">
 <style>
-.instrument-body.sandbox-preview{display:flex!important;flex-direction:column;grid-template-columns:1fr!important;min-height:0;flex:1}
-.sandbox-preview .layers{display:none!important}
-.sandbox-preview .console{display:flex;flex-direction:column;flex:1;min-height:0;padding:0!important;border:0;width:100%}
+/* Full-bleed sandbox preview card — no side step list */
+.instrument.sb-card{min-height:0;padding:0;overflow:hidden}
+.instrument.sb-card .instrument-top,
+.instrument.sb-card .layers,
+.instrument.sb-card .trace,
+.instrument.sb-card .console-head{display:none!important}
+.instrument-body.sandbox-preview{
+  display:block!important;grid-template-columns:1fr!important;min-height:0;flex:1;
+}
+.sb-link{
+  display:block;color:inherit;text-decoration:none;height:100%;
+}
 .sb-observe{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  padding:12px 16px;border-bottom:1px solid #26343d;background:#0b1218;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;background:#0b1218;border-bottom:1px solid #26343d;
 }
-.sb-observe a{
-  font:700 .95rem ui-sans-serif,system-ui;color:#7dd3fc;text-decoration:none;letter-spacing:-.01em;
+.sb-observe .go{
+  font:700 1.05rem ui-sans-serif,system-ui;color:#7dd3fc;letter-spacing:-.02em;
 }
-.sb-observe a:hover{color:#fff}
-.sb-observe span{font:600 .68rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.08em}
+.sb-link:hover .sb-observe .go{color:#fff}
+.sb-observe .tag{
+  font:600 .68rem ui-monospace,monospace;color:#8aa0b2;letter-spacing:.1em;
+}
 .sb-stage{
-  position:relative;flex:1;min-height:420px;margin:0;border-radius:0;overflow:hidden;
-  background:radial-gradient(ellipse at 60% 40%,rgba(30,80,110,.25),transparent 50%),#081018;
-  border:0;
+  position:relative;min-height:480px;
+  background:radial-gradient(ellipse at 55% 35%,rgba(30,80,110,.28),transparent 55%),#081018;
 }
-.sb-stage svg{width:100%;height:100%;display:block;min-height:420px}
-.sb-hud{position:absolute;left:12px;right:12px;bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;pointer-events:none}
-.sb-chip{background:rgba(7,13,19,.88);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 10px;color:#edf4f8;font:600 .6rem ui-monospace,monospace}
-.sb-chip span{display:block;color:#8aa0b2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
-.sb-chip strong{font-size:.82rem;color:#f8fafc}
+.sb-stage svg{width:100%;height:480px;display:block}
+.sb-hud{
+  position:absolute;left:14px;right:14px;bottom:14px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;pointer-events:none;
+}
+.sb-chip{
+  background:rgba(7,13,19,.9);border:1px solid rgba(255,255,255,.12);border-radius:8px;
+  padding:10px 11px;color:#edf4f8;font:600 .62rem ui-monospace,monospace;
+}
+.sb-chip span{display:block;color:#8aa0b2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.sb-chip strong{font-size:.88rem;color:#f8fafc}
 .sb-radar{
-  position:absolute;right:14px;top:14px;width:88px;height:88px;border-radius:50%;
-  border:2px solid #1f8f3a;background:#031408;box-shadow:0 0 16px rgba(30,180,70,.35);
+  position:absolute;right:16px;top:16px;width:92px;height:92px;border-radius:50%;
+  border:2px solid #1f8f3a;background:#031408;box-shadow:0 0 18px rgba(30,180,70,.4);
 }
 .sb-radar:after{
-  content:'';position:absolute;left:50%;top:50%;width:46%;height:2px;background:rgba(90,255,120,.85);
-  transform-origin:left center;animation:sbSweep 2.4s linear infinite;
+  content:'';position:absolute;left:50%;top:50%;width:46%;height:2px;background:rgba(90,255,120,.9);
+  transform-origin:left center;animation:sbSweep 2.2s linear infinite;
 }
 @keyframes sbSweep{to{transform:rotate(360deg)}}
-.sb-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-top:1px solid #26343d}
-.sb-foot p{margin:0;color:#94a3b8;font-size:.8rem;max-width:340px}
-.sb-actions{display:flex;gap:10px;flex-wrap:wrap}
-.sb-actions a{font-size:.86rem}
-@media(max-width:720px){.sb-stage,.sb-stage svg{min-height:300px}.sb-hud{grid-template-columns:1fr}}
+@media(max-width:720px){
+  .sb-stage,.sb-stage svg{min-height:320px;height:320px}
+  .sb-hud{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -69,19 +86,18 @@
 <h1>Don't just trust AI.<br><span>Test it.</span></h1>
 <p class="lead">Start with the DCA Night Crossing case, then run the sandbox: reconstruct the record, keep rival explanations alive, and watch matched counterfactuals create different outcomes.</p>
 <div class="actions">
-<a class="btn primary" href="c2-sandbox.html">Run Sandbox →</a>
+<a class="btn primary" href="c2-sandbox.html">Observe example →</a>
 <a class="btn" href="dca.html">Read the DCA case →</a>
 <a class="btn rust" href="economics-demo.html">Open the economics instrument →</a>
 <a class="btn" href="book.html">About the book →</a>
 </div>
-<p class="micro">Historical reconstruction → matched trials → what the counterfactual creates.</p>
+<p class="micro">Click the preview — or Observe example — to enter the sandbox.</p>
 </div>
-<div class="instrument">
+<a class="instrument sb-card" href="c2-sandbox.html" aria-label="Observe example: open the DCA Night Crossing sandbox">
 <div class="instrument-body sandbox-preview">
-<div class="console">
 <div class="sb-observe">
-  <a href="c2-sandbox.html">Observe example →</a>
-  <span>DCA NIGHT CROSSING · SANDBOX</span>
+  <span class="go">Observe example →</span>
+  <span class="tag">DCA NIGHT CROSSING</span>
 </div>
 <div class="sb-stage" aria-hidden="true">
 <svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice">
@@ -101,8 +117,8 @@
 <circle cx="430" cy="170" r="5" fill="#7895a8"/>
 <text x="198" y="162" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
 <text x="400" y="156" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
-<text x="18" y="32" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
-<text x="18" y="52" fill="#edf4f8" font-size="18" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
+<text x="18" y="36" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
+<text x="18" y="58" fill="#edf4f8" font-size="20" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
 </svg>
 <div class="sb-radar" title="Derived radar"></div>
 <div class="sb-hud">
@@ -111,16 +127,8 @@
 <div class="sb-chip"><span>Range · CPA</span><strong>6.50 nm · 118 s</strong></div>
 </div>
 </div>
-<div class="sb-foot">
-<p>Open the sandbox to watch the reconstruction and matched counterfactuals.</p>
-<div class="sb-actions">
-<a class="btn primary" href="c2-sandbox.html">Observe example →</a>
-<a class="btn" href="dca.html">DCA case →</a>
 </div>
-</div>
-</div>
-</div>
-</div>
+</a>
 </section>
 
 
@@ -224,7 +232,7 @@
 <div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
 </div>
 </footer>
-<script src="tip.js?v=66"></script>
-<script src="script.js?v=66"></script>
+<script src="tip.js?v=67"></script>
+<script src="script.js?v=67"></script>
 </body>
 </html>
