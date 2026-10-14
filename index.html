@@ -5,22 +5,25 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Paul Cummings, Ph.D. | Thinking Together</title>
 <meta name="description" content="Making AI behavior testable: competing explanations, controlled comparisons, and evidence people can inspect.">
-<link rel="stylesheet" href="styles.css?v=62">
+<link rel="stylesheet" href="styles.css?v=65">
 <style>
-.sandbox-preview{display:flex;flex-direction:column;min-height:0;flex:1}
-.sandbox-preview .console{display:flex;flex-direction:column;flex:1;min-height:0;padding:0!important}
+.instrument-body.sandbox-preview{display:flex;flex-direction:column;grid-template-columns:1fr;min-height:0;flex:1}
+.sandbox-preview .console{display:flex;flex-direction:column;flex:1;min-height:0;padding:0!important;border:0}
+.sb-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #26343d;font:600 .68rem ui-monospace,monospace;color:#91a3b2;letter-spacing:.06em}
+.sb-bar b{color:#edf4f8;font-weight:700}
+.sb-bar .pill{color:#3dcf5a}
 .sb-stage{
-  position:relative;flex:1;min-height:340px;margin:12px;border-radius:10px;overflow:hidden;
+  position:relative;flex:1;min-height:420px;margin:0;border-radius:0;overflow:hidden;
   background:radial-gradient(ellipse at 60% 40%,rgba(30,80,110,.25),transparent 50%),#081018;
-  border:1px solid #223243;
+  border:0;
 }
-.sb-stage svg{width:100%;height:100%;display:block}
-.sb-hud{position:absolute;left:10px;right:10px;bottom:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;pointer-events:none}
-.sb-chip{background:rgba(7,13,19,.88);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 9px;color:#edf4f8;font:600 .58rem ui-monospace,monospace}
+.sb-stage svg{width:100%;height:100%;display:block;min-height:420px}
+.sb-hud{position:absolute;left:12px;right:12px;bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;pointer-events:none}
+.sb-chip{background:rgba(7,13,19,.88);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 10px;color:#edf4f8;font:600 .6rem ui-monospace,monospace}
 .sb-chip span{display:block;color:#8aa0b2;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
-.sb-chip strong{font-size:.78rem;color:#f8fafc}
+.sb-chip strong{font-size:.82rem;color:#f8fafc}
 .sb-radar{
-  position:absolute;right:12px;top:12px;width:78px;height:78px;border-radius:50%;
+  position:absolute;right:14px;top:14px;width:88px;height:88px;border-radius:50%;
   border:2px solid #1f8f3a;background:#031408;box-shadow:0 0 16px rgba(30,180,70,.35);
 }
 .sb-radar:after{
@@ -28,8 +31,11 @@
   transform-origin:left center;animation:sbSweep 2.4s linear infinite;
 }
 @keyframes sbSweep{to{transform:rotate(360deg)}}
-.sb-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px}
+.sb-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-top:1px solid #26343d}
+.sb-foot p{margin:0;color:#94a3b8;font-size:.8rem;max-width:340px}
+.sb-actions{display:flex;gap:10px;flex-wrap:wrap}
 .sb-actions a{font-size:.86rem}
+@media(max-width:720px){.sb-stage,.sb-stage svg{min-height:300px}.sb-hud{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -64,42 +70,30 @@
 <p class="micro">Historical reconstruction → matched trials → what the counterfactual creates.</p>
 </div>
 <div class="instrument">
-<div class="instrument-top"><span class="dot live"></span><span>SANDBOX PREVIEW · DCA NIGHT CROSSING</span></div>
+<div class="instrument-top"><span class="dot live"></span><span>SANDBOX · DCA NIGHT CROSSING</span></div>
 <div class="instrument-body sandbox-preview">
-<div class="layers">
-<div class="layer active"><b>Record</b><span>NTSB-linked sequence</span></div>
-<div class="layer"><b>Stage</b><span>tracks · radar · live HUD</span></div>
-<div class="layer"><b>Change</b><span>one factor · matched seed</span></div>
-<div class="layer"><b>Creates</b><span>counterfactual geometry</span></div>
-<div class="layer"><b>Trials</b><span>1000s · rank what mattered</span></div>
-<div class="layer"><b>Limits</b><span>model · not a finding</span></div>
-</div>
 <div class="console">
-<div class="console-head">
-<div class="metric"><span>case</span><strong>DCA25MA108</strong></div>
-<div class="metric"><span>mode</span><strong data-claim>record</strong></div>
-<div class="metric"><span>seed family</span><strong>1842</strong></div>
-</div>
+<div class="sb-bar"><span>CASE <b>DCA25MA108</b></span><span>SEED <b>1842</b></span><span class="pill">RECORD → MATCHED TRIALS · 10×</span></div>
 <div class="sb-stage" aria-hidden="true">
-<svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+<svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice">
 <defs>
 <linearGradient id="sbGrid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1822"/><stop offset="1" stop-color="#081018"/></linearGradient>
 </defs>
-<rect width="640" height="360" fill="url(#sbGrid)"/>
+<rect width="640" height="400" fill="url(#sbGrid)"/>
 <g stroke="#1a2b38" stroke-width="1">
-<line x1="40" y1="280" x2="600" y2="200"/><line x1="80" y1="300" x2="620" y2="210"/>
-<line x1="20" y1="240" x2="580" y2="170"/><line x1="60" y1="320" x2="560" y2="250"/>
+<line x1="40" y1="300" x2="600" y2="220"/><line x1="80" y1="320" x2="620" y2="230"/>
+<line x1="20" y1="260" x2="580" y2="190"/><line x1="60" y1="340" x2="560" y2="270"/>
 </g>
-<path d="M70 90 C180 130,260 170,340 210 S480 270,560 300" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
-<path d="M560 80 C460 140,380 180,300 210 S160 260,90 300" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
-<circle cx="320" cy="210" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
-<circle cx="320" cy="210" r="3" fill="#f0c879"/>
-<circle cx="210" cy="160" r="5" fill="#e8eef2"/>
-<circle cx="430" cy="155" r="5" fill="#7895a8"/>
-<text x="198" y="148" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
-<text x="400" y="142" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
-<text x="18" y="28" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
-<text x="18" y="46" fill="#edf4f8" font-size="16" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
+<path d="M70 100 C180 140,260 180,340 230 S480 290,560 320" fill="none" stroke="#d7e4ec" stroke-width="2.5"/>
+<path d="M560 90 C460 150,380 190,300 230 S160 280,90 320" fill="none" stroke="#7d99aa" stroke-width="2.5"/>
+<circle cx="320" cy="230" r="10" fill="none" stroke="#f0c879" stroke-width="2"/>
+<circle cx="320" cy="230" r="3" fill="#f0c879"/>
+<circle cx="210" cy="175" r="5" fill="#e8eef2"/>
+<circle cx="430" cy="170" r="5" fill="#7895a8"/>
+<text x="198" y="162" fill="#cfe0ea" font-size="11" font-family="ui-monospace,monospace">PAT25 · 320 ft</text>
+<text x="400" y="156" fill="#9bb8c8" font-size="11" font-family="ui-monospace,monospace">CRJ 5342 · 1200 ft</text>
+<text x="18" y="32" fill="#91a3b2" font-size="11" font-family="ui-monospace,monospace" letter-spacing="1">HISTORICAL RECONSTRUCTION</text>
+<text x="18" y="52" fill="#edf4f8" font-size="18" font-family="ui-sans-serif,system-ui" font-weight="700">DCA · Night Crossing</text>
 </svg>
 <div class="sb-radar" title="Derived radar"></div>
 <div class="sb-hud">
@@ -108,12 +102,13 @@
 <div class="sb-chip"><span>Range · CPA</span><strong>6.50 nm · 118 s</strong></div>
 </div>
 </div>
-<div class="trace"></div>
+<div class="sb-foot">
+<p>Reconstruct the record, then run matched counterfactuals and see what each change creates.</p>
 <div class="sb-actions">
 <a class="btn primary" href="c2-sandbox.html">Run Sandbox →</a>
-<a class="btn" href="dca.html">DCA case study →</a>
+<a class="btn" href="dca.html">DCA case →</a>
 </div>
-<p class="micro" style="margin:0 14px 14px;color:#94a3b8">Preview of the sandbox stage. Read the DCA case, then run matched counterfactuals on the live instrument.</p>
+</div>
 </div>
 </div>
 </div>
@@ -220,7 +215,7 @@
 <div class="fineprint">© 2026 Paul Cummings, Ph.D.</div>
 </div>
 </footer>
-<script src="tip.js?v=62"></script>
-<script src="script.js?v=62"></script>
+<script src="tip.js?v=65"></script>
+<script src="script.js?v=65"></script>
 </body>
 </html>
