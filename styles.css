@@ -179,7 +179,11 @@ h1,h2,h3,h4,
 }
 
 .demo-card:before{
-  background:radial-gradient(circle at 100% 0, rgba(31,78,121,.08),transparent 40%) !important;
+  display:none !important;
+}
+
+.section{
+  padding:96px 0;
 }
 
 .section.warm{
