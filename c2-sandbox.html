@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sandbox | DCA Night Crossing | Paul Cummings</title>
 <meta name="description" content="CoAgentics sandbox: reconstruct the DCA Night Crossing record, then run matched counterfactual trials and see what each change creates.">
-<link rel="stylesheet" href="styles.css?v=74">
+<link rel="stylesheet" href="styles.css?v=76">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -148,8 +148,35 @@
 .notice{border-left:3px solid var(--teal);padding:10px 12px;background:#f0f6fa;color:#304256;font-size:.86rem;margin-top:12px}
 .hide{display:none!important}
 .side-hist.hide,.side-exp.hide,.hist-panels.hide{display:none!important}
+.tour-bar{display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border-radius:10px;background:#0f172a;color:#e8eef6;border:1px solid #334155}
+.tour-bar.show{display:flex}
+.tour-bar .tour-copy{font-size:.92rem;line-height:1.4;margin:0}
+.tour-bar .tour-copy strong{display:block;font:700 .65rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#93c5fd;margin-bottom:4px}
+.tour-bar .tour-actions{display:flex;gap:8px;flex-wrap:wrap}
+.tour-bar button{appearance:none;border:1px solid #64748b;background:#1e293b;color:#e8eef6;border-radius:7px;padding:8px 12px;font:700 .72rem ui-sans-serif,system-ui;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.tour-bar button.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+.tour-done{display:none;margin:0 0 14px;padding:10px 14px;border-radius:10px;background:#f0f6fa;border:1px solid var(--line);color:#304256;font-size:.88rem}
+.tour-done.show{display:block}
+.mobile-run-dock{display:none}
 @media(max-width:1050px){.c2-grid{grid-template-columns:1fr}.c2-stage,.c2-side{max-height:none;min-height:520px}.c2-data-grid{grid-template-columns:1fr 1fr}.c2-live-row{grid-template-columns:1fr 1fr}.c2-contact{grid-column:1/-1}.c2-radar-wrap{width:140px;height:140px;top:70px}}
-@media(max-width:720px){.c2-shell{padding:0 14px 60px}.c2-stage{min-height:520px}.c2-live-row{grid-template-columns:1fr}.c2-data-grid{grid-template-columns:1fr}.c2-overlay{flex-direction:column;align-items:flex-start}.c2-modebox{display:none}.c2-radar-wrap{right:10px;top:64px;width:112px;height:112px}.c2-kv strong{font-size:.78rem}}
+@media(max-width:720px){
+  .c2-shell{padding:0 14px 88px}
+  .c2-toolbar{position:sticky;top:0;z-index:20;background:var(--bg,#f4f7fa);padding:10px 0;margin:0 0 10px;border-bottom:1px solid var(--line)}
+  .c2-tabs{flex-direction:column;width:100%}
+  .c2-tabs .c2-tab,.c2-tabs .c2-btn{width:100%}
+  .c2-stage{min-height:420px}
+  .c2-live-row{grid-template-columns:1fr}
+  .c2-data-grid{grid-template-columns:1fr}
+  .c2-overlay{flex-direction:column;align-items:flex-start}
+  .c2-modebox{display:block!important}
+  .craft-tag{display:none!important}
+  .c2-radar-wrap{right:8px;top:58px;width:88px;height:88px}
+  .impact-banner,.cf-banner{max-width:min(200px,52%);font-size:.72rem;padding:8px 10px}
+  .c2-kv strong{font-size:.78rem}
+  .mobile-run-dock{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(244,247,250,.96);border-top:1px solid var(--line);gap:8px}
+  .mobile-run-dock .c2-btn{flex:1;text-align:center}
+  .mobile-run-dock .hide{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -159,14 +186,23 @@
 <section class="c2-hero"><div class="c2-shell" style="padding-bottom:24px"><div class="eyebrow">CoAgentics · Sandbox · from the <a href="dca.html" style="color:inherit">DCA case</a></div><h1>Sandbox</h1><p>Reconstruct the recorded Night Crossing encounter, then run matched counterfactual trials. Watch what each change creates on the same stage — automatically, at 100×.</p><div class="c2-legend"><span class="fact">RECORDED FACT</span><span class="derived">DERIVED RECONSTRUCTION</span><span class="sim">SIMULATED COUNTERFACTUAL</span></div></div></section>
 
 <div class="c2-shell">
-<div class="c2-toolbar">
+<div class="tour-bar" id="tourBar" role="status">
+  <p class="tour-copy"><strong id="tourStep">Guided first run</strong><span id="tourText">Watch the recorded encounter, then one matched change and what it creates.</span></p>
+  <div class="tour-actions">
+    <button type="button" class="primary" id="tourNext">Continue</button>
+    <button type="button" id="tourSkip">Skip</button>
+  </div>
+</div>
+<p class="tour-done" id="tourDone">Lesson: one controlled change under a matched seed → measured Δ → claim stays a model result, not an NTSB finding. Explore freely.</p>
+
+<div class="c2-toolbar" id="c2Toolbar">
   <div class="c2-tabs">
     <button class="c2-btn primary" id="playBtn">Play reconstruction</button>
-    <button class="c2-tab" data-view="experiment" data-tip-title="Experiment mode" data-tip="Leave the historical record. Matched interventions are simulated — not NTSB findings." data-focus="Focus on one hypothesis. Same seed, one controlled change, then compare modeled separation in the stage.">Experiment mode</button>
-    <button class="c2-tab active" data-view="history" data-tip-title="History mode" data-tip="Stay in the recorded NTSB-linked sequence. The 3D view is a schematic reconstruction." data-focus="Focus on the timeline and sourced metrics — not every rendered coordinate is an exact FDR sample.">Historical record</button>
+    <button class="c2-tab" data-view="experiment" data-tip-title="Experiment mode" data-tip="Matched interventions are simulated model results." data-focus="One hypothesis. Same seed, one controlled change, compare modeled separation.">Experiment mode</button>
+    <button class="c2-tab active" data-view="history" data-tip-title="History mode" data-tip="Recorded NTSB-linked sequence. The 3D view is a schematic reconstruction." data-focus="Timeline and sourced metrics — schematic geometry.">Historical record</button>
   </div>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <span class="c2-badge" id="sourceBadge">NTSB DCA25MA108</span>
+    <span class="c2-badge" id="sourceBadge">RECORD · NTSB anchors</span>
     <button class="c2-btn" id="viewBtn">Change view</button>
     <button class="c2-btn primary hide" id="runExp">Run matched trials</button>
   </div>
@@ -174,7 +210,7 @@
 
 <div class="c2-grid">
   <div class="c2-stage" id="stage">
-    <canvas id="c2canvas" aria-label="3D command and control reconstruction"></canvas>
+    <canvas id="c2canvas" aria-label="Schematic 3D encounter stage"></canvas>
     <div class="c2-overlay">
       <div class="c2-titlebox"><small id="stageLabel">Historical reconstruction</small><strong id="stageTitle">DCA · Night Crossing</strong></div>
       <div class="c2-modebox"><small>Data layer</small><strong id="modeLabel">Recorded + derived</strong></div>
@@ -364,13 +400,18 @@
     <li><a href="https://www.ntsb.gov/investigations/Documents/DCA25MA108%20Prelim.pdf">NTSB Preliminary Report DCA25MA108</a> — time sequence, separations, CRJ radio altitude/speed, radio-transmission details.</li>
     <li><a href="https://data.ntsb.gov/Docket/Document/docBLOB?FileExtension=pdf&FileName=DCA+Hearing+Animation+Description-Rel.pdf&ID=19838915">NTSB Hearing Animation Description</a> — reconstruction sources: FDR, CVR, radar, ADS-B, ATC, and surveillance video.</li>
   </ul>
-  <p style="color:var(--muted);font-size:.83rem;margin-top:14px">Educational/research visualization. The matched experiment animates illustrative paths in the same schematic stage — it does not replace NTSB findings.</p>
+  <p style="color:var(--muted);font-size:.83rem;margin-top:14px">Educational/research visualization. Matched experiment paths are a schematic toy model on this stage. NTSB reports remain the authority on the accident.</p>
 </div>
+</div>
+
+<div class="mobile-run-dock" id="mobileDock">
+  <button class="c2-btn" id="mobileExpBtn" type="button">Experiment mode</button>
+  <button class="c2-btn primary hide" id="mobileRunBtn" type="button">Run matched trials</button>
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=74"></script>
-<script src="script.js?v=74"></script>
+<script src="tip.js?v=76"></script>
+<script src="script.js?v=76"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -389,6 +430,9 @@ let orbit = { theta: 0.95, phi: 0.92, radius: 25.5, targetY: 0.6 };
 let dragging = false;
 let dragLast = null;
 let mode = 'history';
+let tourActive = false;
+let tourAbort = false;
+let tourContinueResolve = null;
 let useFallback = false;
 let fbCtx = null;
 let fbProgress = 0.05;
@@ -408,7 +452,7 @@ const defs = {
     change: 'Altitude cue +100 ft (baro bias corrected in the model)',
     creates: 'Raised PAT25 path',
     createsDetail: 'Purple counterfactual tube climbs above the baseline heli track. Encounter model yields larger min-separation — often a clear miss instead of a near-miss.',
-    claim: 'In this sandbox encounter model, altitude is the strongest lever on min separation. Model result — not an NTSB finding.'
+    claim: 'In this schematic encounter model, altitude is the strongest lever on min separation. Model result under seed 1842.'
   },
   radio: {
     title: 'Traffic-advisory comprehension test',
@@ -418,7 +462,7 @@ const defs = {
     change: 'Full “circling to runway 33” advisory received',
     creates: 'Earlier divert / pass-behind path',
     createsDetail: 'Counterfactual route bends away sooner. Stage shows a lateral miss geometry; separation improves, but less than the altitude intervention in this model.',
-    claim: 'In this sandbox model, the advisory changes the response distribution, but less than altitude. Model result — not an NTSB finding.'
+    claim: 'In this schematic model, the advisory changes the response distribution less than altitude. Model result under seed 1842.'
   },
   timing: {
     title: 'Encounter timing test',
@@ -428,7 +472,7 @@ const defs = {
     change: 'Encounter timing +7 seconds',
     creates: 'Time-shifted craft on the same geometry',
     createsDetail: 'Same tubes, staggered playback. Closest approach moves; mean Δ is smaller than altitude or advisory in this schematic model.',
-    claim: 'In this sandbox model, timing moves separation less than altitude or advisory. Model result — not an NTSB finding.'
+    claim: 'In this schematic model, timing moves separation less than altitude or advisory. Model result under seed 1842.'
   }
 };
 const HYP_ORDER = ['alt', 'radio', 'timing'];
@@ -842,22 +886,26 @@ function setMode(exp) {
   setCfVisibility(exp);
   if (exp) {
     stopAutoLoop();
-    autoOn = true;
-    if ($('#autoRun')) $('#autoRun').checked = true;
-    $('#sourceBadge').textContent = 'AUTO · 100× · SEED 1842';
-    $('#modeLabel').textContent = 'Monte Carlo · 100× loop';
+    autoOn = !tourActive;
+    if ($('#autoRun')) $('#autoRun').checked = autoOn;
+    $('#sourceBadge').textContent = 'MODEL · SEED 1842 · 100×';
+    $('#modeLabel').textContent = 'Monte Carlo model · 100×';
     applyHyp(sel);
     showCreatePanel(sel);
-    startAutoLoop();
+    if (!tourActive) startAutoLoop();
+    $('#mobileExpBtn')?.classList.add('hide');
+    $('#mobileRunBtn')?.classList.remove('hide');
   } else {
     autoOn = false;
     stopAutoLoop();
-    $('#sourceBadge').textContent = 'NTSB DCA25MA108';
+    $('#sourceBadge').textContent = 'RECORD · NTSB anchors';
     $('#stageLabel').textContent = 'Historical reconstruction';
     $('#stageTitle').textContent = 'DCA · Night Crossing';
-    $('#modeLabel').textContent = 'Live tracks · derived geo';
+    $('#modeLabel').textContent = 'Recorded + derived schematic';
     placeHist(fbProgress || 0.05);
     if (useFallback) drawFallback();
+    $('#mobileExpBtn')?.classList.remove('hide');
+    $('#mobileRunBtn')?.classList.add('hide');
   }
 }
 
@@ -1359,35 +1407,149 @@ function applyOrbit() {
   camera.lookAt(0, targetY, 0);
 }
 
-function startReconstructionPlayback() {
-  if (mode !== 'history') return;
+function startReconstructionPlayback(opts = {}) {
+  if (mode !== 'history') return Promise.resolve(false);
   if (anim) cancelAnimationFrame(anim);
+  const duration = opts.durationMs || HIST_PLAY_MS;
   const start = performance.now();
   $('#playBtn').textContent = 'Playing…';
   lastIdx = -1;
   placeHist(0.05);
   metric(events[0], 0);
-  const step = (now) => {
-    if (mode !== 'history') { anim = null; return; }
-    const q = Math.min(1, (now - start) / HIST_PLAY_MS);
-    const p = 0.05 + 0.95 * q;
-    placeHist(p);
-    let idx = 0;
-    for (let i = 0; i < events.length; i++) if (p >= events[i].p) idx = i;
-    if (idx !== lastIdx) metric(events[idx], idx);
-    if (q < 1) anim = requestAnimationFrame(step);
-    else {
-      $('#playBtn').textContent = 'Replay reconstruction';
-      anim = null;
-    }
-  };
-  anim = requestAnimationFrame(step);
+  return new Promise((resolve) => {
+    const step = (now) => {
+      if (mode !== 'history') { anim = null; resolve(false); return; }
+      const q = Math.min(1, (now - start) / duration);
+      const p = 0.05 + 0.95 * q;
+      placeHist(p);
+      let idx = 0;
+      for (let i = 0; i < events.length; i++) if (p >= events[i].p) idx = i;
+      if (idx !== lastIdx) metric(events[idx], idx);
+      if (q < 1) anim = requestAnimationFrame(step);
+      else {
+        $('#playBtn').textContent = 'Replay reconstruction';
+        anim = null;
+        resolve(true);
+      }
+    };
+    anim = requestAnimationFrame(step);
+  });
+}
+
+const TOUR_KEY = 'coag_sandbox_tour_v1';
+
+function setTourCopy(step, text, nextLabel) {
+  const bar = $('#tourBar');
+  if (!bar) return;
+  $('#tourStep').textContent = step;
+  $('#tourText').textContent = text;
+  if (nextLabel) $('#tourNext').textContent = nextLabel;
+  bar.classList.add('show');
+}
+
+function endTour({ skipped } = {}) {
+  tourActive = false;
+  tourAbort = true;
+  if (tourContinueResolve) {
+    const r = tourContinueResolve;
+    tourContinueResolve = null;
+    r(false);
+  }
+  try { localStorage.setItem(TOUR_KEY, skipped ? 'skipped' : 'done'); } catch (_) {}
+  $('#tourBar')?.classList.remove('show');
+  $('#tourDone')?.classList.add('show');
+  if (window.CoTips) CoTips.pause();
+  setTimeout(() => $('#tourDone')?.classList.remove('show'), 12000);
+}
+
+function waitTourMs(ms) {
+  return new Promise((resolve) => {
+    if (tourAbort) { resolve(false); return; }
+    const t = setTimeout(() => resolve(!tourAbort), ms);
+  });
+}
+
+function waitTourContinue() {
+  return new Promise((resolve) => {
+    if (tourAbort) { resolve(false); return; }
+    const btn = $('#tourNext');
+    const onNext = () => {
+      btn.removeEventListener('click', onNext);
+      tourContinueResolve = null;
+      resolve(!tourAbort);
+    };
+    tourContinueResolve = (ok) => {
+      btn.removeEventListener('click', onNext);
+      tourContinueResolve = null;
+      resolve(ok);
+    };
+    btn.addEventListener('click', onNext);
+  });
+}
+
+async function runGuidedTour() {
+  tourActive = true;
+  tourAbort = false;
+  if (window.CoTips) CoTips.pause();
+  setTourCopy('1 · Record', 'Schematic reconstruction of the recorded encounter — watch it reach impact.', 'Playing…');
+  $('#tourNext').disabled = true;
+  document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'history'));
+  setMode(false);
+  const played = await startReconstructionPlayback({ durationMs: 4200 });
+  if (tourAbort || !played) { $('#tourNext').disabled = false; return; }
+
+  setTourCopy('2 · Experiment', 'Switch to Experiment. Same stage — now one controlled model change under a matched seed.', 'Start experiment');
+  $('#tourNext').disabled = false;
+  if (!(await waitTourContinue())) return;
+
+  document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'experiment'));
+  setMode(true);
+  selectHyp('alt', { silent: true });
+  setTourCopy('3 · Matched change', 'Running H1 altitude under seed 1842. Watch base vs CF impact rates.', 'Running…');
+  $('#tourNext').disabled = true;
+  autoOn = false;
+  if ($('#autoRun')) $('#autoRun').checked = false;
+  await runMatchedCycle();
+  if (tourAbort) return;
+
+  setTourCopy('4 · What changed', 'HUD rates and charts below are from this batch. Schematic model — not an NTSB finding.', 'See charts');
+  $('#tourNext').disabled = false;
+  if (!(await waitTourContinue())) return;
+  $('#mcPanel')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  if (!(await waitTourMs(1600))) return;
+
+  setTourCopy('5 · Limits', 'Claim: altitude was the strongest lever in this toy model. Explore other hypotheses freely.', 'Finish');
+  if (!(await waitTourContinue())) return;
+
+  tourActive = false;
+  endTour({ skipped: false });
+  autoOn = true;
+  if ($('#autoRun')) $('#autoRun').checked = true;
+  startAutoLoop();
 }
 
 await init3D();
 placeHist(0.05);
 metric(events[0], 0);
-startReconstructionPlayback();
+
+let tourSeen = false;
+try { tourSeen = !!localStorage.getItem(TOUR_KEY); } catch (_) {}
+if (tourSeen) {
+  startReconstructionPlayback();
+} else {
+  runGuidedTour();
+}
+
+$('#tourSkip')?.addEventListener('click', () => {
+  tourAbort = true;
+  if (anim) { cancelAnimationFrame(anim); anim = null; }
+  endTour({ skipped: true });
+  if (mode !== 'experiment') {
+    document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'history'));
+    setMode(false);
+  }
+  startReconstructionPlayback();
+});
 
 eventEls.forEach((el) => el.addEventListener('click', () => {
   if (mode !== 'history') return;
@@ -1445,9 +1607,9 @@ function showCreatePanel(h) {
   $('#stageTitle').textContent = d.creates;
   $('#stageLabel').textContent = 'WHAT CHANGED · ' + HYP_LABEL[h];
   setOutcomePills(true, false, d.change, d.creates, HYP_LABEL[h] + ' · round ' + (batchRound + 1));
-  $('#bannerSpeed').textContent = 'AUTO · 100× · ' + Number($('#trialN')?.value || 1000) + ' matched trials';
+  $('#bannerSpeed').textContent = 'MODEL · 100× · ' + Number($('#trialN')?.value || 1000) + ' matched trials';
   $('#cfBanner')?.classList.add('show');
-  $('#sourceBadge').textContent = 'AUTO · 100× · ' + HYP_LABEL[h];
+  $('#sourceBadge').textContent = 'MODEL · SEED 1842 · ' + HYP_LABEL[h];
 }
 
 function selectHyp(h, { silent } = {}) {
@@ -1689,6 +1851,16 @@ function startAutoLoop() {
 }
 
 $('#runExp').addEventListener('click', () => {
+  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+  runMatchedCycle();
+});
+
+$('#mobileExpBtn')?.addEventListener('click', () => {
+  document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'experiment'));
+  if (anim) { cancelAnimationFrame(anim); anim = null; }
+  setMode(true);
+});
+$('#mobileRunBtn')?.addEventListener('click', () => {
   if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
   runMatchedCycle();
 });

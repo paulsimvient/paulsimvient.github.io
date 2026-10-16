@@ -1,4 +1,4 @@
-/* Shared demo tooltips: one tip at a time; step changes force a live focus tip */
+/* Shared demo tooltips: hover/focus on desktop; no idle auto-rotate unless opted in */
 (function () {
   let tip = document.getElementById('site-tip');
   if (!tip) {
@@ -8,22 +8,33 @@
     document.body.appendChild(tip);
   }
 
-  const AUTO_MS = 5200;
-  const RESUME_MS = 6000;
-  const START_DELAY = 1400;
   const STEP_HOLD_MS = 3800;
   const TARGET_HOLD_MS = 3200;
+  const AUTO_MS = 5200;
+  const START_DELAY = 1400;
 
   let active = null;
   let hideTimer = null;
   let autoTimer = null;
-  let resumeTimer = null;
   let stepTimer = null;
   let autoIndex = -1;
   let manual = false;
   let stepLocked = false;
   let paused = false;
   let anchors = [];
+  let autoEnabled = false;
+
+  function tipsOffViewport() {
+    return window.matchMedia('(hover: none), (max-width: 820px)').matches;
+  }
+
+  function autoOptIn() {
+    try {
+      const q = new URLSearchParams(location.search);
+      if (q.get('tour') === '1') return true;
+    } catch (_) {}
+    return document.body && document.body.hasAttribute('data-tips-auto');
+  }
 
   function visible(el) {
     if (!el || !el.isConnected) return false;
@@ -60,6 +71,7 @@
   }
 
   function place(el, mode) {
+    if (tipsOffViewport() && mode !== 'focus') return;
     const { head, body } = contentFor(el, mode || 'tip');
     tip.innerHTML = (head ? '<strong>' + head + '</strong>' : '') + body;
     tip.classList.add('show');
@@ -79,6 +91,7 @@
 
   function show(el, fromManual, mode) {
     if (!el) return;
+    if (tipsOffViewport() && mode !== 'focus' && fromManual) return;
     clearTimeout(hideTimer);
     active = el;
     if (fromManual) {
@@ -86,7 +99,6 @@
       stepLocked = false;
       stopAuto();
       clearTimeout(stepTimer);
-      scheduleResume();
     }
     place(el, mode || 'tip');
   }
@@ -102,7 +114,6 @@
       if (manual) {
         hideNow();
         manual = false;
-        scheduleResume();
       }
     }, 120);
   }
@@ -112,17 +123,9 @@
     autoTimer = null;
   }
 
-  function scheduleResume() {
-    clearTimeout(resumeTimer);
-    resumeTimer = setTimeout(() => {
-      if (!paused && !stepLocked) startAuto(true);
-    }, RESUME_MS);
-  }
-
   function nextAuto() {
-    if (paused || manual || stepLocked || document.hidden) return;
+    if (!autoEnabled || paused || manual || stepLocked || document.hidden || tipsOffViewport()) return;
     collect();
-    // Prefer non-step chrome when idle; skip active step buttons that already had focus tips
     const pool = anchors.filter((el) => !el.classList.contains('phase') && !el.matches('.phase-bar button'));
     const list = pool.length ? pool : anchors;
     if (!list.length) return;
@@ -147,17 +150,16 @@
 
   function startAuto(immediate) {
     stopAuto();
-    if (paused || stepLocked || document.hidden) return;
+    if (!autoEnabled || paused || stepLocked || document.hidden || tipsOffViewport()) return;
     autoTimer = setTimeout(nextAuto, immediate ? 250 : START_DELAY);
   }
 
-  /** Real-time step tip: only one tip, pinned to the active action, then optional look-at target */
+  /** Guided focus tip — does not restart idle auto-tour */
   function focusStep(el, opts) {
     opts = opts || {};
     if (typeof el === 'string') el = document.querySelector(el);
     if (!el) return;
     clearTimeout(stepTimer);
-    clearTimeout(resumeTimer);
     stopAuto();
     manual = false;
     stepLocked = true;
@@ -175,7 +177,6 @@
       if (targetSel) {
         const target = document.querySelector(targetSel);
         if (target && visible(target)) {
-          // Ensure target has tip content for placement
           if (!target.getAttribute('data-tip') && el.getAttribute('data-focus')) {
             target.setAttribute('data-tip', el.getAttribute('data-focus'));
             if (!target.getAttribute('data-tip-title')) {
@@ -183,16 +184,16 @@
             }
             bind(target);
           }
-          show(target, false, target.getAttribute('data-focus') ? 'focus' : 'tip');
+          show(target, false, 'focus');
           stepTimer = setTimeout(() => {
             stepLocked = false;
-            if (!paused) startAuto(true);
+            if (autoEnabled && !paused) startAuto(true);
           }, opts.targetHold || TARGET_HOLD_MS);
           return;
         }
       }
       stepLocked = false;
-      if (!paused) startAuto(true);
+      if (autoEnabled && !paused) startAuto(true);
     }, hold);
   }
 
@@ -203,18 +204,16 @@
     if (!el.hasAttribute('tabindex') && !/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/i.test(el.tagName)) {
       el.setAttribute('tabindex', '0');
     }
-    el.addEventListener('mouseenter', () => show(el, true, 'tip'));
-    el.addEventListener('mouseleave', hide);
-    el.addEventListener('focus', () => show(el, true, 'tip'));
-    el.addEventListener('blur', hide);
-    el.addEventListener('click', (e) => {
-      if (active === el && tip.classList.contains('show') && manual) {
-        hide();
-      } else {
-        e.stopPropagation();
-        show(el, true, 'tip');
-      }
+    el.addEventListener('mouseenter', () => {
+      if (tipsOffViewport()) return;
+      show(el, true, 'tip');
     });
+    el.addEventListener('mouseleave', hide);
+    el.addEventListener('focus', () => {
+      if (tipsOffViewport()) return;
+      show(el, true, 'tip');
+    });
+    el.addEventListener('blur', hide);
   }
 
   function scan(root) {
@@ -225,20 +224,30 @@
   document.addEventListener('click', (e) => {
     if (manual && active && !e.target.closest('[data-tip]') && e.target !== tip) hide();
   });
-  window.addEventListener('scroll', () => { if (active) place(active, stepLocked ? 'focus' : 'tip'); }, true);
-  window.addEventListener('resize', () => { if (active) place(active, stepLocked ? 'focus' : 'tip'); });
+  window.addEventListener('scroll', () => {
+    if (active) place(active, stepLocked ? 'focus' : 'tip');
+  }, true);
+  window.addEventListener('resize', () => {
+    if (tipsOffViewport()) {
+      hideNow();
+      stopAuto();
+      return;
+    }
+    if (active) place(active, stepLocked ? 'focus' : 'tip');
+  });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       stopAuto();
       clearTimeout(stepTimer);
-    } else if (!manual && !paused && !stepLocked) {
+    } else if (autoEnabled && !manual && !paused && !stepLocked) {
       startAuto(true);
     }
   });
 
   function init() {
+    autoEnabled = autoOptIn();
     scan();
-    startAuto(false);
+    if (autoEnabled) startAuto(false);
   }
 
   if (document.readyState === 'loading') {
@@ -253,6 +262,11 @@
     focusStep: focusStep,
     hide: hideNow,
     pause: function () { paused = true; stopAuto(); clearTimeout(stepTimer); stepLocked = false; hideNow(); },
-    resume: function () { paused = false; startAuto(true); }
+    resume: function () {
+      paused = false;
+      if (autoEnabled) startAuto(true);
+    },
+    enableAuto: function () { autoEnabled = true; if (!paused) startAuto(true); },
+    disableAuto: function () { autoEnabled = false; stopAuto(); }
   };
 })();
