@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sandbox | DCA Night Crossing | Paul Cummings</title>
 <meta name="description" content="CoAgentics sandbox: reconstruct the DCA Night Crossing record, then run matched counterfactual trials and see what each change creates.">
-<link rel="stylesheet" href="styles.css?v=76">
+<link rel="stylesheet" href="styles.css?v=77">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -410,8 +410,8 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=76"></script>
-<script src="script.js?v=76"></script>
+<script src="tip.js?v=77"></script>
+<script src="script.js?v=77"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -886,8 +886,8 @@ function setMode(exp) {
   setCfVisibility(exp);
   if (exp) {
     stopAutoLoop();
-    autoOn = !tourActive;
-    if ($('#autoRun')) $('#autoRun').checked = autoOn;
+    autoOn = true;
+    if ($('#autoRun')) $('#autoRun').checked = true;
     $('#sourceBadge').textContent = 'MODEL · SEED 1842 · 100×';
     $('#modeLabel').textContent = 'Monte Carlo model · 100×';
     applyHyp(sel);
@@ -1507,8 +1507,9 @@ async function runGuidedTour() {
   selectHyp('alt', { silent: true });
   setTourCopy('3 · Matched change', 'Running H1 altitude under seed 1842. Watch base vs CF impact rates.', 'Running…');
   $('#tourNext').disabled = true;
-  autoOn = false;
-  if ($('#autoRun')) $('#autoRun').checked = false;
+  // Keep "Keep running" checked; tourActive blocks the auto loop until Finish
+  autoOn = true;
+  if ($('#autoRun')) $('#autoRun').checked = true;
   await runMatchedCycle();
   if (tourAbort) return;
 
@@ -1544,11 +1545,15 @@ $('#tourSkip')?.addEventListener('click', () => {
   tourAbort = true;
   if (anim) { cancelAnimationFrame(anim); anim = null; }
   endTour({ skipped: true });
+  autoOn = true;
+  if ($('#autoRun')) $('#autoRun').checked = true;
   if (mode !== 'experiment') {
     document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'history'));
     setMode(false);
+  } else {
+    startAutoLoop();
   }
-  startReconstructionPlayback();
+  if (mode === 'history') startReconstructionPlayback();
 });
 
 eventEls.forEach((el) => el.addEventListener('click', () => {
@@ -1768,7 +1773,7 @@ function animateExpPlayback(gen, outcome) {
 function scheduleNextHyp(gen) {
   if (autoTimer) clearTimeout(autoTimer);
   autoTimer = setTimeout(() => {
-    if (gen !== runGeneration || !autoOn || mode !== 'experiment') return;
+    if (gen !== runGeneration || tourActive || !autoOn || mode !== 'experiment') return;
     cycleIdx = (cycleIdx + 1) % HYP_ORDER.length;
     selectHyp(HYP_ORDER[cycleIdx], { silent: true });
     runMatchedCycle();
@@ -1838,7 +1843,7 @@ async function runMatchedCycle() {
   $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run matched trials';
   $('#runExp').disabled = false;
 
-  if (autoOn && mode === 'experiment' && ($('#autoRun')?.checked !== false)) {
+  if (!tourActive && autoOn && mode === 'experiment' && ($('#autoRun')?.checked !== false)) {
     scheduleNextHyp(gen);
   }
 }
