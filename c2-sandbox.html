@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sandbox | DCA Night Crossing | Paul Cummings</title>
 <meta name="description" content="CoAgentics sandbox: reconstruct the DCA Night Crossing record, then run matched counterfactual trials and see what each change creates.">
-<link rel="stylesheet" href="styles.css?v=77">
+<link rel="stylesheet" href="styles.css?v=78">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -330,7 +330,7 @@
             <p id="claimOut" style="margin:8px 0 0;font-size:.86rem;color:var(--muted)"></p>
           </div>
           <div id="rankBox" style="margin-top:14px;display:none">
-            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">What mattered (mean |Δ| across hyps)</span>
+            <span style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em">What mattered in this toy model (mean |Δ| sep)</span>
             <div id="rankBars" style="margin-top:8px"></div>
           </div>
         </div>
@@ -341,24 +341,24 @@
   <div class="mc-panel hide" id="mcPanel" hidden>
   <h3>This batch</h3>
   <p class="batch-meta" id="chartBatchMeta">Waiting for matched trials…</p>
-  <p class="sub">Each bar comes from the same seed family as the HUD rates above.</p>
+  <p class="sub">Toy encounter model · matched ε · same integers as the HUD. Not NTSB measured densities.</p>
   <div class="mc-grid">
     <div class="mc-chart-card">
-      <div class="lbl">Min-separation counts (nm)</div>
+      <div class="lbl">Min-separation histogram (trial counts)</div>
       <div class="mc-legend">
         <span class="base"><i></i>Baseline</span>
         <span class="cf"><i></i>Counterfactual</span>
         <span class="thr">Impact &lt; 0.12 nm</span>
       </div>
-      <svg id="histSvg" viewBox="0 0 420 160" role="img" aria-label="Baseline and counterfactual min-separation counts from this batch"></svg>
+      <svg id="histSvg" viewBox="0 0 420 170" role="img" aria-label="Baseline and counterfactual min-separation trial counts"></svg>
     </div>
     <div class="mc-chart-card">
-      <div class="lbl">Impact counts · this hypothesis</div>
-      <svg id="impactSvg" viewBox="0 0 320 100" role="img" aria-label="Impact counts baseline versus counterfactual"></svg>
+      <div class="lbl">Impact hits · this hypothesis</div>
+      <svg id="impactSvg" viewBox="0 0 320 110" role="img" aria-label="Impact hit counts baseline versus counterfactual"></svg>
     </div>
     <div class="mc-chart-card">
-      <div class="lbl">Rescued counts · same seed · all hyps</div>
-      <svg id="rescueSvg" viewBox="0 0 320 120" role="img" aria-label="Rescued collision counts per hypothesis"></svg>
+      <div class="lbl">Rescued hits · same seed · all hyps</div>
+      <svg id="rescueSvg" viewBox="0 0 320 130" role="img" aria-label="Rescued hit counts per hypothesis"></svg>
     </div>
   </div>
 </div>
@@ -410,8 +410,8 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=77"></script>
-<script src="script.js?v=77"></script>
+<script src="tip.js?v=78"></script>
+<script src="script.js?v=78"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -895,6 +895,8 @@ function setMode(exp) {
     if (!tourActive) startAutoLoop();
     $('#mobileExpBtn')?.classList.add('hide');
     $('#mobileRunBtn')?.classList.remove('hide');
+    clearOutcomeCharts();
+    syncMobileDock();
   } else {
     autoOn = false;
     stopAutoLoop();
@@ -906,6 +908,7 @@ function setMode(exp) {
     if (useFallback) drawFallback();
     $('#mobileExpBtn')?.classList.remove('hide');
     $('#mobileRunBtn')?.classList.add('hide');
+    syncMobileDock();
   }
 }
 
@@ -1543,7 +1546,10 @@ if (tourSeen) {
 
 $('#tourSkip')?.addEventListener('click', () => {
   tourAbort = true;
+  runGeneration++;
   if (anim) { cancelAnimationFrame(anim); anim = null; }
+  if (expAnim) { cancelAnimationFrame(expAnim); expAnim = null; }
+  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
   endTour({ skipped: true });
   autoOn = true;
   if ($('#autoRun')) $('#autoRun').checked = true;
@@ -1588,16 +1594,45 @@ document.querySelectorAll('.c2-tab').forEach((b) => b.addEventListener('click', 
   if (window.CoTips) CoTips.focusStep(b);
 }));
 
-function setOutcomePills(baseHit, cfHit, change, creates, hypLabel) {
+function clearOutcomeCharts() {
+  const panel = $('#mcPanel');
+  const metaEl = $('#chartBatchMeta');
+  if (metaEl) metaEl.textContent = 'Waiting for matched trials…';
+  const emptyHist = '<text x="210" y="85" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="ui-monospace,monospace">Run matched trials to fill charts</text>';
+  const emptyBar = '<text x="160" y="55" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="ui-monospace,monospace">—</text>';
+  if ($('#histSvg')) $('#histSvg').innerHTML = emptyHist;
+  if ($('#impactSvg')) $('#impactSvg').innerHTML = emptyBar;
+  if ($('#rescueSvg')) $('#rescueSvg').innerHTML = emptyBar;
+  if (panel && mode === 'experiment') {
+    panel.hidden = false;
+    panel.classList.remove('hide');
+  }
+}
+
+function syncMobileDock() {
+  const run = $('#runExp');
+  const mob = $('#mobileRunBtn');
+  if (run && mob) {
+    mob.textContent = run.textContent || 'Run matched trials';
+    mob.classList.toggle('hide', run.classList.contains('hide') || mode !== 'experiment');
+  }
+  const expBtn = $('#mobileExpBtn');
+  if (expBtn) expBtn.classList.toggle('hide', mode === 'experiment');
+}
+
+/** Pills show batch impact rates — never isImpact(mean sep). */
+function setOutcomePills(baseRate, cfRate, change, creates, hypLabel) {
   const basePill = $('#outBasePill');
   const cfPill = $('#outCfPill');
+  const bPct = Math.round((baseRate ?? 0) * 100);
+  const cPct = Math.round((cfRate ?? 0) * 100);
   if (basePill) {
-    basePill.className = 'out-pill ' + (baseHit ? 'hit' : 'miss');
-    $('#outBaseLabel').textContent = baseHit ? 'IMPACT' : 'MISS';
+    basePill.className = 'out-pill ' + (bPct >= 50 ? 'hit' : 'miss');
+    $('#outBaseLabel').textContent = bPct + '% IMPACT';
   }
   if (cfPill) {
-    cfPill.className = 'out-pill ' + (cfHit ? 'hit' : 'miss');
-    $('#outCfLabel').textContent = cfHit ? 'IMPACT' : 'CLEAR MISS';
+    cfPill.className = 'out-pill ' + (cPct >= 50 ? 'hit' : 'miss');
+    $('#outCfLabel').textContent = cPct + '% IMPACT';
   }
   $('#bannerChange').textContent = change;
   $('#bannerCreates').textContent = creates;
@@ -1611,7 +1646,13 @@ function showCreatePanel(h) {
   $('#createsDetail').textContent = d.createsDetail;
   $('#stageTitle').textContent = d.creates;
   $('#stageLabel').textContent = 'WHAT CHANGED · ' + HYP_LABEL[h];
-  setOutcomePills(true, false, d.change, d.creates, HYP_LABEL[h] + ' · round ' + (batchRound + 1));
+  const basePill = $('#outBasePill');
+  const cfPill = $('#outCfPill');
+  if (basePill) { basePill.className = 'out-pill change'; $('#outBaseLabel').textContent = 'rate pending'; }
+  if (cfPill) { cfPill.className = 'out-pill change'; $('#outCfLabel').textContent = 'rate pending'; }
+  $('#bannerChange').textContent = d.change;
+  $('#bannerCreates').textContent = d.creates;
+  $('#bannerHyp').textContent = HYP_LABEL[h] + ' · awaiting batch';
   $('#bannerSpeed').textContent = 'MODEL · 100× · ' + Number($('#trialN')?.value || 1000) + ' matched trials';
   $('#cfBanner')?.classList.add('show');
   $('#sourceBadge').textContent = 'MODEL · SEED 1842 · ' + HYP_LABEL[h];
@@ -1629,9 +1670,10 @@ function selectHyp(h, { silent } = {}) {
     $('#expResult').classList.remove('show');
     $('#rankBox').style.display = 'none';
     $('#nHud').textContent = '—';
-    $('#baseSepHud').textContent = '—';
-    $('#cfSepHud').textContent = '—';
+    if ($('#baseHitHud')) $('#baseHitHud').textContent = '—';
+    if ($('#cfHitHud')) $('#cfHitHud').textContent = '—';
     $('#deltaHud').textContent = '—';
+    clearOutcomeCharts();
   }
   applyHyp(h);
 }
@@ -1670,21 +1712,27 @@ function renderOutcomeCharts(primary, ranked, meta = {}) {
   if (metaEl) {
     metaEl.textContent =
       `${n} matched pairs · seed ${seed} · round ${round} · ${hypLabel} · ` +
-      `base ${primary.baseHits}/${n} · cf ${primary.cfHits}/${n} · rescued ${primary.rescued}/${n}`;
+      `base ${primary.baseHits}/${n} (${Math.round(primary.baseHitRate * 100)}%) · ` +
+      `cf ${primary.cfHits}/${n} (${Math.round(primary.cfHitRate * 100)}%) · ` +
+      `rescued ${primary.rescued}/${n} (${Math.round(primary.rescuedRate * 100)}%)`;
   }
 
-  // --- overlapping histograms (trial counts) ---
   const { min, max, bins, base, cf } = primary.hist;
   const peak = Math.max(1, ...base, ...cf);
-  const padL = 28, padR = 12, padT = 14, padB = 30;
-  const W = 420, H = 160;
+  const padL = 36, padR = 12, padT = 16, padB = 32;
+  const W = 420, H = 170;
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
   const bw = plotW / bins;
   let hist = '';
-  const thrX = padL + ((IMPACT_NM - min) / (max - min)) * plotW;
+  const thrX = padL + ((IMPACT_NM - min) / Math.max(1e-9, max - min)) * plotW;
   hist += `<line x1="${thrX}" y1="${padT}" x2="${thrX}" y2="${padT + plotH}" stroke="#b45309" stroke-width="1.5" stroke-dasharray="3 3"/>`;
-  hist += `<text x="${Math.min(W - 36, thrX + 4)}" y="${padT + 10}" fill="#b45309" font-size="9" font-family="ui-monospace,monospace">impact</text>`;
+  hist += `<text x="${Math.min(W - 40, thrX + 4)}" y="${padT + 10}" fill="#b45309" font-size="9" font-family="ui-monospace,monospace">impact</text>`;
+  const span = Math.max(1e-9, max - min);
+  const meanBX = padL + ((primary.meanB - min) / span) * plotW;
+  const meanCX = padL + ((primary.meanC - min) / span) * plotW;
+  hist += `<line x1="${meanBX}" y1="${padT}" x2="${meanBX}" y2="${padT + plotH}" stroke="#c45c45" stroke-width="1" opacity="0.5"/>`;
+  hist += `<line x1="${meanCX}" y1="${padT}" x2="${meanCX}" y2="${padT + plotH}" stroke="#3b82a8" stroke-width="1" opacity="0.5"/>`;
   for (let i = 0; i < bins; i++) {
     const x = padL + i * bw;
     const hB = (base[i] / peak) * plotH;
@@ -1693,14 +1741,15 @@ function renderOutcomeCharts(primary, ranked, meta = {}) {
     hist += `<rect x="${x + bw * 0.45}" y="${padT + plotH - hC}" width="${bw * 0.42}" height="${Math.max(0, hC)}" fill="#3b82a8" opacity="0.85"/>`;
   }
   hist += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="#94a3b8" stroke-width="1"/>`;
+  hist += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="#94a3b8" stroke-width="1"/>`;
+  hist += `<text x="4" y="${padT + 10}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">${peak}</text>`;
+  hist += `<text x="4" y="${padT + plotH}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">0</text>`;
   hist += `<text x="${padL}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">0</text>`;
-  hist += `<text x="${padL + plotW - 24}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">${max.toFixed(2)}</text>`;
-  hist += `<text x="${padL + plotW / 2 - 48}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">min sep (nm) · n=${n}</text>`;
-  hist += `<text x="${padL - 2}" y="${padT + 8}" fill="#64748b" font-size="9" font-family="ui-monospace,monospace">${peak}</text>`;
+  hist += `<text x="${padL + plotW - 28}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">${max.toFixed(2)}</text>`;
+  hist += `<text x="${padL + plotW / 2 - 72}" y="${H - 8}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">min sep (nm) · trial count · n=${n}</text>`;
   histSvg.innerHTML = hist;
 
-  // --- impact counts (same integers as HUD) ---
-  const iPadL = 72, iW = 320 - iPadL - 48;
+  const iPadL = 72, iW = 320 - iPadL - 56;
   const rowH = 24;
   let imp = '';
   const drawRow = (y, label, hits, color) => {
@@ -1710,32 +1759,31 @@ function renderOutcomeCharts(primary, ranked, meta = {}) {
     imp += `<rect x="${iPadL}" y="${y}" width="${iW}" height="${rowH}" rx="4" fill="#e8eef2"/>`;
     imp += `<rect x="${iPadL}" y="${y}" width="${Math.max(hits ? 2 : 0, w)}" height="${rowH}" rx="4" fill="${color}"/>`;
     imp += `<text x="${iPadL + iW + 6}" y="${y + 16}" fill="#0f172a" font-size="11" font-family="ui-monospace,monospace" font-weight="700">${hits}/${n}</text>`;
-    imp += `<title>${label}: ${hits}/${n} (${pct.toFixed(1)}%)</title>`;
   };
-  drawRow(18, 'Base', primary.baseHits, '#c45c45');
-  drawRow(18 + rowH + 14, 'CF', primary.cfHits, '#1a7a4c');
-  imp += `<text x="${iPadL}" y="${96}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">sep &lt; ${IMPACT_NM} nm · matches HUD %</text>`;
+  drawRow(22, 'Base', primary.baseHits, '#c45c45');
+  drawRow(22 + rowH + 14, 'CF', primary.cfHits, '#1a7a4c');
+  imp += `<text x="${iPadL}" y="${104}" fill="#64748b" font-size="10" font-family="ui-monospace,monospace">sep &lt; ${IMPACT_NM} nm · equals HUD %</text>`;
   impactSvg.innerHTML = imp;
 
-  // --- rescued counts · same seed for every hyp ---
   const byRescue = [...ranked].sort((a, b) => b.rescued - a.rescued);
   const rMax = Math.max(1, ...byRescue.map((r) => r.rescued));
-  const rPadL = 62, rPlotW = 320 - rPadL - 52;
-  const rPlotH = 88;
+  const rPadL = 62, rPlotW = 320 - rPadL - 58;
+  const rPlotH = 96;
   const rh = rPlotH / byRescue.length;
   let res = '';
   byRescue.forEach((r, i) => {
-    const y = 12 + i * rh;
+    const y = 14 + i * rh;
     const w = (r.rescued / rMax) * rPlotW;
     const winner = i === 0;
+    const pct = Math.round(r.rescuedRate * 100);
     res += `<text x="6" y="${y + rh * 0.65}" fill="#334155" font-size="11" font-family="ui-monospace,monospace">${r.label}</text>`;
     res += `<rect x="${rPadL}" y="${y + 3}" width="${rPlotW}" height="${rh - 8}" rx="4" fill="#e8eef2"/>`;
     res += `<rect x="${rPadL}" y="${y + 3}" width="${Math.max(r.rescued ? 2 : 0, w)}" height="${rh - 8}" rx="4" fill="${winner ? '#1a7a4c' : '#3b82a8'}"/>`;
-    res += `<text x="${rPadL + rPlotW + 6}" y="${y + rh * 0.65}" fill="#0f172a" font-size="11" font-family="ui-monospace,monospace" font-weight="700">${r.rescued}/${r.n}</text>`;
+    res += `<text x="${rPadL + rPlotW + 4}" y="${y + rh * 0.65}" fill="#0f172a" font-size="11" font-family="ui-monospace,monospace" font-weight="700">${pct}% · ${r.rescued}/${r.n}</text>`;
   });
   rescueSvg.innerHTML = res;
 
-  if (mode === 'experiment') {
+  if (tourActive && mode === 'experiment') {
     panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 }
@@ -1752,16 +1800,16 @@ function animateExpPlayback(gen, outcome) {
       if (!flashed && q >= 0.82 && outcome) {
         flashed = true;
         setOutcomePills(
-          outcome.baseHit,
-          outcome.cfHit,
+          outcome.baseRate,
+          outcome.cfRate,
           outcome.change,
           outcome.creates,
           outcome.hypLabel
         );
-        // Contact strip mirrors outcome
-        $('#stateMetric').textContent = outcome.cfHit ? 'CF still impacts' : 'CF avoids impact';
-        $('#timeMetric').textContent = outcome.cfHit ? 'IMPACT' : 'MISS';
-        $('#sepMetric').textContent = outcome.meanC.toFixed(2) + ' nm CF';
+        const cPct = Math.round((outcome.cfRate ?? 0) * 100);
+        $('#stateMetric').textContent = 'CF impact rate ' + cPct + '%';
+        $('#timeMetric').textContent = cPct + '% IMPACT';
+        $('#sepMetric').textContent = outcome.meanC.toFixed(2) + ' nm CF mean';
       }
       if (q < 1) expAnim = requestAnimationFrame(step);
       else { expAnim = null; resolve(true); }
@@ -1799,9 +1847,6 @@ async function runMatchedCycle() {
   const ranked = rankHypotheses(n, seed);
   const ms = Math.round(performance.now() - t0);
 
-  const baseHitTypical = isImpact(primary.meanB);
-  const cfHitTypical = isImpact(primary.meanC);
-
   $('#nHud').textContent = n + ' · r' + batchRound;
   $('#baseHitHud').textContent = Math.round(primary.baseHitRate * 100) + '%';
   $('#cfHitHud').textContent = Math.round(primary.cfHitRate * 100) + '%';
@@ -1818,10 +1863,10 @@ async function runMatchedCycle() {
   $('#claimOut').textContent =
     `What changed: ${d.change}. That creates: ${d.creates}. ` +
     `Impact rate ${Math.round(primary.baseHitRate * 100)}% → ${Math.round(primary.cfHitRate * 100)}%. ` +
-    `${d.claim} Strongest |Δ|: ${winner.label}.`;
+    `${d.claim} Strongest mean |Δ| in this toy model: ${winner.label}.`;
   setOutcomePills(
-    baseHitTypical,
-    cfHitTypical,
+    primary.baseHitRate,
+    primary.cfHitRate,
     d.change,
     d.creates,
     HYP_LABEL[sel] + ' · ' + Math.round(primary.rescuedRate * 100) + '% rescued'
@@ -1831,8 +1876,8 @@ async function runMatchedCycle() {
   $('#expResult').classList.add('show');
 
   const ok = await animateExpPlayback(gen, {
-    baseHit: baseHitTypical,
-    cfHit: cfHitTypical,
+    baseRate: primary.baseHitRate,
+    cfRate: primary.cfHitRate,
     change: d.change,
     creates: d.creates,
     hypLabel: HYP_LABEL[sel] + ' · round ' + batchRound,
@@ -1842,6 +1887,7 @@ async function runMatchedCycle() {
 
   $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run matched trials';
   $('#runExp').disabled = false;
+  syncMobileDock();
 
   if (!tourActive && autoOn && mode === 'experiment' && ($('#autoRun')?.checked !== false)) {
     scheduleNextHyp(gen);
