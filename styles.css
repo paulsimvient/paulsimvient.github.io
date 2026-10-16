@@ -52,9 +52,7 @@ html,body{
 }
 
 body{
-  background:
-    radial-gradient(circle at 88% 0%, rgba(31,78,121,.07), transparent 28rem),
-    linear-gradient(180deg,#f8fafc 0%,#eef2f6 100%);
+  background:var(--bg);
   font-family:"Source Sans 3", "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -88,25 +86,41 @@ header.site-header{
 }
 
 .btn:hover{
-  background:var(--ink) !important;
-  color:#fff !important;
+  background:var(--bg-soft) !important;
+  color:var(--ink) !important;
   border-color:var(--ink) !important;
 }
 
-.nav .contact,
-.nav a.contact,
-.nav .contact-pill,
-.btn.primary,
-.btn.rust{
+.btn.primary{
   background:var(--teal) !important;
   color:#fff !important;
   border-color:var(--teal) !important;
 }
 
-.btn.primary:hover,
-.btn.rust:hover{
+.btn.primary:hover{
   background:var(--rust-dark) !important;
   color:#fff !important;
+  border-color:var(--rust-dark) !important;
+}
+
+/* Secondary filled style — use sparingly; prefer outline .btn with one .primary */
+.btn.rust{
+  background:transparent !important;
+  color:var(--teal) !important;
+  border-color:var(--teal) !important;
+}
+
+.btn.rust:hover{
+  background:var(--teal) !important;
+  color:#fff !important;
+}
+
+.nav .contact,
+.nav a.contact,
+.nav .contact-pill{
+  background:var(--teal) !important;
+  color:#fff !important;
+  border-color:var(--teal) !important;
 }
 
 .hero-tech .lead,
@@ -161,7 +175,7 @@ h1,h2,h3,h4,
 .demo-card{
   background:var(--paper) !important;
   border-color:var(--line) !important;
-  box-shadow:0 8px 28px rgba(21,32,51,.06);
+  box-shadow:0 2px 12px rgba(21,32,51,.04);
 }
 
 .demo-card:before{

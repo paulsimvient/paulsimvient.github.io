@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Economics Demonstration | Paul Cummings, Ph.D.</title>
 <meta name="description" content="A 2×2 worked example: named toy trader policy, matched noise, sealed holdout cell, and scored rival explanations.">
-<link rel="stylesheet" href="styles.css?v=73">
+<link rel="stylesheet" href="styles.css?v=81">
 <style>
 :root{--ink:#152033;--accent:#1f4e79;--paper:#ffffff;--soft:#eef2f6;--green:#dbeafe;--muted:#5b667a;--warn:#b45309}
 .demo-shell{max-width:1120px;margin:0 auto;padding:2rem 1.5rem 5rem;color:var(--ink)}
@@ -80,10 +80,8 @@
 <button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
 <nav class="nav">
 <a href="index.html">Home</a>
-<a href="research.html">How it works</a>
-<a href="c2-sandbox.html">Sandbox</a>
-<a href="dca.html">DCA</a>
-<a class="active" href="economics-demo.html">Economics</a>
+<a href="research.html">Method</a>
+<a class="active" href="c2-sandbox.html">Cases</a>
 <a href="book.html">Book</a>
 <a href="about.html">About</a>
 <a class="contact-pill" href="contact.html">Contact</a>
@@ -93,9 +91,9 @@
 
 <main class="demo-shell">
 <section class="hero">
-<div class="eyebrow">CoAgentics · economics worked example</div>
+<div class="eyebrow">Educational demonstration · economics</div>
 <h1>Change one thing.<br>Watch what changes.</h1>
-<p>A <strong>named toy trader policy</strong> sits in a controlled 2×2 information design. Private value stays fixed. We vary news and price history, score rival models on observed means, then unlock a sealed holdout cell.</p>
+<p>A teaching 2×2 — not a live trading system. A <strong>named toy trader policy</strong> sits in a controlled information design. Private value stays fixed. We vary news and price history, score rival models on observed means, then unlock a sealed holdout cell.</p>
 <p class="policy">bid = 75 + 5·H + 3·N + 12·H·N + ε · seed 42 · N=40 matched draws</p>
 <aside class="demo-guide" id="guide" aria-live="polite">
 <div class="tag">FOCUS</div>
@@ -184,7 +182,7 @@
 <p class="note">Illustrative toy policy. Demonstrates the experimental method; not an empirical claim about a real AI trader or a full market with clearing, cash, and surplus.</p>
 </main>
 <footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D. All rights reserved.</div></div></footer>
-<script src="tip.js?v=73"></script>
+<script src="tip.js?v=81"></script>
 <script>
 (function(){var t=document.querySelector('.mobile-toggle'),n=document.querySelector('.nav');if(t&&n)t.addEventListener('click',function(){n.classList.toggle('open')});})();
 
