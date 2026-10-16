@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sandbox | DCA Night Crossing | Paul Cummings</title>
 <meta name="description" content="CoAgentics sandbox: reconstruct the DCA Night Crossing record, then run matched counterfactual trials and see what each change creates.">
-<link rel="stylesheet" href="styles.css?v=79">
+<link rel="stylesheet" href="styles.css?v=80">
 <style>
 .c2-hero{padding:58px 0 26px}.c2-hero h1{font-size:clamp(2.7rem,6vw,6rem);line-height:.94;letter-spacing:-.05em;margin:8px 0 16px}.c2-hero p{max-width:820px;color:var(--muted);font-size:1.08rem}
 .c2-shell{max-width:1480px;margin:auto;padding:0 24px 80px}
@@ -410,8 +410,8 @@
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links"><strong>Explore</strong><a href="research.html">How it works</a><a href="c2-sandbox.html">Sandbox</a><a href="economics-demo.html">Economics</a></div><div class="footer-links"><strong>Elsewhere</strong><a href="book.html">Thinking Together</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></div><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
-<script src="tip.js?v=79"></script>
-<script src="script.js?v=79"></script>
+<script src="tip.js?v=80"></script>
+<script src="script.js?v=80"></script>
 <script type="module">
 const canvas = document.getElementById('c2canvas');
 const stage = document.getElementById('stage');
@@ -484,10 +484,12 @@ const PLAY_MS = Math.round(HIST_PLAY_MS / 10);
 const AUTO_GAP_MS = 120;
 let sel = 'alt';
 let autoOn = true;
-let autoTimer = null;
+let autoTimer = null; // legacy; pump uses autoPumpId
 let cycleIdx = 0;
 let runGeneration = 0;
 let batchRound = 0;
+let autoPumpId = 0;
+let autoPumpBusy = false;
 
 /** Deterministic PRNG (mulberry32). */
 function mulberry32(a) {
@@ -874,10 +876,14 @@ function cancelExpAnim() {
 }
 
 function stopAutoLoop() {
+  autoPumpId++; // invalidate running pump
   if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
   runGeneration++;
   cancelExpAnim();
+  autoPumpBusy = false;
   $('#cfBanner')?.classList.remove('show');
+  const run = $('#runExp');
+  if (run) { run.disabled = false; }
 }
 
 /** Leave guided tour locks so Keep-running auto can proceed. */
@@ -894,8 +900,9 @@ function releaseTourForExplore({ skipped } = {}) {
   $('#tourBar')?.classList.remove('show');
 }
 
-function setMode(exp) {
+function setMode(exp, opts = {}) {
   mode = exp ? 'experiment' : 'history';
+  const wantAuto = opts.auto !== false;
   stage.classList.toggle('sim-mode', exp);
   $('#sideHist').classList.toggle('hide', exp);
   $('#sideExp').classList.toggle('hide', !exp);
@@ -918,7 +925,7 @@ function setMode(exp) {
     $('#modeLabel').textContent = 'Monte Carlo model · 10×';
     applyHyp(sel);
     showCreatePanel(sel);
-    if (!tourActive) startAutoLoop();
+    if (wantAuto) startAutoLoop();
     $('#mobileExpBtn')?.classList.add('hide');
     $('#mobileRunBtn')?.classList.remove('hide');
     clearOutcomeCharts();
@@ -1532,20 +1539,17 @@ async function runGuidedTour() {
   if (!(await waitTourContinue())) return;
 
   document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'experiment'));
-  setMode(true);
+  setMode(true, { auto: false });
   selectHyp('alt', { silent: true });
   setTourCopy('3 · Matched change', 'Running H1 altitude under seed 1842. Watch base vs CF impact rates.', 'Running…');
   $('#tourNext').disabled = true;
-  // Keep "Keep running" checked; tourActive blocks the auto loop until Finish
   autoOn = true;
   if ($('#autoRun')) $('#autoRun').checked = true;
   await runMatchedCycle();
   if (tourAbort) return;
 
-  // Unlock auto immediately so Keep running continues while the user reads the last tips
+  // Hand off to continuous pump — tour tips no longer block auto
   tourActive = false;
-  autoOn = true;
-  if ($('#autoRun')) $('#autoRun').checked = true;
   startAutoLoop();
 
   setTourCopy('4 · What changed', 'HUD rates and charts below are from this batch. Auto is looping at speed — schematic model, not an NTSB finding.', 'See charts');
@@ -1710,10 +1714,10 @@ function selectHyp(h, { silent } = {}) {
 document.querySelectorAll('.hyp').forEach((b) => b.addEventListener('click', () => {
   if (window.CoTips) CoTips.focusStep(b);
   if (tourActive) releaseTourForExplore({ skipped: true });
-  cancelExpAnim();
-  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
   selectHyp(b.dataset.h);
-  if (autoOn) runMatchedCycle();
+  cycleIdx = Math.max(0, HYP_ORDER.indexOf(sel));
+  if ($('#autoRun')?.checked !== false) startAutoLoop();
+  else { stopAutoLoop(); autoOn = false; runMatchedCycle(); }
 }));
 
 function renderRankBars(ranked) {
@@ -1858,18 +1862,13 @@ function animateExpPlayback(gen, outcome) {
   });
 }
 
-function scheduleNextHyp(gen) {
-  if (autoTimer) clearTimeout(autoTimer);
-  autoTimer = setTimeout(() => {
-    if (gen !== runGeneration || tourActive || !autoOn || mode !== 'experiment') return;
-    cycleIdx = (cycleIdx + 1) % HYP_ORDER.length;
-    selectHyp(HYP_ORDER[cycleIdx], { silent: true });
-    runMatchedCycle();
-  }, AUTO_GAP_MS);
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
 }
 
+/** One matched Monte Carlo batch + stage playback. Returns false if superseded. */
 async function runMatchedCycle() {
-  if (mode !== 'experiment') return;
+  if (mode !== 'experiment') return false;
   const gen = ++runGeneration;
   const n = Number($('#trialN')?.value || 1000);
   const d = defs[sel];
@@ -1877,60 +1876,84 @@ async function runMatchedCycle() {
   showCreatePanel(sel);
   $('#runExp').textContent = `10× running ${n}…`;
   $('#runExp').disabled = true;
-
-  await new Promise((r) => requestAnimationFrame(r));
-  if (gen !== runGeneration) return;
-
-  const t0 = performance.now();
-  const seed = (MASTER_SEED + batchRound * 7919) >>> 0;
-  const primary = runMatchedBatch(sel, n, seed);
-  const ranked = rankHypotheses(n, seed);
-  const ms = Math.round(performance.now() - t0);
-
-  $('#nHud').textContent = n + ' · r' + batchRound;
-  $('#baseHitHud').textContent = Math.round(primary.baseHitRate * 100) + '%';
-  $('#cfHitHud').textContent = Math.round(primary.cfHitRate * 100) + '%';
-  $('#deltaHud').textContent = Math.round(primary.rescuedRate * 100) + '%';
-  $('#baseHitOut').textContent = Math.round(primary.baseHitRate * 100) + '%';
-  $('#cfHitOut').textContent = Math.round(primary.cfHitRate * 100) + '%';
-  $('#baseOut').textContent = 'mean sep ' + primary.meanB.toFixed(3) + ' nm';
-  $('#cfOut').textContent = 'mean sep ' + primary.meanC.toFixed(3) + ' nm';
-  $('#deltaOut').textContent = Math.round(primary.rescuedRate * 100) + '% rescued · Δ ' +
-    (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(3) + ' nm';
-  $('#pPosOut').textContent =
-    `Baseline impacts ${primary.baseHits}/${n} · CF impacts ${primary.cfHits}/${n} · avoided ${primary.rescued}/${n} · 10× · ${ms} ms`;
-  const winner = ranked[0];
-  $('#claimOut').textContent =
-    `What changed: ${d.change}. That creates: ${d.creates}. ` +
-    `Impact rate ${Math.round(primary.baseHitRate * 100)}% → ${Math.round(primary.cfHitRate * 100)}%. ` +
-    `${d.claim} Strongest mean |Δ| in this toy model: ${winner.label}.`;
-  setOutcomePills(
-    primary.baseHitRate,
-    primary.cfHitRate,
-    d.change,
-    d.creates,
-    HYP_LABEL[sel] + ' · ' + Math.round(primary.rescuedRate * 100) + '% rescued'
-  );
-  renderRankBars(ranked);
-  renderOutcomeCharts(primary, ranked, { seed, round: batchRound, hypLabel: HYP_LABEL[sel] });
-  $('#expResult').classList.add('show');
-
-  const ok = await animateExpPlayback(gen, {
-    baseRate: primary.baseHitRate,
-    cfRate: primary.cfHitRate,
-    change: d.change,
-    creates: d.creates,
-    hypLabel: HYP_LABEL[sel] + ' · round ' + batchRound,
-    meanC: primary.meanC
-  });
-  if (!ok || gen !== runGeneration) return;
-
-  $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run matched trials';
-  $('#runExp').disabled = false;
   syncMobileDock();
 
-  if (!tourActive && autoOn && mode === 'experiment' && ($('#autoRun')?.checked !== false)) {
-    scheduleNextHyp(gen);
+  try {
+    await new Promise((r) => requestAnimationFrame(r));
+    if (gen !== runGeneration) return false;
+
+    const t0 = performance.now();
+    const seed = (MASTER_SEED + batchRound * 7919) >>> 0;
+    const primary = runMatchedBatch(sel, n, seed);
+    const ranked = rankHypotheses(n, seed);
+    const ms = Math.round(performance.now() - t0);
+
+    $('#nHud').textContent = n + ' · r' + batchRound;
+    $('#baseHitHud').textContent = Math.round(primary.baseHitRate * 100) + '%';
+    $('#cfHitHud').textContent = Math.round(primary.cfHitRate * 100) + '%';
+    $('#deltaHud').textContent = Math.round(primary.rescuedRate * 100) + '%';
+    $('#baseHitOut').textContent = Math.round(primary.baseHitRate * 100) + '%';
+    $('#cfHitOut').textContent = Math.round(primary.cfHitRate * 100) + '%';
+    $('#baseOut').textContent = 'mean sep ' + primary.meanB.toFixed(3) + ' nm';
+    $('#cfOut').textContent = 'mean sep ' + primary.meanC.toFixed(3) + ' nm';
+    $('#deltaOut').textContent = Math.round(primary.rescuedRate * 100) + '% rescued · Δ ' +
+      (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(3) + ' nm';
+    $('#pPosOut').textContent =
+      `Baseline impacts ${primary.baseHits}/${n} · CF impacts ${primary.cfHits}/${n} · avoided ${primary.rescued}/${n} · 10× · ${ms} ms`;
+    const winner = ranked[0];
+    $('#claimOut').textContent =
+      `What changed: ${d.change}. That creates: ${d.creates}. ` +
+      `Impact rate ${Math.round(primary.baseHitRate * 100)}% → ${Math.round(primary.cfHitRate * 100)}%. ` +
+      `${d.claim} Strongest mean |Δ| in this toy model: ${winner.label}.`;
+    setOutcomePills(
+      primary.baseHitRate,
+      primary.cfHitRate,
+      d.change,
+      d.creates,
+      HYP_LABEL[sel] + ' · ' + Math.round(primary.rescuedRate * 100) + '% rescued'
+    );
+    renderRankBars(ranked);
+    renderOutcomeCharts(primary, ranked, { seed, round: batchRound, hypLabel: HYP_LABEL[sel] });
+    $('#expResult').classList.add('show');
+
+    const ok = await animateExpPlayback(gen, {
+      baseRate: primary.baseHitRate,
+      cfRate: primary.cfHitRate,
+      change: d.change,
+      creates: d.creates,
+      hypLabel: HYP_LABEL[sel] + ' · round ' + batchRound,
+      meanC: primary.meanC
+    });
+    if (!ok || gen !== runGeneration) return false;
+
+    $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run matched trials';
+    syncMobileDock();
+    return true;
+  } finally {
+    if (gen === runGeneration) {
+      $('#runExp').disabled = false;
+      syncMobileDock();
+    }
+  }
+}
+
+async function autoPump(pumpId) {
+  if (pumpId !== autoPumpId) return;
+  autoPumpBusy = true;
+  try {
+    while (pumpId === autoPumpId && autoOn && mode === 'experiment') {
+      if ($('#autoRun') && $('#autoRun').checked === false) break;
+      await runMatchedCycle();
+      if (pumpId !== autoPumpId) break;
+      if (!autoOn || mode !== 'experiment') break;
+      if ($('#autoRun') && $('#autoRun').checked === false) break;
+      // Advance hypothesis for the next round
+      cycleIdx = (cycleIdx + 1) % HYP_ORDER.length;
+      selectHyp(HYP_ORDER[cycleIdx], { silent: true });
+      await sleep(AUTO_GAP_MS);
+    }
+  } finally {
+    if (pumpId === autoPumpId) autoPumpBusy = false;
   }
 }
 
@@ -1938,13 +1961,19 @@ function startAutoLoop() {
   autoOn = true;
   if ($('#autoRun')) $('#autoRun').checked = true;
   cycleIdx = Math.max(0, HYP_ORDER.indexOf(sel));
-  runMatchedCycle();
+  // New pump id + bump generation so any in-flight batch/anim yields
+  autoPumpId++;
+  const id = autoPumpId;
+  runGeneration++;
+  cancelExpAnim();
+  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+  autoPump(id);
 }
 
 $('#runExp').addEventListener('click', () => {
   if (tourActive) releaseTourForExplore({ skipped: true });
-  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
-  runMatchedCycle();
+  if ($('#autoRun')?.checked !== false) startAutoLoop();
+  else { stopAutoLoop(); autoOn = false; runMatchedCycle(); }
 });
 
 $('#mobileExpBtn')?.addEventListener('click', () => {
@@ -1955,8 +1984,8 @@ $('#mobileExpBtn')?.addEventListener('click', () => {
 });
 $('#mobileRunBtn')?.addEventListener('click', () => {
   if (tourActive) releaseTourForExplore({ skipped: true });
-  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
-  runMatchedCycle();
+  if ($('#autoRun')?.checked !== false) startAutoLoop();
+  else { stopAutoLoop(); autoOn = false; runMatchedCycle(); }
 });
 
 $('#autoRun')?.addEventListener('change', (e) => {
