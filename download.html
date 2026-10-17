@@ -60,7 +60,7 @@
 <script>
 (function () {
   var KEY = "tt-book-access-v1";
-  var ENDPOINT = "https://formsubmit.co/ajax/paulsimvient@gmail.com";
+  var ENDPOINT = "https://formsubmit.co/ajax/paul@invia.com";
   var gate = document.getElementById("gate");
   var unlocked = document.getElementById("unlocked");
   var form = document.getElementById("access-form");
@@ -94,7 +94,6 @@
         source: "paulsimvient.github.io/download.html",
         _template: "table",
         _captcha: "false",
-        _cc: "paul@invia.com"
       })
     })
       .then(function (res) {
@@ -107,7 +106,7 @@
         window.location.href = epub.getAttribute("href");
       })
       .catch(function () {
-        statusEl.textContent = "Something went wrong. Try again, or email paulsimvient@gmail.com.";
+        statusEl.textContent = "Something went wrong. Try again, or use the Contact page.";
         btn.disabled = false;
       });
   });
