@@ -1,0 +1,1 @@
+Department of War application card: “Cargo Loading (8375915).jpg”, U.S. Air Force photo by Staff Sgt. Kaylee Patterson, 22 April 2024. Public domain (U.S. federal government work). Source: https://commons.wikimedia.org/wiki/File:Cargo_Loading_(8375915).jpg . The image is loaded remotely and requires internet access.
