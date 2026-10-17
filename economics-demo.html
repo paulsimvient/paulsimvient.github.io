@@ -146,6 +146,27 @@
 .demo-shell .beats .beat{font-size:.82rem!important;line-height:1.4!important;padding:13px 8px!important}
 @media(max-width:700px){.lab-dashboard .lab-visual,.lab-dashboard .lab-panel{padding:18px!important}.lab-dashboard .lab-plot{height:300px!important}.lab-dashboard .lab-bar-label{font-size:.75rem!important}.lab-dashboard .lab-bars{gap:6px!important}.lab-dashboard .lab-stat strong{font-size:2.5rem!important}}
 
+
+/* Visual-first autoplay. Research controls remain available on demand. */
+.autostory{margin:24px 0 18px;padding:clamp(22px,3vw,38px);border-radius:22px;background:#f3f7fc;color:#152b45;border:1px solid #d4e1ef;box-shadow:0 12px 36px #071e3710}
+.auto-top,.auto-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.auto-top{justify-content:space-between}
+.auto-pill{font-weight:800;color:#08665b;font-size:.88rem}.auto-time{color:#425d79;font-weight:800}
+.autostory h2{color:#102b49!important;font-size:clamp(1.65rem,3vw,2.5rem)!important;line-height:1.16!important;margin:20px 0 10px!important}
+.autostory p{color:#344f6b!important;font-size:1.08rem!important;line-height:1.65!important;max-width:70ch}
+.auto-progress{height:9px;background:#d5e2f0;border-radius:100px;overflow:hidden;margin:23px 0}.auto-progress>div{width:0;height:100%;background:#1676c6;transition:width .7s ease}
+.auto-actions button{border-radius:9px;border:1px solid #a9bfd5;background:#fff;color:#153858;font-weight:800;padding:12px 17px;cursor:pointer;font-size:.95rem}
+.auto-actions button:first-child{background:#0e4c84;color:#fff;border-color:#0e4c84}.auto-actions button:focus-visible{outline:3px solid #e79a38;outline-offset:3px}
+.auto-findings{margin-top:20px;border-left:5px solid #1477c9;background:#fff;padding:15px 18px;border-radius:8px}.auto-findings strong{color:#153858;font-size:1rem}.auto-findings p{font-size:.98rem!important;margin:6px 0 0!important}
+.advanced-only{display:none!important}.advanced-workbench[hidden]{display:none!important}.advanced-workbench{margin-top:20px}.lab-dashboard{grid-template-columns:minmax(0,1fr)!important}
+body.advanced-open .advanced-only{display:block!important}body.advanced-open .lab-dashboard{grid-template-columns:minmax(0,1.55fr) minmax(290px,1fr)!important}
+@media(max-width:850px){body.advanced-open .lab-dashboard{grid-template-columns:1fr!important}.autostory{padding:20px}}
+@media(prefers-reduced-motion:reduce){.auto-progress>div{transition:none}}
+
+/* Guided visual attention: readable, unobstructed and synchronized with autoplay. */
+.focus-target{position:relative!important;z-index:5!important;outline:4px solid #f59e0b!important;outline-offset:5px!important;border-radius:10px;box-shadow:0 0 0 9px rgba(245,158,11,.16)!important;transition:outline-color .25s ease}
+.focus-cue{position:fixed;right:clamp(12px,3vw,36px);bottom:clamp(12px,3vw,28px);z-index:1000;width:min(350px,calc(100vw - 24px));background:#fff;color:#17314c;border:2px solid #d4e2f0;border-left:6px solid #ed9c23;border-radius:15px;padding:16px 18px;box-shadow:0 12px 45px #071e3760;display:none}
+.focus-cue.visible{display:block}.focus-cue .focus-label{font-size:.77rem;letter-spacing:.1em;text-transform:uppercase;color:#75500e;font-weight:850}.focus-cue strong{display:block;color:#102b49;font-size:1.18rem;margin:5px 0}.focus-cue p{margin:0 0 10px;color:#344f6b;line-height:1.48;font-size:.96rem}.focus-cue button{background:#123f6d;color:#fff;border:0;border-radius:8px;padding:9px 13px;font-weight:750;cursor:pointer}
+@media(max-width:650px){.focus-cue{bottom:10px;padding:12px 14px}.focus-cue p{font-size:.88rem}}
 </style>
 </head>
 <body>
@@ -170,21 +191,30 @@
 <h1>Why did the trader<br>change its bid?</h1>
 <p>Watch a simple trader respond to news and price history. We test competing explanations, then check whether the winning explanation predicts a situation it has not seen. <strong>This is a teaching example, not a live market.</strong></p>
 <p class="policy">bid = 75 + 5·H + 3·N + 12·H·N + ε · seed 42 · N=40 matched draws</p>
-<section class="lab-dashboard" aria-label="Interactive economics experiment">
+<section class="autostory" aria-label="Automatic narrated economics experiment">
+ <div class="auto-top"><span class="auto-pill" id="autoStatus">● Playing investigation</span><span class="auto-time" id="autoTime">01 / 05</span></div>
+ <h2 id="autoTitle">First, observe the trader.</h2>
+ <p id="autoNarration">With neither signal present, the toy trader establishes a baseline bid. Watch what happens as we change one condition at a time.</p>
+ <div class="auto-progress" aria-hidden="true"><div id="autoProgress"></div></div>
+ <div class="auto-actions"><button id="autoPause" type="button">Pause</button><button id="autoReplay" type="button">↻ Replay</button><button id="autoExplore" type="button" aria-expanded="false">Explore full experiment ↓</button></div>
+ <div class="auto-findings" id="autoFindings" aria-live="polite"><strong>What the evidence says</strong><p id="autoFindingText">We haven't tested the competing explanations yet. A baseline alone cannot identify the cause.</p></div>
+</section>
+<aside class="focus-cue" id="focusCue" role="status" aria-live="polite"><span class="focus-label" id="focusLabel">LOOK HERE</span><strong id="focusTitle">Watch the change</strong><p id="focusText"></p><button id="focusDismiss" type="button">Got it</button></aside>
+<section class="lab-dashboard" aria-label="Economics experiment results">
  <div class="lab-visual">
   <div class="lab-heading"><div><span class="lab-kicker">LIVE TOY-POLICY EXPERIMENT</span><h2>Watch the bid respond</h2><p>Same trader, same $100 private value. Change what information the trader receives.</p></div><div class="lab-stat"><span>Current mean bid</span><strong id="labCurrent">$75</strong><small id="labCondition">No news · stable prices</small></div></div>
   <div class="lab-plot" id="labPlot" role="img" aria-label="Mean bid by information condition, with the fourth condition hidden until holdout unlocks"><div class="lab-y">Mean bid ($)</div><div class="lab-bars" id="labBars"></div></div>
   <div class="lab-legend"><span><i class="dot blue"></i>Observed toy-policy mean</span><span><i class="dot pale"></i>Not yet tested</span><span><i class="dot orange"></i>Sealed holdout</span></div>
   <div class="lab-insight" id="labInsight">Start with the baseline, then change one signal at a time.</div>
  </div>
- <div class="lab-panel"><span class="lab-kicker">CHANGE ONE CONDITION</span><h2>Run a controlled test</h2><p>Choose a condition to compare against the baseline.</p>
+ <div class="lab-panel advanced-only"><span class="lab-kicker">CHANGE ONE CONDITION</span><h2>Run a controlled test</h2><p>Choose a condition to compare against the baseline.</p>
  <div class="lab-control"><strong>News signal</strong><div class="lab-options"><button class="lab-option selected" data-news="0">None</button><button class="lab-option" data-news="1">Positive</button></div></div>
  <div class="lab-control"><strong>Price history</strong><div class="lab-options"><button class="lab-option selected" data-history="0">Stable</button><button class="lab-option" data-history="1">Rising</button></div></div>
  <button class="lab-action" id="labApply">Test this condition →</button><p class="lab-help" id="labHelp">The positive-news + rising-history combination is a sealed holdout. Run the discovery tests before revealing it.</p>
  <div class="lab-mini"><span>PRIVATE VALUE</span><b>$100</b><span>RANDOM SEED</span><b>42</b><span>MATCHED DRAWS</span><b>40</b></div>
  </div>
 </section>
-<aside class="demo-guide" id="guide" aria-live="polite">
+<div id="advancedWorkbench" class="advanced-workbench" hidden><aside class="demo-guide" id="guide" aria-live="polite">
 <div class="tag">FOCUS</div>
 <div>
 <p id="guideText">Ask a question, run controlled tests on three discovery cells, freeze a candidate, then unlock the holdout.</p>
@@ -267,7 +297,7 @@
 </div></details></div>
 </section>
 
-<div class="footer-actions"><a href="economics.html">← Economics case study</a><a href="research.html">How the method works →</a><a href="c2-sandbox.html">Open sandbox →</a></div>
+</div><!-- end advancedWorkbench --><div class="footer-actions"><a href="economics.html">← Economics case study</a><a href="research.html">How the method works →</a><a href="c2-sandbox.html">Open sandbox →</a></div>
 <p class="note">Illustrative toy policy. Demonstrates the experimental method; not an empirical claim about a real AI trader or a full market with clearing, cash, and surplus.</p>
 </main>
 <footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D. All rights reserved.</div></div></footer>
@@ -704,6 +734,78 @@ paintCells();
 paintSSE();
 setRef(batch.contrasts.additivePred);
 render(0);
+
+// Narrated presentation uses the same batch, contrasts, rendering and sealed holdout.
+// The toy policy is illustrative: the interaction is not identifiable from the three
+// discovery cells alone; holdout testing distinguishes it from an additive extrapolation.
+(function(){
+ const titles=['Observe the baseline','Change price history','Introduce positive news','Freeze the competing predictions','Reveal the unseen condition'];
+ const descriptions=[
+  'Same $100 private value and matched random draws. With no news and stable prices, establish the baseline.',
+  'Only the price-history signal changes. The mean bid moves, but that observation does not establish a complete explanation.',
+  'Reset history and change only the news signal. We now have two isolated effects, but have not tested their combination.',
+  'An additive model predicts the combined condition by summing isolated effects. An interaction model makes a different prediction. The unseen result is still sealed.',
+  'Compare the frozen additive prediction against the previously unseen combined condition. This toy policy contains an interaction, so the additive prediction misses the observed response.'
+ ];
+ const focusSteps=[
+  {id:'labCurrent',title:'Start with this number',text:'This is the baseline average bid. Keep an eye on it as the experiment progresses.'},
+  {id:'labBars',title:'Watch the second bar',text:'Only price history changes. Compare the new bid with the baseline.'},
+  {id:'labBars',title:'Now compare the third bar',text:'Price history returns to stable. Only the news signal changes.'},
+  {id:'autoFindingText',title:'Look at the prediction',text:'Before revealing the final condition, we freeze what the additive explanation predicts.'},
+  {id:'labBars',title:'Here is the discovery',text:'The sealed fourth bar appears. Compare its observed bid with the frozen prediction and read the finding.'}
+ ];
+ const cue=elId=>document.getElementById(elId);
+ let focused=null, cueDismissed=false;
+ function setFocus(i){
+  if(focused)focused.classList.remove('focus-target');
+  const f=focusSteps[i], target=cue(f.id), panel=cue('focusCue');
+  focused=target;cue('focusTitle').textContent=f.title;cue('focusText').textContent=f.text;
+  panel.classList.toggle('visible',!cueDismissed);
+  if(!cueDismissed){target.classList.add('focus-target');
+   const rect=target.getBoundingClientRect();
+   if(rect.bottom<110 || rect.top>window.innerHeight-180)target.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+ }
+ cue('focusDismiss').addEventListener('click',()=>{cueDismissed=true;cue('focusCue').classList.remove('visible');if(focused)focused.classList.remove('focus-target');});
+ const duration=7500;
+ let phase=0, autoTimer=null, paused=false;
+ const el=id=>document.getElementById(id);
+ function stop(){clearTimeout(autoTimer);autoTimer=null;clearTimeout(timer);}
+ function show(i){
+  phase=i; stop();
+  if(i===0){reset();} else if(i<4){render(i);} else {render(3);unlockHoldout();}
+  el('autoTitle').textContent=titles[i];el('autoNarration').textContent=descriptions[i];
+  el('autoTime').textContent=String(i+1).padStart(2,'0')+' / 05';
+  el('autoProgress').style.width=((i+1)/5*100)+'%';
+  const c=batch.contrasts;
+  const finding=[
+   'A single observation does not establish why the trader bids this amount.',
+   'History-only change: '+fmtDelta(c.dH)+'. Other explanations have not yet been ruled out.',
+   'News-only change: '+fmtDelta(c.dNstable)+'. The combined condition is still sealed.',
+   'Additive prediction for the unseen combination: '+fmtMoney(c.additivePred)+'. No claim about the interaction is validated yet.',
+   'Additive prediction '+fmtMoney(c.additivePred)+' versus observed combined bid '+fmtMoney(batch.stats['1,1'].mean)+'. Difference-in-differences: '+fmtDelta(c.interaction)+'. Supported for this named toy policy only; not evidence about real markets.'
+  ];
+  el('autoFindingText').textContent=finding[i];
+  setFocus(i);
+  if(!paused && i<4)autoTimer=setTimeout(()=>show(i+1),duration);
+  if(i===4){paused=true;el('autoPause').textContent='Play again';el('autoStatus').textContent='✓ Investigation complete';}
+ }
+ el('autoPause').addEventListener('click',()=>{
+  if(phase===4){paused=false;el('autoPause').textContent='Pause';el('autoStatus').textContent='● Playing investigation';show(0);return;}
+  paused=!paused;el('autoPause').textContent=paused?'Resume':'Pause';el('autoStatus').textContent=paused?'Ⅱ Paused':'● Playing investigation';
+  if(paused)stop();else autoTimer=setTimeout(()=>show(phase+1),duration);
+ });
+ el('autoReplay').addEventListener('click',()=>{paused=false;el('autoPause').textContent='Pause';el('autoStatus').textContent='● Playing investigation';show(0);});
+ el('autoExplore').addEventListener('click',()=>{
+  const opened=document.body.classList.toggle('advanced-open');
+  el('advancedWorkbench').hidden=!opened;
+  el('autoExplore').setAttribute('aria-expanded',String(opened));
+  el('autoExplore').textContent=opened?'Hide full experiment ↑':'Explore full experiment ↓';
+  if(opened){cueDismissed=true;cue('focusCue').classList.remove('visible');if(focused)focused.classList.remove('focus-target');paused=true;stop();el('autoPause').textContent='Resume';el('autoStatus').textContent='Ⅱ Paused for exploration';}
+ });
+ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){paused=true;show(0);el('autoPause').textContent='Resume';el('autoStatus').textContent='Paused · motion preference';}
+ else show(0);
+})();
 </script>
 </body>
 </html>
