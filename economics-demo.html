@@ -74,6 +74,78 @@
 .policy{font:600 .78rem ui-monospace,monospace;color:var(--muted);margin:.6rem 0 0}
 @media(max-width:900px){.story{grid-template-columns:1fr}.market-stage{height:470px}.detail-grid{grid-template-columns:1fr}.fourcells{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.demo-shell{padding:1.2rem .8rem 3rem}.fixed{grid-template-columns:1fr 1fr}.fixed div:last-child{display:none}.market-stage{height:455px}.chart{top:180px}.fourcells{grid-template-columns:1fr 1fr}.beats{grid-template-columns:1fr}.agentline{align-items:flex-start;flex-direction:column}}
+
+/* Visual-first economics explainer */
+.visual-intro{background:linear-gradient(125deg,#0c2944,#145579);border-radius:18px;padding:1.4rem 1.6rem;color:#fff;margin:1.25rem 0 1.5rem;overflow:hidden}
+.visual-intro h2{color:#fff;font-size:clamp(1.3rem,2.5vw,1.85rem);margin:0 0 .35rem}.visual-intro p{color:#d9efff;margin:0 0 1rem;line-height:1.5}
+.market-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:.6rem}.flow-node{background:#ffffff12;border:1px solid #ffffff40;border-radius:12px;padding:1rem;min-height:105px}.flow-node b{display:block;color:#fff;font-size:1rem}.flow-node span{display:block;color:#d2eaff;font-size:.86rem;margin-top:.3rem}.flow-icon{font-size:1.9rem;display:block;margin-bottom:.25rem}.flow-arrow{font-size:1.7rem;color:#9edfff}.story-note{font-size:.9rem!important;color:#d9efff!important;margin-top:1rem!important}
+.experiment-key{display:flex;gap:.65rem;flex-wrap:wrap;margin:.8rem 0 1.2rem}.experiment-key span{border:1px solid #cbd5e1;border-radius:20px;padding:.35rem .7rem;background:#fff;font-size:.8rem;color:#24445e}
+.hero .policy{display:none}.market-stage{height:520px}.demo-shell .hero h1{line-height:1.02}
+@media(max-width:650px){.market-flow{grid-template-columns:1fr;gap:.4rem}.flow-node{min-height:0}.flow-arrow{text-align:center;transform:rotate(90deg)}.visual-intro{padding:1rem}.market-stage{height:490px}}
+
+/* Interactive, visual-first lab */
+.demo-shell{max-width:1320px}.hero{max-width:100%;margin-bottom:0}.hero h1{font-size:clamp(2.5rem,4.8vw,4.4rem)}.hero p{max-width:780px}
+.lab-dashboard{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(270px,.85fr);gap:14px;margin:1.5rem 0 1.3rem;color:#fff}
+.lab-visual,.lab-panel{background:linear-gradient(145deg,#09253f,#103d60);border-radius:18px;padding:24px;box-shadow:0 15px 35px #102e4930}
+.lab-panel{background:#103452}.lab-kicker{font:700 11px system-ui;letter-spacing:.15em;color:#80d2ff}.lab-dashboard h2{font-size:1.5rem;color:white;margin:.4rem 0}.lab-dashboard p{color:#d1e5f4;font-size:.94rem;line-height:1.45}
+.lab-heading{display:flex;justify-content:space-between;gap:15px;align-items:start}.lab-stat{min-width:140px;text-align:right}.lab-stat span,.lab-stat small{display:block;color:#bbd7e8;font-size:.78rem}.lab-stat strong{display:block;color:#8cdbff;font-size:2.4rem;line-height:1.2}
+.lab-plot{margin-top:20px;position:relative;border:1px solid #42627c;border-radius:12px;background:repeating-linear-gradient(to top,transparent 0,transparent calc(25% - 1px),#ffffff18 25%);height:270px;padding:25px 14px 8px 38px}.lab-y{position:absolute;left:9px;top:8px;color:#b5d5e8;font-size:.7rem}.lab-bars{height:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:end}.lab-bar-group{height:100%;display:flex;flex-direction:column;align-items:center;min-width:0}.lab-bar-value{font-size:.79rem;font-weight:700;color:white;height:22px}.lab-bar-track{height:calc(100% - 47px);width:min(65%,82px);display:flex;align-items:end}.lab-bar-fill{width:100%;border-radius:7px 7px 0 0;transition:height .5s ease;background:#53b9fa}.lab-bar-fill.active{background:#8cdeff;box-shadow:0 0 20px #8cdeff77}.lab-bar-fill.untested{background:#ffffff30}.lab-bar-fill.holdout{background:#f9ad65}.lab-bar-label{height:25px;text-align:center;font-size:.72rem;color:#d7e6f2;padding-top:5px}.lab-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:.74rem;color:#c9e2f4}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.dot.blue{background:#53b9fa}.dot.pale{background:#8499aa}.dot.orange{background:#f9ad65}.lab-insight{border-left:3px solid #73c9ff;background:#ffffff0c;padding:11px 14px;margin-top:18px;font-size:.91rem;color:#e4f5ff}
+.lab-control{margin:24px 0}.lab-control strong{display:block;color:white;margin-bottom:9px;font-size:.87rem}.lab-options{display:flex;gap:8px}.lab-option{flex:1;border:1px solid #7495ad;background:#ffffff09;color:#fff;border-radius:9px;padding:12px 9px;cursor:pointer}.lab-option.selected{background:#245e8c;border-color:#7fd2ff;box-shadow:inset 0 0 0 1px #7fd2ff}.lab-action{width:100%;border:0;border-radius:10px;background:#a7e1ff;color:#082640;font-weight:800;padding:15px;cursor:pointer}.lab-panel .lab-help{font-size:.79rem;color:#c5dbea}.lab-mini{border-top:1px solid #ffffff30;margin-top:22px;padding-top:14px;display:grid;grid-template-columns:1fr auto;gap:9px;font-size:.73rem}.lab-mini span{color:#b9d4e6}.lab-mini b{color:white}
+.demo-guide{display:none!important}.demo-shell .controls{margin-top:.8rem}.demo-shell .story{margin-top:1.2rem}.demo-shell .market-stage{height:430px}.demo-shell .chart{top:135px}.demo-shell .agentline{bottom:14px}
+@media(max-width:850px){.lab-dashboard{grid-template-columns:1fr}.lab-visual,.lab-panel{padding:18px}.lab-plot{height:240px}.lab-heading{flex-wrap:wrap}.lab-stat{text-align:left}.lab-bar-label{font-size:.63rem}}
+
+/* Accessibility and legibility: override the site's global !important heading rules. */
+.lab-dashboard .lab-visual h2,.lab-dashboard .lab-panel h2{color:#f8fcff !important;text-shadow:none !important;line-height:1.18 !important;letter-spacing:-.025em}
+.lab-dashboard .lab-visual p,.lab-dashboard .lab-panel p{color:#dcecf9 !important;opacity:1 !important}
+.lab-dashboard .lab-kicker{color:#8bdbff !important}
+.lab-dashboard .lab-control strong,.lab-dashboard .lab-mini b{color:#fff !important}
+.lab-dashboard .lab-help{color:#d7e8f5 !important;line-height:1.5 !important}
+.lab-dashboard .lab-insight{color:#effaff !important;background:rgba(130,204,250,.13) !important}
+.lab-dashboard .lab-stat span,.lab-dashboard .lab-stat small,.lab-dashboard .lab-mini span{color:#cfe7f7 !important}
+.lab-dashboard .lab-option{color:#fff !important;font-weight:650}
+.lab-dashboard .lab-option:focus-visible,.lab-dashboard .lab-action:focus-visible{outline:3px solid #ffe29b;outline-offset:3px}
+.lab-dashboard .lab-bar-label,.lab-dashboard .lab-bar-value,.lab-dashboard .lab-legend{color:#f1f8ff !important}
+.lab-dashboard .lab-visual{background:linear-gradient(145deg,#08253e,#114a70)}
+.lab-dashboard .lab-panel{background:linear-gradient(155deg,#103552,#16486a)}
+.lab-dashboard{grid-template-columns:minmax(0,2.05fr) minmax(290px,.8fr)}
+.lab-dashboard .lab-plot{height:325px;background:repeating-linear-gradient(to top,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) calc(25% - 1px),rgba(174,215,243,.22) 25%)}
+.lab-dashboard .lab-bar-fill.untested{background:repeating-linear-gradient(135deg,#8da5b780 0 8px,#c5d6e580 8px 16px)}
+.lab-dashboard .lab-bar-fill.holdout{background:repeating-linear-gradient(135deg,#ffb36c 0 8px,#db8747 8px 16px)}
+.lab-dashboard .lab-legend{line-height:1.5}
+@media(max-width:950px){.lab-dashboard{grid-template-columns:1fr}.lab-dashboard .lab-plot{height:285px}}
+@media(max-width:500px){.lab-dashboard .lab-plot{height:245px;padding-left:24px}.lab-dashboard .lab-bars{gap:5px}.lab-dashboard .lab-bar-label{font-size:.63rem}.lab-dashboard .lab-visual,.lab-dashboard .lab-panel{padding:16px}}
+
+
+/* Readability pass: larger type, strong contrast, calmer hierarchy. */
+.demo-shell{max-width:1400px}
+.demo-shell .hero h1{line-height:1.08!important;letter-spacing:-.035em}
+.demo-shell .hero>p:not(.policy){font-size:1.2rem;line-height:1.65;max-width:900px}
+.lab-dashboard{gap:20px!important}
+.lab-dashboard .lab-visual,.lab-dashboard .lab-panel{padding:30px!important;border:1px solid #537c9b}
+.lab-dashboard .lab-kicker{font-size:.85rem!important;letter-spacing:.1em!important;color:#a5e5ff!important}
+.lab-dashboard h2{font-size:clamp(1.6rem,2.3vw,2.05rem)!important;color:#fff!important;margin:.55rem 0 .7rem!important}
+.lab-dashboard .lab-visual p,.lab-dashboard .lab-panel p{font-size:1.05rem!important;line-height:1.65!important;color:#eaf5ff!important}
+.lab-dashboard .lab-stat span,.lab-dashboard .lab-stat small{font-size:.92rem!important;color:#e1f1ff!important}
+.lab-dashboard .lab-stat strong{font-size:3rem!important;color:#a4e4ff!important}
+.lab-dashboard .lab-plot{height:355px!important;border-color:#799db8!important;background-color:#0b2c47!important}
+.lab-dashboard .lab-y{font-size:.86rem!important;color:#e3f4ff!important}
+.lab-dashboard .lab-bar-value{font-size:1rem!important;color:#fff!important}
+.lab-dashboard .lab-bar-label{font-size:.9rem!important;line-height:1.2!important;height:auto!important;min-height:36px!important;color:#fff!important}
+.lab-dashboard .lab-bar-track{height:calc(100% - 67px)!important}
+.lab-dashboard .lab-legend{font-size:.9rem!important;gap:18px!important;color:#e7f4ff!important}
+.lab-dashboard .lab-insight{font-size:1.04rem!important;line-height:1.6!important;background:#224c6c!important;border-left:5px solid #8fe0ff!important;padding:16px 18px!important;color:#fff!important}
+.lab-dashboard .lab-control{margin:24px 0!important}
+.lab-dashboard .lab-control strong{font-size:1.05rem!important;color:#fff!important;margin-bottom:12px!important}
+.lab-dashboard .lab-option{font-size:1.03rem!important;min-height:54px!important;border:2px solid #92b7d0!important;background:#173f60!important;color:#fff!important}
+.lab-dashboard .lab-option.selected{background:#3279a9!important;border-color:#b6ecff!important;box-shadow:inset 0 0 0 1px #b6ecff!important}
+.lab-dashboard .lab-action{font-size:1.05rem!important;min-height:56px!important;background:#b4e7ff!important;color:#09273e!important}
+.lab-dashboard .lab-help{font-size:.95rem!important;line-height:1.65!important;color:#e3f1fd!important}
+.lab-dashboard .lab-mini{font-size:.85rem!important;line-height:1.5!important}
+.lab-dashboard .lab-mini span{color:#dbeefa!important}
+.demo-shell .controls button{font-size:.88rem!important;min-height:49px!important;letter-spacing:.035em!important}
+.demo-shell .beats .beat{font-size:.82rem!important;line-height:1.4!important;padding:13px 8px!important}
+@media(max-width:700px){.lab-dashboard .lab-visual,.lab-dashboard .lab-panel{padding:18px!important}.lab-dashboard .lab-plot{height:300px!important}.lab-dashboard .lab-bar-label{font-size:.75rem!important}.lab-dashboard .lab-bars{gap:6px!important}.lab-dashboard .lab-stat strong{font-size:2.5rem!important}}
+
 </style>
 </head>
 <body>
@@ -84,7 +156,7 @@
 <nav class="nav">
 <a href="index.html">Home</a>
 <a href="research.html">Method</a>
-<a class="active" href="c2-sandbox.html">Cases</a>
+<a class="active" href="investigations.html">Use cases</a>
 <a href="book.html">Book</a>
 <a href="about.html">About</a>
 <a class="contact-pill" href="contact.html">Contact</a>
@@ -95,9 +167,23 @@
 <main class="demo-shell">
 <section class="hero">
 <div class="eyebrow">Educational demonstration · economics</div>
-<h1>Change one thing.<br>Watch what changes.</h1>
-<p>A teaching 2×2 — not a live trading system. A <strong>named toy trader policy</strong> sits in a controlled information design. Private value stays fixed. We vary news and price history, score rival models on observed means, then unlock a sealed holdout cell.</p>
+<h1>Why did the trader<br>change its bid?</h1>
+<p>Watch a simple trader respond to news and price history. We test competing explanations, then check whether the winning explanation predicts a situation it has not seen. <strong>This is a teaching example, not a live market.</strong></p>
 <p class="policy">bid = 75 + 5·H + 3·N + 12·H·N + ε · seed 42 · N=40 matched draws</p>
+<section class="lab-dashboard" aria-label="Interactive economics experiment">
+ <div class="lab-visual">
+  <div class="lab-heading"><div><span class="lab-kicker">LIVE TOY-POLICY EXPERIMENT</span><h2>Watch the bid respond</h2><p>Same trader, same $100 private value. Change what information the trader receives.</p></div><div class="lab-stat"><span>Current mean bid</span><strong id="labCurrent">$75</strong><small id="labCondition">No news · stable prices</small></div></div>
+  <div class="lab-plot" id="labPlot" role="img" aria-label="Mean bid by information condition, with the fourth condition hidden until holdout unlocks"><div class="lab-y">Mean bid ($)</div><div class="lab-bars" id="labBars"></div></div>
+  <div class="lab-legend"><span><i class="dot blue"></i>Observed toy-policy mean</span><span><i class="dot pale"></i>Not yet tested</span><span><i class="dot orange"></i>Sealed holdout</span></div>
+  <div class="lab-insight" id="labInsight">Start with the baseline, then change one signal at a time.</div>
+ </div>
+ <div class="lab-panel"><span class="lab-kicker">CHANGE ONE CONDITION</span><h2>Run a controlled test</h2><p>Choose a condition to compare against the baseline.</p>
+ <div class="lab-control"><strong>News signal</strong><div class="lab-options"><button class="lab-option selected" data-news="0">None</button><button class="lab-option" data-news="1">Positive</button></div></div>
+ <div class="lab-control"><strong>Price history</strong><div class="lab-options"><button class="lab-option selected" data-history="0">Stable</button><button class="lab-option" data-history="1">Rising</button></div></div>
+ <button class="lab-action" id="labApply">Test this condition →</button><p class="lab-help" id="labHelp">The positive-news + rising-history combination is a sealed holdout. Run the discovery tests before revealing it.</p>
+ <div class="lab-mini"><span>PRIVATE VALUE</span><b>$100</b><span>RANDOM SEED</span><b>42</b><span>MATCHED DRAWS</span><b>40</b></div>
+ </div>
+</section>
 <aside class="demo-guide" id="guide" aria-live="polite">
 <div class="tag">FOCUS</div>
 <div>
@@ -121,7 +207,7 @@
 <section class="story">
 <div class="card market" data-tip="Same private value and matched ε draws. Only information shown to the toy policy changes." data-tip-title="Controlled market">
 <div class="market-stage">
-  <div class="market-title"><b>Controlled market</b><span id="seedLabel">Private value $100 · seed 42 · N=40</span></div>
+  <div class="market-title"><b>Trader experiment</b><span id="seedLabel">Private value $100 · seed 42 · N=40</span></div>
   <div class="fixed">
     <div data-tip="True private value — held fixed across treatments. Not a full market identity." data-tip-title="Private value"><span>Private value</span><b>$100</b></div>
     <div class="signal" id="historyCard" data-tip="Controlled observation: price path shown to the policy." data-tip-title="Price history"><span>Price history</span><b id="historyVal">Stable</b></div>
@@ -139,8 +225,8 @@
 <div class="side">
   <section class="card question" data-tip="Competing models scored by SSE on discovery-cell means." data-tip-title="Hypotheses">
     <div class="stepno">Question</div>
-    <h2>What is driving the bid?</h2>
-    <p>Score each model against observed discovery means. Lower SSE fits better.</p>
+    <h2>Why does the bid change?</h2>
+    <p>Three explanations compete. As each test runs, the best-fitting explanation becomes clearer. Lower error means a closer fit.</p>
     <div class="choices">
       <div class="choice" id="hNews" data-tip="H₁: news main effect only." data-tip-title="News"><i>1</i><div><b>News matters</b><small>H₁ · additive news</small></div><span class="sse" id="sseNews">SSE —</span></div>
       <div class="choice" id="hHistory" data-tip="H₂: history main effect only." data-tip-title="History"><i>2</i><div><b>Price history matters</b><small>H₂ · additive history</small></div><span class="sse" id="sseHistory">SSE —</span></div>
@@ -162,8 +248,8 @@
 
 <section class="card result" style="margin-top:1rem;padding:1.15rem" data-tip="Four-cell design: news × price history. Holdout cell stays sealed until freeze." data-tip-title="Four conditions">
 <div class="stepno">Design matrix</div>
-<h2>Four controlled conditions</h2>
-<p>Same private value. Same policy. Matched ε across information treatments. Cell 4 is sealed until you freeze a candidate.</p>
+<h2>The four situations we compare</h2>
+<p>Only the information changes. The trader’s private value and decision rule stay the same. We keep the last situation hidden to test the prediction fairly.</p>
 <div class="fourcells">
   <div class="cell" id="c0"><span>No news · stable</span><b id="c0v">—</b><em id="c0se"></em></div>
   <div class="cell" id="c1"><span>No news · rising</span><b id="c1v">—</b><em id="c1se"></em></div>
@@ -401,10 +487,7 @@ function tipFor(n) {
     $('beat2').setAttribute('data-focus-target', '#newsCard');
     $('beat2').setAttribute('data-focus', 'Watch News — the one controlled change.');
   }
-  if (window.CoTips) {
-    const el = document.querySelector(f.target);
-    if (el) CoTips.focusStep(el);
-  }
+  
 }
 
 function unlockHoldout() {
@@ -441,6 +524,7 @@ function unlockHoldout() {
     'News effect is ' + fmtDelta(c.dNstable) + ' under stable history and ' + fmtDelta(c.dNrising) +
     ' under rising history. Interaction DiD = ' + fmtDelta(c.interaction) + '.';
   beats(3);
+  updateLab(3);
 }
 
 function render(n) {
@@ -537,6 +621,7 @@ function render(n) {
     }
   }
   tipFor(n);
+  updateLab(n);
 }
 
 function next() {
@@ -589,6 +674,31 @@ $('holdoutBtn').addEventListener('click', () => {
   });
 });
 
+let selectedNews=0,selectedHistory=0;
+function updateLab(n){
+ const names=['No news · stable','No news · rising','Positive news · stable','Positive news · rising'];
+ const vals=[batch.stats['0,0'].mean,batch.stats['1,0'].mean,batch.stats['0,1'].mean,batch.stats['1,1'].mean];
+ const active=holdoutUnlocked?3:Math.min(n,2);
+ $('labCurrent').textContent=fmtMoney(vals[active]); $('labCondition').textContent=names[active];
+ const labels=['Baseline','History only','News only','Both signals'];
+ $('labBars').innerHTML=vals.map((v,i)=>{
+  const visible=i<=Math.min(n,2)||(i===3&&holdoutUnlocked);
+  const height=visible?Math.max(10,(v-55)/55*100):20;
+  return `<div class="lab-bar-group"><span class="lab-bar-value">${visible?fmtMoney(v):i===3?'SEALED':'—'}</span><div class="lab-bar-track"><div class="lab-bar-fill ${i===3?'holdout':visible?'observed':'untested'} ${i===active?'active':''}" style="height:${height}%"></div></div><span class="lab-bar-label">${labels[i]}</span></div>`;
+ }).join('');
+ $('labInsight').textContent=holdoutUnlocked?'The combined-signal response exceeds the additive prediction. The holdout reveals an interaction in this named toy policy.':n===0?'Baseline: neither signal is present. Compare the next two conditions to isolate each effect.':n===1?'Only price history changed. Compare this mean bid with the baseline.':n===2?'Now only news changed. The combined-signal response is still sealed.':'The combined-signal prediction is frozen; unlock the holdout to test it.';
+}
+document.querySelectorAll('[data-news],[data-history]').forEach(btn=>btn.addEventListener('click',()=>{
+ const key=btn.hasAttribute('data-news')?'news':'history';
+ if(key==='news')selectedNews=Number(btn.dataset.news);else selectedHistory=Number(btn.dataset.history);
+ document.querySelectorAll('[data-'+key+']').forEach(x=>x.classList.toggle('selected',x===btn));
+}));
+$('labApply').addEventListener('click',()=>{
+ const code=selectedHistory+2*selectedNews;
+ clearTimeout(timer);
+ if(code===3){if(step<2){$('labHelp').textContent='First test history-only and news-only, then unlock the holdout.';return;}render(3);unlockHoldout();return;}
+ render(code);$('labHelp').textContent='Matched draws keep random noise comparable. The combined condition stays sealed until you unlock it.';
+});
 batch = runBatch();
 paintCells();
 paintSSE();

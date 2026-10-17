@@ -1,0 +1,1 @@
+Images cropped from the two concept mockups supplied in this conversation. Assets: mission-command-hero.webp, black-box-investigation.webp, and mockup-{ai,economics,defense,twins,human}.webp. These are concept illustrations, not operational screenshots. Crops contain imagery rather than the original mockup text.
