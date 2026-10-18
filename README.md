@@ -13,4 +13,4 @@ Primary pages:
 - `book.html` — Thinking Together
 
 ## C2 Sandbox
-`c2-sandbox.html` keeps one Three.js stage for history and experiment modes. Experiment mode animates baseline + counterfactual craft with a Δ HUD (seed 1842). If the Three.js CDN fails, a 2D dual-path fallback still runs the method demo.
+`c2-sandbox.html` keeps one Three.js stage for history and experiment modes. Experiment mode runs a schematic geometric CPA model (shared `INTERVENE` levers for Monte Carlo + stage paths) with a Δ HUD (seed 1842). Auto-cycle is opt-in. If the Three.js CDN fails, a 2D dual-path fallback still runs the method demo.

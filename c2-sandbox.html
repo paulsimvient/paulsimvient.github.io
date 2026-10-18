@@ -24,6 +24,9 @@
 .c2-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px}
 .c2-stage{position:relative;min-height:590px;background:#081018;border:1px solid #223243;border-radius:14px;overflow:hidden;box-shadow:0 18px 55px rgba(15,23,42,.16)}
 .c2-stage.sim-mode{border-color:#7c6a9a;box-shadow:0 18px 55px rgba(90,60,140,.18)}
+/* Experiment: keep rate HUD only — hide dense track lat/lon chrome */
+.c2-stage.sim-mode .c2-live-row{display:none!important}
+.c2-stage.sim-mode #expMetrics{display:grid!important}
 #c2canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .c2-overlay{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;z-index:2}
 .c2-titlebox,.c2-modebox{background:rgba(7,13,19,.77);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 12px;color:#edf4f8}
@@ -203,18 +206,18 @@
     <button type="button" id="tourSkip">Skip</button>
   </div>
 </div>
-<p class="tour-done" id="tourDone">Lesson: one controlled change under a matched seed → measured Δ → claim stays a model result, not an NTSB finding. Explore freely.</p>
+<p class="tour-done" id="tourDone">Lesson: one controlled change under a matched seed → measured Δ → claim stays a model result, not an NTSB finding. Pick another change or turn on Keep running.</p>
 
 <div class="c2-toolbar" id="c2Toolbar">
   <div class="c2-tabs">
     <button class="c2-btn primary" id="playBtn">Play reconstruction</button>
-    <button class="c2-tab" data-view="experiment" data-tip-title="Experiment mode" data-tip="Matched interventions are simulated model results." data-focus="One hypothesis. Same seed, one controlled change, compare modeled separation.">Experiment mode</button>
+    <button class="c2-tab" data-view="experiment" id="enterExpTab" data-tip-title="Experiment mode" data-tip="One controlled change under a matched seed — simulated model result." data-focus="Pick one hypothesis, run it, compare baseline vs counterfactual.">Enter experiment</button>
     <button class="c2-tab active" data-view="history" data-tip-title="History mode" data-tip="Recorded NTSB-linked sequence. The 3D view is a schematic reconstruction." data-focus="Timeline and sourced metrics — schematic geometry.">Historical record</button>
   </div>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <span class="c2-badge" id="sourceBadge">RECORD · NTSB anchors</span>
     <button class="c2-btn" id="viewBtn">Change view</button>
-    <button class="c2-btn primary hide" id="runExp">Run matched trials</button>
+    <button class="c2-btn primary hide" id="runExp">Run this change</button>
   </div>
 </div>
 
@@ -301,10 +304,10 @@
 
     <div class="side-exp hide" id="sideExp">
       <div class="eyebrow">Simulated · seed family 1842</div>
-      <h3>Matched counterfactuals</h3>
-      <p>Auto-cycles each hypothesis, re-runs matched trials, and shows what the counterfactual creates on stage.</p>
+      <h3>What if one factor changed?</h3>
+      <p>Pick one change. Run matched trials. Compare baseline vs counterfactual on the same stage.</p>
       <div class="auto-row">
-        <label><input type="checkbox" id="autoRun" checked> Keep running</label>
+        <label><input type="checkbox" id="autoRun"> Keep running</label>
         <span class="speed-pill">10× SPEED</span>
         <label class="mc-n" style="margin-left:auto">Trials
           <select id="trialN" style="font:inherit;padding:4px 6px;border-radius:6px;border:1px solid var(--line)">
@@ -322,7 +325,7 @@
         <strong id="changeOut">—</strong>
         <div class="lbl" style="margin-top:10px">What the counterfactual creates</div>
         <strong id="createsOut">—</strong>
-        <p id="createsDetail">Select a hypothesis or let auto-run cycle them.</p>
+        <p id="createsDetail">Select a hypothesis, then Run this change.</p>
       </div>
       <div class="exp-box">
         <span class="c2-badge sim">MONTE CARLO · MODEL</span>
@@ -351,7 +354,7 @@
   <div class="mc-panel hide" id="mcPanel" hidden>
   <h3>This batch</h3>
   <p class="batch-meta" id="chartBatchMeta">Waiting for matched trials…</p>
-  <p class="sub">Toy encounter model · matched ε · same integers as the HUD. Not NTSB measured densities.</p>
+  <p class="sub">Schematic geometric CPA model · matched noise · same integers as the HUD. Not NTSB measured densities.</p>
   <div class="mc-grid">
     <div class="mc-chart-card">
       <div class="lbl">Min-separation histogram (trial counts)</div>
@@ -416,7 +419,7 @@
 
 <div class="mobile-run-dock" id="mobileDock">
   <button class="c2-btn" id="mobileExpBtn" type="button">Experiment mode</button>
-  <button class="c2-btn primary hide" id="mobileRunBtn" type="button">Run matched trials</button>
+  <button class="c2-btn primary hide" id="mobileRunBtn" type="button">Run this change</button>
 </div>
 </main>
 <footer class="site-footer"><div class="shell"><div class="footer-grid"><div><div class="footer-title">PAUL CUMMINGS, Ph.D.</div><p>Making AI and simulation claims inspectable through modeling, experiment, and human review.</p></div><div class="footer-links">
@@ -460,47 +463,59 @@ let lastIdx = 0;
 /** Schematic world → approx DCA corridor (derived, not FDR-sampled). */
 const GEO = { lat0: 38.8482, lon0: -77.0348, nmPerUnit: 0.46 };
 
+/**
+ * Shared intervention parameters — drive Monte Carlo CPA and stage CF paths together.
+ * FT_TO_NM_TEACH maps altitude into teach-space nm so a ~100 ft bias is a first-order
+ * lever vs IMPACT_NM (true ~6076 ft/nm would make 100 ft negligible at 0.12 nm).
+ */
+const FT_TO_NM_TEACH = 100 / 0.20; // 100 ft → 0.20 nm teach-space
+const ENCOUNTER_SEC = 118;
+const CLOSE_RATE_NM_S = 0.012; // residual closing near CPA (schematic)
+const INTERVENE = {
+  alt: { dAltFt: 100, divertNm: 0, timeShiftSec: 0 },
+  radio: { dAltFt: 0, divertNm: 0.11, timeShiftSec: 0 },
+  timing: { dAltFt: 0, divertNm: 0, timeShiftSec: 7 }
+};
+function timingLagFrac(hyp) {
+  return INTERVENE[hyp].timeShiftSec / ENCOUNTER_SEC;
+}
+
 const defs = {
   alt: {
     title: 'Altitude perception test',
-    desc: 'Matched Monte Carlo: raise the altitude cue by +100 ft. Same noise draws as baseline; only altitude changes.',
-    effect: 0.32,
-    noise: 0.055,
+    desc: 'Geometric CPA: add +100 ft vertical miss under matched noise. Same seed stream; only altitude changes.',
     change: 'Altitude cue +100 ft (baro bias corrected in the model)',
     creates: 'Raised PAT25 path',
-    createsDetail: 'Purple counterfactual tube climbs above the baseline heli track. Encounter model yields larger min-separation — often a clear miss instead of a near-miss.',
+    createsDetail: 'Purple counterfactual tube climbs by the same +100 ft teaching lever used in the CPA model — often a clear miss instead of a near-miss.',
     claim: 'In this schematic encounter model, altitude is the strongest lever on min separation. Model result under seed 1842.'
   },
   radio: {
     title: 'Traffic-advisory comprehension test',
-    desc: 'Matched Monte Carlo: deliver the complete circling advisory. Same noise draws; only information/response changes.',
-    effect: 0.18,
-    noise: 0.06,
+    desc: 'Geometric CPA: add an earlier lateral divert (0.11 nm teach-space) under matched noise. Information/response only.',
     change: 'Full “circling to runway 33” advisory received',
     creates: 'Earlier divert / pass-behind path',
-    createsDetail: 'Counterfactual route bends away sooner. Stage shows a lateral miss geometry; separation improves, but less than the altitude intervention in this model.',
+    createsDetail: 'Counterfactual route bends by the same divert used in the CPA model. Separation improves, typically less than the altitude intervention.',
     claim: 'In this schematic model, the advisory changes the response distribution less than altitude. Model result under seed 1842.'
   },
   timing: {
     title: 'Encounter timing test',
-    desc: 'Matched Monte Carlo: shift encounter timing by +7 s. Same noise draws; only phase changes.',
-    effect: 0.11,
-    noise: 0.07,
+    desc: 'Geometric CPA: shift encounter timing by +7 s (phase only). Same geometry and matched noise.',
     change: 'Encounter timing +7 seconds',
     creates: 'Time-shifted craft on the same geometry',
-    createsDetail: 'Same tubes, staggered playback. Closest approach moves; mean Δ is smaller than altitude or advisory in this schematic model.',
+    createsDetail: 'Same tubes, staggered by +7 s / encounter length — the same phase lever as the CPA model. Mean Δ is typically smaller than altitude or advisory.',
     claim: 'In this schematic model, timing moves separation less than altitude or advisory. Model result under seed 1842.'
   }
 };
 const HYP_ORDER = ['alt', 'radio', 'timing'];
 const HYP_LABEL = { alt: 'H1 Alt', radio: 'H2 Radio', timing: 'H3 Time' };
 const MASTER_SEED = 1842;
+const TOUR_KEY = 'coag_sandbox_tour_v2';
 const HIST_PLAY_MS = 11500;
 // Stage path: fast but still visible (~10× vs history). Batches + auto-gap stay snappy.
 const PLAY_MS = Math.round(HIST_PLAY_MS / 10);
 const AUTO_GAP_MS = 120;
 let sel = 'alt';
-let autoOn = true;
+let autoOn = false;
 let autoTimer = null; // legacy; pump uses autoPumpId
 let cycleIdx = 0;
 let runGeneration = 0;
@@ -529,21 +544,24 @@ function gauss(rand) {
 const IMPACT_NM = 0.12;
 
 /**
- * Schematic encounter model: sample minimum separation (nm).
- * Matched pairs share the same noise draws; intervention adds a controlled miss component.
+ * Schematic geometric CPA: slant range from lateral + vertical miss (teach-space nm).
+ * Matched pairs share the same noise draws; intervention adds INTERVENE components.
  */
 function sampleMinSep(rand, hyp, intervene) {
-  // Shared world noise — baseline often near/under impact threshold
-  const geo = 0.04 * gauss(rand);
-  const phase = 0.025 * gauss(rand);
-  const sensor = 0.015 * gauss(rand);
-  let sep = Math.max(0.01, 0.07 + geo + phase + sensor);
+  const lat0 = 0.045 + 0.038 * gauss(rand);
+  const vert0 = 0.025 + 0.022 * gauss(rand);
+  let missLat = Math.abs(lat0);
+  let missVert = Math.abs(vert0);
   if (intervene) {
-    const d = defs[hyp];
-    const lift = d.effect + d.noise * gauss(rand);
-    sep = Math.max(0.02, sep + Math.max(0.02, lift));
+    const iv = INTERVENE[hyp];
+    missVert += iv.dAltFt / FT_TO_NM_TEACH;
+    missLat += iv.divertNm;
+    // Phase shift moves CPA epoch → extra lateral miss at the old closest-approach time
+    if (iv.timeShiftSec) {
+      missLat += iv.timeShiftSec * CLOSE_RATE_NM_S * (0.85 + 0.3 * rand());
+    }
   }
-  return sep;
+  return Math.max(0.01, Math.hypot(missLat, missVert));
 }
 
 function isImpact(sep) { return sep < IMPACT_NM; }
@@ -913,13 +931,14 @@ function releaseTourForExplore({ skipped } = {}) {
     tourContinueResolve = null;
     r(false);
   }
-  try { localStorage.setItem('coag_sandbox_tour_v1', skipped ? 'skipped' : 'done'); } catch (_) {}
+  try { localStorage.setItem(TOUR_KEY, skipped ? 'skipped' : 'done'); } catch (_) {}
   $('#tourBar')?.classList.remove('show');
 }
 
 function setMode(exp, opts = {}) {
   mode = exp ? 'experiment' : 'history';
-  const wantAuto = opts.auto !== false;
+  // Auto-cycle is opt-in only (Keep running) — never default on for first-time path
+  const wantAuto = opts.auto === true;
   stage.classList.toggle('sim-mode', exp);
   $('#sideHist').classList.toggle('hide', exp);
   $('#sideExp').classList.toggle('hide', !exp);
@@ -932,17 +951,23 @@ function setMode(exp, opts = {}) {
   $('#expMetrics').classList.toggle('hide', !exp);
   $('#playBtn').classList.toggle('hide', exp);
   $('#runExp').classList.toggle('hide', !exp);
+  $('#enterExpTab')?.classList.toggle('hide', exp);
   $('#sourceBadge').classList.toggle('sim', exp);
   setCfVisibility(exp);
   if (exp) {
     stopAutoLoop();
-    autoOn = true;
-    if ($('#autoRun')) $('#autoRun').checked = true;
-    $('#sourceBadge').textContent = 'MODEL · SEED 1842 · 10×';
-    $('#modeLabel').textContent = 'Monte Carlo model · 10×';
+    autoOn = false;
+    if ($('#autoRun')) $('#autoRun').checked = false;
+    $('#sourceBadge').textContent = 'MODEL · SEED 1842';
+    $('#modeLabel').textContent = 'Geometric CPA · matched trials';
+    $('#runExp').textContent = 'Run this change';
     applyHyp(sel);
     showCreatePanel(sel);
-    if (wantAuto) startAutoLoop();
+    if (wantAuto) {
+      autoOn = true;
+      if ($('#autoRun')) $('#autoRun').checked = true;
+      startAutoLoop();
+    }
     $('#mobileExpBtn')?.classList.add('hide');
     $('#mobileRunBtn')?.classList.remove('hide');
     clearOutcomeCharts();
@@ -966,6 +991,10 @@ const IMPACT = { x: 0, y: 1.05, z: 0 };
 
 function makePathPoints(hyp) {
   // Both historical tracks terminate at the same impact point (schematic).
+  // CF offsets use the same INTERVENE levers as sampleMinSep.
+  const iv = INTERVENE[hyp] || INTERVENE.alt;
+  const yLift = (iv.dAltFt / FT_TO_NM_TEACH) * 3.2; // stage units ≈ 0.64 for +100 ft
+  const divert = iv.divertNm * 14; // stage units ≈ 1.5 for 0.11 nm divert
   const baseA = [
     { x: -9.5, y: 1.55, z: 10 },
     { x: -5.5, y: 1.35, z: 5.5 },
@@ -981,27 +1010,23 @@ function makePathPoints(hyp) {
     { ...IMPACT }
   ];
   let cfA, cfB;
-  if (hyp === 'alt') {
-    // Raise PAT25 so paths no longer meet — visible miss
-    cfA = [
-      { x: -9.5, y: 2.15, z: 10 },
-      { x: -5.5, y: 2.0, z: 5.5 },
-      { x: -2.4, y: 1.9, z: 2.2 },
-      { x: -0.4, y: 1.85, z: 0.4 },
-      { x: 0.2, y: 1.9, z: -0.3 }
-    ];
+  if (iv.dAltFt > 0) {
+    cfA = baseA.map((p, i) => {
+      const t = i / (baseA.length - 1);
+      return { x: p.x + t * 0.25, y: p.y + yLift * (0.55 + 0.45 * t), z: p.z - t * 0.35 };
+    });
+    cfA[cfA.length - 1] = { x: 0.2, y: IMPACT.y + yLift, z: -0.3 };
     cfB = baseB.map((p) => ({ ...p }));
-  } else if (hyp === 'radio') {
-    cfA = [
-      { x: -9.5, y: 1.55, z: 10 },
-      { x: -5.2, y: 1.4, z: 5.8 },
-      { x: -1.2, y: 1.25, z: 3.2 },
-      { x: 1.8, y: 1.15, z: 1.6 },
-      { x: 3.5, y: 1.1, z: 0.2 }
-    ];
+  } else if (iv.divertNm > 0) {
+    cfA = baseA.map((p, i) => {
+      const t = i / (baseA.length - 1);
+      const bend = divert * t * t;
+      return { x: p.x + bend, y: p.y, z: p.z + bend * 0.35 };
+    });
+    cfA[cfA.length - 1] = { x: IMPACT.x + divert * 1.1, y: IMPACT.y, z: IMPACT.z + divert * 0.25 };
     cfB = baseB.map((p) => ({ ...p }));
   } else {
-    // timing: same geometry, playback applies lag
+    // timing: same geometry; placeExp applies INTERVENE timeShiftSec lag
     cfA = baseA.map((p) => ({ ...p }));
     cfB = baseB.map((p) => ({ ...p }));
   }
@@ -1071,7 +1096,7 @@ function drawFallback() {
     drawCraft(pb, '#7895a8', 6);
   } else {
     const t = fbExpProgress;
-    const lag = fbHyp === 'timing' ? 0.12 : 0;
+    const lag = timingLagFrac(fbHyp);
     const pa = along(pts.baseA, t);
     const pb = along(pts.baseB, Math.min(1, t * 0.985));
     const pca = along(pts.cfA, Math.max(0, t - lag));
@@ -1245,7 +1270,7 @@ function placeHist(p) {
 
 function placeExp(t) {
   fbExpProgress = t;
-  const lag = sel === 'timing' ? 0.12 : 0;
+  const lag = timingLagFrac(sel);
   const tb = Math.min(1, Math.max(0, t));
   const tc = Math.min(1, Math.max(0, t - lag));
   if (useFallback || !craftA) {
@@ -1489,8 +1514,6 @@ function startReconstructionPlayback(opts = {}) {
   });
 }
 
-const TOUR_KEY = 'coag_sandbox_tour_v1';
-
 function setTourCopy(step, text, nextLabel) {
   const bar = $('#tourBar');
   if (!bar) return;
@@ -1544,38 +1567,31 @@ async function runGuidedTour() {
   tourActive = true;
   tourAbort = false;
   if (window.CoTips) CoTips.pause();
-  setTourCopy('1 · Record', 'Schematic reconstruction of the recorded encounter — watch it reach impact.', 'Playing…');
+  setTourCopy('1 · Watch', 'Schematic reconstruction of the recorded encounter — watch it reach impact.', 'Playing…');
   $('#tourNext').disabled = true;
   document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'history'));
   setMode(false);
   const played = await startReconstructionPlayback({ durationMs: 4200 });
   if (tourAbort || !played) { $('#tourNext').disabled = false; return; }
 
-  setTourCopy('2 · Experiment', 'Switch to Experiment. Same stage — now one controlled model change under a matched seed.', 'Start experiment');
+  setTourCopy('2 · One change', 'Enter experiment and run one matched change (H1 altitude). Same seed — only altitude moves.', 'Run H1');
   $('#tourNext').disabled = false;
   if (!(await waitTourContinue())) return;
 
   document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'experiment'));
   setMode(true, { auto: false });
   selectHyp('alt', { silent: true });
-  setTourCopy('3 · Matched change', 'Running H1 altitude under seed 1842. Watch base vs CF impact rates.', 'Running…');
+  setTourCopy('2 · One change', 'Running H1 altitude under seed 1842. Watch baseline vs counterfactual impact rates.', 'Running…');
   $('#tourNext').disabled = true;
-  autoOn = true;
-  if ($('#autoRun')) $('#autoRun').checked = true;
+  autoOn = false;
+  if ($('#autoRun')) $('#autoRun').checked = false;
   await runMatchedCycle();
   if (tourAbort) return;
 
-  // Hand off to continuous pump — tour tips no longer block auto
   tourActive = false;
-  startAutoLoop();
-
-  setTourCopy('4 · What changed', 'HUD rates and charts below are from this batch. Auto is looping at speed — schematic model, not an NTSB finding.', 'See charts');
+  setTourCopy('3 · Read Δ', 'Rescued % and charts are from this batch — schematic CPA model, not an NTSB finding. Explore other changes freely.', 'Finish');
   $('#tourNext').disabled = false;
-  if (!(await waitTourContinue())) return;
   $('#mcPanel')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  if (!(await waitTourMs(1600))) return;
-
-  setTourCopy('5 · Limits', 'Claim: altitude was the strongest lever in this toy model. Explore other hypotheses freely.', 'Finish');
   if (!(await waitTourContinue())) return;
 
   endTour({ skipped: false });
@@ -1600,13 +1616,12 @@ $('#tourSkip')?.addEventListener('click', () => {
   cancelExpAnim();
   if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
   endTour({ skipped: true });
-  autoOn = true;
-  if ($('#autoRun')) $('#autoRun').checked = true;
+  autoOn = false;
+  if ($('#autoRun')) $('#autoRun').checked = false;
+  stopAutoLoop();
   if (mode !== 'experiment') {
     document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'history'));
     setMode(false);
-  } else {
-    startAutoLoop();
   }
   if (mode === 'history') startReconstructionPlayback();
 });
@@ -1663,7 +1678,7 @@ function syncMobileDock() {
   const run = $('#runExp');
   const mob = $('#mobileRunBtn');
   if (run && mob) {
-    mob.textContent = run.textContent || 'Run matched trials';
+    mob.textContent = run.textContent || 'Run this change';
     mob.classList.toggle('hide', run.classList.contains('hide') || mode !== 'experiment');
   }
   const expBtn = $('#mobileExpBtn');
@@ -1703,7 +1718,7 @@ function showCreatePanel(h) {
   $('#bannerChange').textContent = d.change;
   $('#bannerCreates').textContent = d.creates;
   $('#bannerHyp').textContent = HYP_LABEL[h] + ' · awaiting batch';
-  $('#bannerSpeed').textContent = 'MODEL · 10× · ' + Number($('#trialN')?.value || 1000) + ' matched trials';
+  $('#bannerSpeed').textContent = 'CPA MODEL · ' + Number($('#trialN')?.value || 1000) + ' matched trials';
   $('#cfBanner')?.classList.add('show');
   $('#sourceBadge').textContent = 'MODEL · SEED 1842 · ' + HYP_LABEL[h];
 }
@@ -1733,7 +1748,7 @@ document.querySelectorAll('.hyp').forEach((b) => b.addEventListener('click', () 
   if (tourActive) releaseTourForExplore({ skipped: true });
   selectHyp(b.dataset.h);
   cycleIdx = Math.max(0, HYP_ORDER.indexOf(sel));
-  if ($('#autoRun')?.checked !== false) startAutoLoop();
+  if ($('#autoRun')?.checked) startAutoLoop();
   else { stopAutoLoop(); autoOn = false; runMatchedCycle(); }
 }));
 
@@ -1891,7 +1906,7 @@ async function runMatchedCycle() {
   const d = defs[sel];
   batchRound++;
   showCreatePanel(sel);
-  $('#runExp').textContent = `10× running ${n}…`;
+  $('#runExp').textContent = `Running ${n}…`;
   $('#runExp').disabled = true;
   syncMobileDock();
 
@@ -1916,12 +1931,12 @@ async function runMatchedCycle() {
     $('#deltaOut').textContent = Math.round(primary.rescuedRate * 100) + '% rescued · Δ ' +
       (primary.meanD >= 0 ? '+' : '') + primary.meanD.toFixed(3) + ' nm';
     $('#pPosOut').textContent =
-      `Baseline impacts ${primary.baseHits}/${n} · CF impacts ${primary.cfHits}/${n} · avoided ${primary.rescued}/${n} · 10× · ${ms} ms`;
+      `Baseline impacts ${primary.baseHits}/${n} · CF impacts ${primary.cfHits}/${n} · avoided ${primary.rescued}/${n} · ${ms} ms`;
     const winner = ranked[0];
     $('#claimOut').textContent =
       `What changed: ${d.change}. That creates: ${d.creates}. ` +
       `Impact rate ${Math.round(primary.baseHitRate * 100)}% → ${Math.round(primary.cfHitRate * 100)}%. ` +
-      `${d.claim} Strongest mean |Δ| in this toy model: ${winner.label}.`;
+      `${d.claim} Strongest mean |Δ| in this schematic CPA model: ${winner.label}.`;
     setOutcomePills(
       primary.baseHitRate,
       primary.cfHitRate,
@@ -1943,7 +1958,7 @@ async function runMatchedCycle() {
     });
     if (!ok || gen !== runGeneration) return false;
 
-    $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run matched trials';
+    $('#runExp').textContent = autoOn ? 'Auto · next hyp…' : 'Re-run this change';
     syncMobileDock();
     return true;
   } finally {
@@ -1989,7 +2004,7 @@ function startAutoLoop() {
 
 $('#runExp').addEventListener('click', () => {
   if (tourActive) releaseTourForExplore({ skipped: true });
-  if ($('#autoRun')?.checked !== false) startAutoLoop();
+  if ($('#autoRun')?.checked) startAutoLoop();
   else { stopAutoLoop(); autoOn = false; runMatchedCycle(); }
 });
 
@@ -1997,11 +2012,11 @@ $('#mobileExpBtn')?.addEventListener('click', () => {
   if (tourActive) releaseTourForExplore({ skipped: true });
   document.querySelectorAll('.c2-tab').forEach((x) => x.classList.toggle('active', x.dataset.view === 'experiment'));
   if (anim) { cancelAnimationFrame(anim); anim = null; }
-  setMode(true);
+  setMode(true, { auto: false });
 });
 $('#mobileRunBtn')?.addEventListener('click', () => {
   if (tourActive) releaseTourForExplore({ skipped: true });
-  if ($('#autoRun')?.checked !== false) startAutoLoop();
+  if ($('#autoRun')?.checked) startAutoLoop();
   else { stopAutoLoop(); autoOn = false; runMatchedCycle(); }
 });
 
