@@ -32,16 +32,22 @@
 <div class="eyebrow">Contact</div>
 <h1>Start with the question.</h1>
 <p>For research collaboration, evaluation design, modeling and simulation work, speaking, or questions about <em>Thinking Together</em>.</p>
-<div class="actions">
-<a class="btn primary" id="email-link" href="#">Email</a>
 </div>
-<p class="micro" style="margin-top:18px;color:#5b667a">A short note with the decision or system you are trying to understand is enough to begin.</p>
-<script>
-(function () {
-  var a = document.getElementById('email-link');
-  if (a) a.href = 'mailto:' + ['paulsimvient', 'gmail.com'].join('@');
-})();
-</script>
+</section>
+<section class="section" style="border-top:0;padding-top:28px">
+<div class="shell" style="max-width:560px">
+<form id="contact-form" novalidate style="display:grid;gap:14px">
+<label for="name" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Name</label>
+<input autocomplete="name" id="name" name="name" placeholder="Your name" required type="text" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
+<label for="email" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Your email</label>
+<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
+<label for="message" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Message</label>
+<textarea id="message" name="message" placeholder="What decision or system are you trying to understand?" required rows="6" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);resize:vertical;font:inherit"></textarea>
+<input aria-hidden="true" autocomplete="off" name="_gotcha" tabindex="-1" type="text" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
+<button class="btn primary" type="submit">Email</button>
+<p aria-live="polite" id="contact-status" role="status" class="micro" style="color:var(--muted);margin:0"></p>
+</form>
+<p class="micro" style="margin-top:18px;color:#5b667a">A short note is enough to begin.</p>
 </div>
 </section>
 </main>
@@ -71,5 +77,62 @@
 </div>
 </footer>
 <script src="script.js?v=81"></script>
+<script>
+(function () {
+  var ENDPOINT = "https://formsubmit.co/ajax/" + ["paulsimvient", "gmail.com"].join("@");
+  var form = document.getElementById("contact-form");
+  var statusEl = document.getElementById("contact-status");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var name = (form.elements.namedItem("name").value || "").trim();
+    var email = (form.elements.namedItem("email").value || "").trim();
+    var message = (form.elements.namedItem("message").value || "").trim();
+    var honeypot = (form.elements.namedItem("_gotcha") && form.elements.namedItem("_gotcha").value) || "";
+    statusEl.textContent = "";
+    if (honeypot) {
+      statusEl.textContent = "Sent. Thank you.";
+      form.reset();
+      return;
+    }
+    if (!name) { statusEl.textContent = "Enter your name."; form.elements.namedItem("name").focus(); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      statusEl.textContent = "Enter a valid email address.";
+      form.elements.namedItem("email").focus();
+      return;
+    }
+    if (!message) { statusEl.textContent = "Enter a short message."; form.elements.namedItem("message").focus(); return; }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    statusEl.textContent = "Sending…";
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: message,
+        _subject: "CoAgentics — contact",
+        _replyto: email,
+        source: "paulsimvient.github.io/contact.html",
+        _template: "table",
+        _captcha: "false"
+      })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("request failed");
+        return res.json().catch(function () { return {}; });
+      })
+      .then(function () {
+        statusEl.textContent = "Sent. Thank you — I’ll reply soon.";
+        form.reset();
+        btn.disabled = false;
+      })
+      .catch(function () {
+        statusEl.textContent = "Something went wrong. Try again in a moment.";
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
 </body>
 </html>
