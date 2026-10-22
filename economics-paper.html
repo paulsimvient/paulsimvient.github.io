@@ -44,13 +44,13 @@
 <label for="email" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Email</label>
 <input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
 <input aria-hidden="true" autocomplete="off" name="_gotcha" tabindex="-1" type="text" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
-<button class="btn rust" type="submit">Unlock paper →</button>
+<button class="btn primary" type="submit">Unlock paper →</button>
 <p aria-live="polite" id="access-status" role="status" class="micro" style="color:var(--muted);margin:0"></p>
 </form>
 </div>
 <div hidden id="unlocked">
 <p style="color:var(--ink);font-size:1.15rem">Thanks — the paper is ready.</p>
-<a class="btn rust" href="downloads/CoAgentics_Economics.pdf" id="paper-link">Open the white paper →</a>
+<a class="btn primary" href="downloads/CoAgentics_Economics.pdf" id="paper-link">Open the white paper →</a>
 <p class="micro" style="margin-top:14px;color:var(--muted)">Five-page technical brief. Proprietary / SBIR data rights as applicable.</p>
 </div>
 </div>
@@ -84,7 +84,16 @@
     }
     var btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
-    statusEl.textContent = "Sending…";
+    statusEl.textContent = "Unlocking…";
+    var finished = false;
+    function complete() {
+      if (finished) return;
+      finished = true;
+      sessionStorage.setItem(KEY, "1");
+      showUnlocked();
+      window.location.href = paper.getAttribute("href");
+    }
+    var timeout = setTimeout(complete, 2200);
     fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -97,19 +106,8 @@
         _captcha: "false",
       })
     })
-      .then(function (res) {
-        if (!res.ok) throw new Error("request failed");
-        return res.json().catch(function () { return {}; });
-      })
-      .then(function () {
-        sessionStorage.setItem(KEY, "1");
-        showUnlocked();
-        window.location.href = paper.getAttribute("href");
-      })
-      .catch(function () {
-        statusEl.textContent = "Something went wrong. Try again, or use the Contact page.";
-        btn.disabled = false;
-      });
+      .then(function () { clearTimeout(timeout); complete(); })
+      .catch(function () { clearTimeout(timeout); complete(); });
   });
 })();
 </script>
