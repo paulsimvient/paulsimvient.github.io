@@ -9,6 +9,7 @@ Primary pages:
 - `research.html` — architecture
 - `c2-sandbox.html` — C2 matched-experiment sandbox (primary demo)
 - `dca-demo.html` — DCA instrument
+- `economics-mission.html` — economics mission film (from homepage)
 - `economics.html` / `economics-demo.html` — economics case
 - `book.html` — Thinking Together
 
