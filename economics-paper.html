@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Economics white paper | CoAgentics</title>
+<meta name="description" content="Leave your name and email to open the CoAgentics economics technical white paper.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=81">
+</head>
+<body>
+<header class="site-header">
+<div class="nav-wrap">
+<a class="brand" href="index.html">PAUL CUMMINGS, Ph.D.</a>
+<button class="mobile-toggle" aria-label="Toggle navigation">☰</button>
+<nav class="nav">
+<a href="index.html">Home</a>
+<a href="research.html">Method</a>
+<a href="c2-sandbox.html">Sandbox</a>
+<a href="investigations.html">Use cases</a>
+<a href="book.html">Book</a>
+<a href="about.html">About</a>
+<a class="contact-pill" href="contact.html">Contact</a>
+</nav>
+</div>
+</header>
+<main>
+<section class="page-hero">
+<div class="shell">
+<div class="eyebrow">CoAgentics · Economics</div>
+<h1>Technical white paper</h1>
+<p>Leave your name and email to open the five-page paper on experimental identification of AI behavior in dynamic markets. Not indexed on the public site.</p>
+</div>
+</section>
+<section class="section" style="border-top:0;padding-top:28px">
+<div class="shell" style="max-width:560px">
+<div id="gate">
+<form id="access-form" novalidate style="display:grid;gap:14px">
+<label for="name" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Name</label>
+<input autocomplete="name" id="name" name="name" placeholder="Your name" required type="text" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
+<label for="email" style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Email</label>
+<input autocomplete="email" id="email" name="email" placeholder="you@example.com" required type="email" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)">
+<input aria-hidden="true" autocomplete="off" name="_gotcha" tabindex="-1" type="text" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
+<button class="btn rust" type="submit">Unlock paper →</button>
+<p aria-live="polite" id="access-status" role="status" class="micro" style="color:var(--muted);margin:0"></p>
+</form>
+</div>
+<div hidden id="unlocked">
+<p style="color:var(--ink);font-size:1.15rem">Thanks — the paper is ready.</p>
+<a class="btn rust" href="downloads/CoAgentics_Economics.pdf" id="paper-link">Open the white paper →</a>
+<p class="micro" style="margin-top:14px;color:var(--muted)">Five-page technical brief. Proprietary / SBIR data rights as applicable.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer"><div class="shell"><div class="fineprint">© 2026 Paul Cummings, Ph.D.</div></div></footer>
+<script src="script.js?v=81"></script>
+<script>
+(function () {
+  var KEY = "ca-econ-paper-access-v1";
+  var ENDPOINT = "https://formsubmit.co/ajax/" + ["paulsimvient", "gmail.com"].join("@");
+  var gate = document.getElementById("gate");
+  var unlocked = document.getElementById("unlocked");
+  var form = document.getElementById("access-form");
+  var statusEl = document.getElementById("access-status");
+  var paper = document.getElementById("paper-link");
+  function showUnlocked() { gate.hidden = true; unlocked.hidden = false; }
+  if (sessionStorage.getItem(KEY) === "1") showUnlocked();
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var name = (form.elements.namedItem("name").value || "").trim();
+    var email = (form.elements.namedItem("email").value || "").trim();
+    var honeypot = (form.elements.namedItem("_gotcha") && form.elements.namedItem("_gotcha").value) || "";
+    statusEl.textContent = "";
+    if (honeypot) { showUnlocked(); return; }
+    if (!name) { statusEl.textContent = "Enter your name."; form.elements.namedItem("name").focus(); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      statusEl.textContent = "Enter a valid email address.";
+      form.elements.namedItem("email").focus();
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    statusEl.textContent = "Sending…";
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        _subject: "CoAgentics — economics white paper access",
+        source: "paulsimvient.github.io/economics-paper.html",
+        _template: "table",
+        _captcha: "false",
+      })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("request failed");
+        return res.json().catch(function () { return {}; });
+      })
+      .then(function () {
+        sessionStorage.setItem(KEY, "1");
+        showUnlocked();
+        window.location.href = paper.getAttribute("href");
+      })
+      .catch(function () {
+        statusEl.textContent = "Something went wrong. Try again, or use the Contact page.";
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
+</body>
+</html>
